@@ -15,8 +15,8 @@ function fillTextures(
 	const posArray = texturePosition.image.data;
 	const velArray = textureVelocity.image.data;
 
-	const { count, array } = GEOMETRY.attributes.position,
-		geometryIndex = GEOMETRY.getIndex();
+	const { count, array } = GEOMETRY.attributes.position;
+	const geometryIndex = GEOMETRY.getIndex();
 
 	console.log({ count, array, length: posArray.length, geometryIndex });
 	for (let k = 0, kl = posArray.length; k < kl; k += 4) {

@@ -26,8 +26,6 @@ export default defineConfig({
 			},
 			output: {
 				manualChunks(id) {
-					if (id.includes("node_modules")) return "vendor";
-
 					if (id.includes("/x/")) {
 						return "x";
 					}
@@ -35,6 +33,8 @@ export default defineConfig({
 					if (id.includes("/x3/")) {
 						return "x3";
 					}
+
+					if (id.includes("node_modules")) return "vendor";
 
 					console.log(id);
 				},
@@ -45,8 +45,7 @@ export default defineConfig({
 	assetsInclude: ["**/*.gltf", "**/*.glb", "**/*.frag"],
 	resolve: {
 		alias: {
-			x: resolve(__dirname, "../../packages/x/src"),
-			x3: resolve(__dirname, "../../packages/x3/src"),
+			x3: resolve(__dirname, "./src/x3"),
 		},
 	},
 });

@@ -17,11 +17,11 @@ function fillTextures(
 
 	const gap = 10 / (SIZE - 1);
 	for (let k = 0, kl = posArray.length; k < kl; k += 4) {
-		const i = k / 4,
-			iH = ~~(i / SIZE),
-			iV = i % SIZE,
-			x = -5 + gap * iH,
-			z = -5 + gap * iV;
+		const i = k / 4;
+		const iH = ~~(i / SIZE);
+		const iV = i % SIZE;
+		const x = -5 + gap * iH;
+		const z = -5 + gap * iV;
 
 		posArray[k + 0] = x;
 		posArray[k + 1] = 0;
