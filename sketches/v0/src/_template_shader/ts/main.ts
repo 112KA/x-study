@@ -1,36 +1,36 @@
-import { assertIsDefined } from '@112ka/x'
-import { Container } from './Container'
-import { Background } from './Background'
-import { Clock } from 'three'
+import { Clock } from "three";
+import { assertIsDefined } from "x";
+import { Background } from "./Background";
+import { Container } from "./Container";
 
-const canvas = document.getElementById('canvas')
-assertIsDefined(canvas)
-const clock = new Clock(),
-  container = new Container({
-    canvas,
-  }),
-  background = new Background(container)
+const canvas = document.getElementById("canvas");
+assertIsDefined(canvas);
+const clock = new Clock();
+const container = new Container({
+	canvas,
+});
+const background = new Background(container);
 
 function setup() {
-  update()
-  resize()
+	update();
+	resize();
 
-  window.addEventListener('resize', resize)
+	window.addEventListener("resize", resize);
 }
 
 function update() {
-  const dt = clock.getDelta(),
-    elapsedTime = clock.elapsedTime
+	const dt = clock.getDelta();
+	const elapsedTime = clock.elapsedTime;
 
-  background.update(dt, elapsedTime)
-  container.render()
+	background.update(dt, elapsedTime);
+	container.render();
 
-  requestAnimationFrame(update)
+	requestAnimationFrame(update);
 }
 
 function resize() {
-  container.resize()
-  background.resize()
+	container.resize();
+	background.resize();
 }
 
-setup()
+setup();

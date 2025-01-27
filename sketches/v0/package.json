@@ -4,15 +4,15 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"_build": "tsc && vite build",
 		"build": "vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"format": "biome format --write",
+		"lint": "biome lint --write"
 	},
 	"dependencies": {
-		"@112ka/x": "^0.0.0",
+		"x": "npm:@112ka/x@*",
 		"@compai/font-noto-sans": "^0.0.4",
-		"three": "0.148.0",
-		"x3": "workspace:@112ka/x3@*"
+		"three": "0.148.0"
 	},
 	"devDependencies": {
 		"@tweakpane/core": "1.1.4",
