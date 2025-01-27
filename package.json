@@ -1,34 +1,26 @@
 {
-  "name": "samples",
-  "version": "1.0.0",
-  "description": "",
-  "engines": {
-    "node": ">=22.11",
-    "npm": "use pnpm",
-    "pnpm": ">=9",
-    "yarn": "use pnpm"
-  },
-  "scripts": {
-    "watch": "tsc -b ./tsconfig.watch.json -w",
-    "dev": "pnpm --filter sketches dev",
-    "build": "pnpm --filter sketches build"
-  },
-  "keywords": [],
-  "author": "Masayuki Iizuka <mas.iizuka@gmail.com>",
-  "dependencies": {
-    "@compai/font-noto-sans": "^0.0.4",
-    "rimraf": "^4.4.0",
-    "three": "^0.148.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@tweakpane/core": "^1.1.4",
-    "@types/three": "^0.148.1",
-    "sass": "^1.58.0",
-    "tweakpane": "^3.1.4",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.1",
-    "vite-plugin-glslify": "^2.0.1"
-  },
-  "license": "MIT"
+	"name": "@112ka/sketches",
+	"version": "1.0.0",
+	"description": "",
+	"engines": {
+		"node": ">=22.11",
+		"npm": "use pnpm",
+		"pnpm": ">=9",
+		"yarn": "use pnpm"
+	},
+	"scripts": {
+		"watch": "tsc -b ./tsconfig.watch.json -w",
+		"dev": "pnpm --filter current dev",
+		"build": "pnpm --filter current build"
+	},
+	"keywords": [],
+	"author": "Masayuki Iizuka <mas.iizuka@gmail.com>",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@tsconfig/recommended": "^1.0.8",
+		"@types/node": "^22.10.10",
+		"rimraf": "^4.4.0",
+		"typescript": "^4.9.5"
+	},
+	"license": "MIT"
 }
