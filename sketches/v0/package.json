@@ -1,0 +1,24 @@
+{
+	"name": "v0",
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"_build": "tsc && vite build",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@112ka/x": "^0.0.0",
+		"@compai/font-noto-sans": "^0.0.4",
+		"three": "0.148.0",
+		"x3": "workspace:@112ka/x3@*"
+	},
+	"devDependencies": {
+		"@tweakpane/core": "1.1.4",
+		"@types/three": "0.148.1",
+		"tweakpane": "3.1.4",
+		"vite": "^6.0.11",
+		"vite-plugin-glslify": "^2.2.0"
+	}
+}
