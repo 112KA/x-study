@@ -9,7 +9,7 @@ import {
 } from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { Deferred, assertIsDefined } from "x";
 
 const LOG_PREFIX = "[AssetLoader]";
