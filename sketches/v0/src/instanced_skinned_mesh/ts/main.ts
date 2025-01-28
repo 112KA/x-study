@@ -23,7 +23,7 @@ assertIsDefined(canvas);
 const container = new Container({
 	canvas,
 });
-const assetLoader = new AssetLoader({});
+const assetLoader = new AssetLoader();
 // mesh = new CylinderSkinnedMesh(container.scene),
 // mesh = new CylinderInstancedSkinnedMesh(container.scene, 10),
 // skeletonHelper = new SkeletonHelper(mesh)
@@ -37,6 +37,7 @@ async function setup() {
 	assetLoader.addResources([{ name: "model", path: ChiBakun }]);
 	await assetLoader.load();
 
+	// biome-ignore lint/suspicious/noExplicitAny: そのうち直す
 	const { scene, animations } = assetLoader.models.model as any;
 	const object = scene.getObjectByName("Armature");
 	const instancedObject = InstancedSkeletonUtils.convertToInstancedObject(

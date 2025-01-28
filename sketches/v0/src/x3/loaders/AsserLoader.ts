@@ -2,6 +2,7 @@ import {
 	EventDispatcher,
 	LoadingManager,
 	type Object3D,
+	REVISION,
 	Texture,
 	TextureLoader,
 	WebGLRenderer,
@@ -18,11 +19,6 @@ export type ResourceItem = {
 	path: string;
 };
 
-export type AssetLoaderParameters = {
-	dracoDecoderPath?: string;
-	ktx2TranscoderPath?: string;
-};
-
 export class AssetLoader extends EventDispatcher {
 	#manager: LoadingManager;
 	#resources: ResourceItem[] = [];
@@ -31,8 +27,10 @@ export class AssetLoader extends EventDispatcher {
 	public models: Record<string, Object3D> = {};
 	public textures: Record<string, Texture> = {};
 
-	constructor({ dracoDecoderPath, ktx2TranscoderPath }: AssetLoaderParameters) {
+	constructor() {
 		super();
+
+		const THREE_PATH = `https://unpkg.com/three@0.${REVISION}.x`;
 
 		this.#manager = new LoadingManager(
 			this.#onLoad,
@@ -42,35 +40,35 @@ export class AssetLoader extends EventDispatcher {
 
 		const gltfLoader = new GLTFLoader(this.#manager);
 
-		if (dracoDecoderPath !== undefined) {
-			const dracoLoader = new DRACOLoader().setDecoderPath(dracoDecoderPath);
-			gltfLoader.setDRACOLoader(dracoLoader);
-		}
+		const dracoLoader = new DRACOLoader().setDecoderPath(
+			`${THREE_PATH}/examples/jsm/libs/draco/gltf/`,
+		);
+		gltfLoader.setDRACOLoader(dracoLoader);
 
-		if (ktx2TranscoderPath !== undefined) {
-			const ktx2Loader = new KTX2Loader(this.#manager)
-				.setTranscoderPath(ktx2TranscoderPath)
-				.detectSupport(new WebGLRenderer());
-			gltfLoader.setKTX2Loader(ktx2Loader);
+		const ktx2Loader = new KTX2Loader(this.#manager)
+			.setTranscoderPath(`${THREE_PATH}/examples/jsm/libs/basis/`)
+			.detectSupport(new WebGLRenderer());
+		gltfLoader.setKTX2Loader(ktx2Loader);
 
-			//NOTE: https://discourse.threejs.org/t/basis-textures-with-alpha-appearing-fully-black-and-white-on-some-ipads-and-older-mobile-devices-when-rgb-pvrtc-4bppv1-format-is-used/22575/18
-			(
-				ktx2Loader as KTX2Loader & { workerConfig: { etc1Supported: boolean } }
-			).workerConfig.etc1Supported = false;
+		//NOTE: https://discourse.threejs.org/t/basis-textures-with-alpha-appearing-fully-black-and-white-on-some-ipads-and-older-mobile-devices-when-rgb-pvrtc-4bppv1-format-is-used/22575/18
+		(
+			ktx2Loader as KTX2Loader & { workerConfig: { etc1Supported: boolean } }
+		).workerConfig.etc1Supported = false;
 
-			this.#manager.addHandler(/\.(ktx2)$/i, ktx2Loader);
-		}
+		this.#manager.addHandler(/\.(ktx2)$/i, ktx2Loader);
 
 		this.#manager.addHandler(/\.(gltf|glb)$/i, gltfLoader);
 		this.#manager.addHandler(/\.(png|jpg)$/i, new TextureLoader(this.#manager));
 	}
 
-	#onLoad = () => {
-		//何もしない
-	};
 	#onProgress = (url: string, loaded: number, total: number): void => {
 		this.dispatchEvent({ type: "progress", url, progress: loaded / total });
 	};
+
+	#onLoad = () => {
+		//何もしない
+	};
+
 	#onError = (url: string): void => {};
 
 	/**
@@ -89,15 +87,14 @@ export class AssetLoader extends EventDispatcher {
 
 		console.groupCollapsed("Asset load info");
 
-		let loadedObject: any;
-		let targetList: any;
+		let targetList: Record<string, unknown>;
 
 		for (const { name, path } of this.#resources) {
 			console.log(LOG_PREFIX, "load", name, path);
 			const loader = this.#manager.getHandler(path);
 			assertIsDefined(loader);
 
-			loadedObject = await loader.loadAsync(`${path}`);
+			const loadedObject = await loader.loadAsync(`${path}`);
 			console.log({ loadedObject });
 
 			if (loadedObject instanceof Texture) {
