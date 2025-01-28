@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>GLSLfan viewer</title>
+  
+  
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+
+  <script id="glslcode" initialTime="0" initialResolution="2" title="shaderart" user="keim" channel="-L37T1Ig8uD4v0yfAFWK">
+precision mediump float;
+uniform vec2  resolution;     // resolution (width, height)
+uniform vec2  mouse;          // mouse      (0.0 ~ 1.0)
+uniform float time;           // time       (1second == 1.0)
+uniform sampler2D backbuffer; // previous scene texture
+
+void main(){
+  gl_FragColor = vec4(gl_FragCoord.xy/resolution-mouse+0.5, 0.5, 1);
+}
+</script>
+
+<div id="container"></div>
+<div id="overlay"><i class="fa fa-caret-square-o-right"></i></div>
+<footer>
+  <a id="link" href="https://glslfan.com/" target="_blank">
+    <span id="title"></span> <i class="fa fa-external-link"></i></a>
+  <button id="play">
+    <i class="fa fa-play"></i>
+    <i class="fa fa-pause"></i>
+  </button>
+  <button id="stop">
+    <i class="fa fa-stop"></i>
+  </button>
+  <select id="resolution" value="2">
+    <option value="0.5">0.5x</option>
+    <option value="1">1x</option>
+    <option value="2">2x</option>
+    <option value="4">4x</option>
+    <option value="8">8x</option>
+  </select>
+  <input id="time" value=""/>
+</footer>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>

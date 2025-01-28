@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storage 動作テスト</title>
+
+  <script>
+    function set_cookie() {
+      // var date_now = new Date();
+      // var date_1hour = new Date(); date_1hour.setHours(date_now.getHours()+1);
+      // var date_1day = new Date(); date_1day.setDate(date_now.getDate()+1);
+      // var date_1month = new Date(); date_1month.setDate(date_now.getDate()+30);
+      // var date_1year = new Date(); date_1year.setFullYear(date_now.getFullYear()+1);
+
+      // document.cookie = 'testcookie_1hour='+encodeURIComponent('設定日時:'+date_now+'/有効期限:'+date_1hour)+'; domain=abc.go2020.tokyo; path=/; max-age='+(60*60)+';';
+      // document.cookie = 'testcookie_1day='+encodeURIComponent('設定日時:'+date_now+'/有効期限:'+date_1day)+'; domain=abc.go2020.tokyo; path=/; max-age='+(60*60*24)+';';
+      // document.cookie = 'testcookie_1month='+encodeURIComponent('設定日時:'+date_now+'/有効期限:'+date_1month)+'; domain=abc.go2020.tokyo; path=/; max-age='+(60*60*24*30)+';';
+      // document.cookie = 'testcookie_1year='+encodeURIComponent('設定日時:'+date_now+'/有効期限:'+date_1year)+'; domain=abc.go2020.tokyo; path=/; max-age='+(60*60*24*365)+';';
+      // console.log(document.cookie);
+      document.cookie = 'testcookie_1day=javascript; max-age=' + (60 * 60 * 24) + ';'
+      document.cookie = 'testcookie_1week=javascript; max-age=' + (60 * 60 * 24 * 7) + ';'
+      window.alert('COOKIE設定完了\n' + decodeURIComponent(document.cookie).replace(/[=;\/]/g, '\n'));
+    }
+
+    function set_localstorage() {
+      window.localStorage.setItem("testlocalstorage", "設定されてるよ")
+    }
+
+    function check_cookie() {
+      window.alert('JSでのCOOKIE確認結果\n' + decodeURIComponent(document.cookie).replace(/[=;\/]/g, '\n'));
+    }
+
+    function check_localstorage() {
+      window.alert('保存したlocalstorage\n' + window.localStorage.getItem("testlocalstorage"));
+    }
+
+    function check_servercookie(v) {
+      let s = ""
+      if (v) {
+        s = "testcookie=" + v
+      }
+      window.alert('JSでのCOOKIE確認結果\n' + s)
+    }
+
+    function set_servercookie(option) {
+      let v = "testcookie=server_default; expires=Mon, 1 Jan 2029 12:00:00 GMT;"
+      if (option === "secure") {
+        v = "testcookie=server_secure; expires=Mon, 1 Jan 2029 12:00:00 GMT; Secure"
+      }
+      else if (option === "httponly") {
+        v = "testcookie=server_secure_httponly; expires=Mon, 1 Jan 2029 12:00:00 GMT; Secure; HttpOnly"
+      }
+      $.ajax({
+        type: 'POST',
+        url: '/fgo-takarazuka/setcookie.php',
+        data: {
+          // set cookie value
+          'cookie_value': v
+        }
+      })
+    }
+  </script>
+</head>
+
+<body>
+  <p>データ保持期間のテスト</p>
+  <div>
+    <p>1.JavaScriptでCookieを設定 <button onclick="set_cookie();">実行</button></p>
+    <p>2.localstorageを設定 <button onclick="set_localstorage();">実行</button></p>
+    <!--
+    <p>2-1.サーバー発行Cookieを設定 <button onclick="set_servercookie();">実行</button></p>
+    <p>2-2.サーバー発行Cookieを設定(Secure) <button onclick="set_servercookie('secure');">実行</button></p>
+    <p>2-3.サーバー発行Cookieを設定(Secure, HttpOnly) <button onclick="set_servercookie('httponly');">実行</button></p>
+    -->
+  </div>
+  <div>Cookieを確認 <button onclick="check_cookie();">Javascript</button>
+    <!--
+    <button
+      onclick="check_servercookie(<?php echo $_COOKIE['testcookie'];?>);">Http</button>
+      -->
+  </div>
+  <div>localstorageを確認 <button onclick="check_localstorage();">Javascript</button></div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+</body>
+
+</html>
