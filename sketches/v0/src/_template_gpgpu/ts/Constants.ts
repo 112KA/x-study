@@ -1,1 +1,1 @@
-export const TEXTURE_SIZE = 64
+export const TEXTURE_SIZE = 64;
