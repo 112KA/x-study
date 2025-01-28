@@ -8,10 +8,10 @@ import {
 	ShapeGeometry,
 	Vector3,
 } from "three";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
 
 import fontData from "@compai/font-noto-sans/data/typefaces/noto-sans-bold-normal-700.json";
-import type { GPUComputationRenderer } from "three/examples/jsm/misc/GPUComputationRenderer";
+import type { GPUComputationRenderer } from "three/examples/jsm/misc/GPUComputationRenderer.js";
 import { TEXTURE_SIZE } from "./Constants";
 import { ShapeSampler } from "./ShapeSampler";
 

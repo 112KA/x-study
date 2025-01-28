@@ -6,7 +6,7 @@ export default defineConfig({
 	root: resolve(__dirname, "src"),
 	base: "/sketches/",
 	build: {
-		outDir: resolve(__dirname, "dist/sketches"),
+		outDir: resolve(__dirname, "../../112KA.github.io/sketches"),
 		emptyOutDir: true,
 		rollupOptions: {
 			input: {

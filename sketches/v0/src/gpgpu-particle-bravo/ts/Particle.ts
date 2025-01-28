@@ -24,7 +24,7 @@ import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler";
 import {
 	GPUComputationRenderer,
 	type Variable,
-} from "three/examples/jsm/misc/GPUComputationRenderer";
+} from "three/examples/jsm/misc/GPUComputationRenderer.js";
 
 import {
 	InstancedParticleDistanceShader,

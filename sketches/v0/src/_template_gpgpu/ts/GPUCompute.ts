@@ -2,7 +2,7 @@ import type { DataTexture, WebGLRenderer } from "three";
 import {
 	GPUComputationRenderer,
 	type Variable,
-} from "three/examples/jsm/misc/GPUComputationRenderer";
+} from "three/examples/jsm/misc/GPUComputationRenderer.js";
 import { TEXTURE_SIZE } from "./Constants";
 import { ComputeShader } from "./glsl";
 
