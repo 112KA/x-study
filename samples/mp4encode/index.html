@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mp4 Encode | Samples</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      main {
+        aspect-ratio: 9 / 16;
+      }
+
+      @media screen and (min-width: 500px) {
+        main {
+          width: 360px;
+          height: 640px;
+        }
+      }
+
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+      #ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+    <!-- <script src="https://unpkg.com/h264-mp4-encoder@1.0.12/embuild/dist/h264-mp4-encoder.web.js"></script> -->
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+    ></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.140.2/build/three.module.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+
+      const width = 720,
+        height = 1280,
+        scene = new THREE.Scene(),
+        renderer = new THREE.WebGLRenderer({
+          canvas: document.getElementById("canvas"),
+          antialias: false,
+          // preserveDrawingBuffer: true,
+        }),
+        context = renderer.getContext("webgl");
+      renderer.setSize(width, height);
+      renderer.setClearColor(0x000000);
+      renderer.setPixelRatio(window.devicePixelRatio);
+
+      const camera = new THREE.PerspectiveCamera(
+        45,
+        width / height,
+        0.1,
+        10000
+      );
+      camera.position.set(0, 1, 7);
+      camera.lookAt(0, 0, 0);
+
+      const grid = new THREE.GridHelper(10, 10);
+      scene.add(grid);
+
+      // 箱を作成
+      const geometry = new THREE.BoxGeometry(1, 1, 1),
+        material = new THREE.MeshNormalMaterial(),
+        box = new THREE.Mesh(geometry, material);
+      scene.add(box);
+      tick();
+
+      var pixels = new Uint8Array(width * height * 4),
+        nAdded = 0;
+
+      function tick() {
+        box.rotation.y += 0.03;
+        renderer.render(scene, camera); // レンダリング
+
+        if (isRecord) {
+          context.readPixels(
+            0,
+            0,
+            width,
+            height,
+            context.RGBA,
+            context.UNSIGNED_BYTE,
+            pixels
+          );
+          // console.log("pixels", pixels);
+          nAdded++;
+          worker.postMessage({ command: "addframe", pixels });
+        }
+        requestAnimationFrame(tick);
+      }
+
+      var worker = new Worker("worker.js"),
+        btnRecord = document.getElementById("btn-record"),
+        progress = document.getElementById("progress"),
+        isRecord = false;
+
+      btnRecord.addEventListener("click", function (e) {
+        if (btnRecord.textContent === "Record") {
+          nAdded = 0;
+          btnRecord.textContent = "Stop";
+          worker.postMessage({ command: "initialize", width, height });
+        } else {
+          isRecord = false;
+          btnRecord.textContent = "Record";
+          btnRecord.style.visibility = "hidden";
+          worker.postMessage({ command: "finalize" });
+        }
+      });
+
+      worker.onmessage = function (e) {
+        switch (e.data.command) {
+          case "initialize":
+            isRecord = true;
+            break;
+          case "addframe":
+            var nProgress = ~~((e.data.nEncoded / nAdded) * 100);
+            progress.setAttribute("value", nProgress);
+            console.log("addframe", e.data.nEncoded, nAdded);
+            break;
+          case "finalize":
+            console.log("finalize", e.data.encoded);
+            download(
+              URL.createObjectURL(
+                new Blob([e.data.encoded], { type: "video/mp4" })
+              )
+            );
+            btnRecord.style.visibility = "visible";
+            progress.setAttribute("value", 0);
+            break;
+        }
+        // console.log(e);
+      };
+
+      const download = (url, filename) => {
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = filename || "download";
+        anchor.click();
+      };
+    </script>
+  </head>
+  <body>
+    <main>
+      <canvas id="canvas"></canvas>
+      <div id="ui">
+        <button id="btn-record">Record</button><br />
+        <progress id="progress" max="100" value="0"></progress>
+      </div>
+    </main>
+  </body>
+</html>
