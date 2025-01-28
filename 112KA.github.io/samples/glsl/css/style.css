@@ -1,0 +1,61 @@
+html {
+  height:100%;
+}
+body {
+  height:100%;
+  background-color: #000;
+  margin: 0px;
+  overflow: hidden;
+  position: relative;
+}
+#overlay.hidden {
+  display: none;
+}
+#overlay {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top:0;
+  height:100%;
+  width:100%;
+  background-color: rgba(128,128,128,0.75);
+  cursor:pointer;
+}
+#overlay>i {
+  color: rgba(0,0,128,0.3);
+  font-size:128px;
+}
+#overlay:hover>i {
+  color:#fff;
+  font-size:128px;
+  text-shadow: 4px 4px 16px rgba(0,0,0,0.5);
+}
+footer {
+  bottom:0;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  padding: 5px;
+  background: rgba(0,0,0,0.5);
+}
+input {
+  width: 60px;
+  text-align:right;
+}
+button,select,option,input {
+  padding:3px 12px;
+  color:#666;
+  background-color:#ccc;
+  border:1px solid #ccc;
+  border-radius:4px;
+}
+a {
+  color:#fff;
+  font:bold 14px Monospace;
+  margin-right: 16px;
+}
+#play>.fa-play{display:inline;}
+#play>.fa-pause{display:none;}
+#play.paused>.fa-play{display:none;}
+#play.paused>.fa-pause{display:inline;}

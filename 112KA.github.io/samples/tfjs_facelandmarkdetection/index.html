@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tfjs - face-landmarks-detection</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.min.js"></script>
+  <script src="main.js"></script>
+  <style>
+    #container {
+      position: relative;
+    }
+    #output {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <video id="video" playsinline muted style="transform:scaleX(-1);"></video>
+    <canvas id="output" style="transform:scaleX(-1);"></canvas>
+  </div>
+  <p>ref)<br><a href="https://github.com/tensorflow/tfjs-models/tree/master/face-landmarks-detection">https://github.com/tensorflow/tfjs-models/tree/master/face-landmarks-detection</a></p>
+  <h3>settings</h3>
+  <ul>
+    <li>@tensorflow/tfjs-backend-webgl</li>
+    <li>predictIrises:false</li>
+  </ul>
+</body>
+</html>

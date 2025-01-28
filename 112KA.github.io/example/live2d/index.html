@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <h1 class="heading">P2P Media example</h1>
+        <p class="note">
+            Enter remote peer ID to call.
+        </p>
+        <div class="p2p-media">
+
+            <div class="remote-stream">
+                <div class="video-container">
+                    <div>
+                        <video id="js-remote-stream" width="200" height="150" autoplay　playsinline="true"></video>
+                        <canvas id="overlay" width="200" height="150"></canvas>
+                    </div>
+                </div>
+
+                <canvas id="SAMPLE" width="500" height="500">
+                    このブラウザは
+                    <code>&lt;canvas&lt;</code>要素をサポートしていません。
+                </canvas>
+            </div>
+
+            <div class="local-stream">
+                <div>
+                    <video id="js-local-stream" width="300" height="225" autoplay　playsinline="true"></video>
+                </div>
+                <p>Your ID: <span id="js-local-id"></span></p>
+                <input type="text" placeholder="Remote Peer ID" id="js-remote-id">
+                <button id="js-call-trigger">Call</button>
+                <button id="js-close-trigger">Close</button>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="debug">a</div>
+
+    <!-- Promise-polyfill -->
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js "> </script>
+
+    <!-- Live2DCubismCore -->
+    <script src="./live2dcubismcore.min.js"></script>
+
+    <!-- <script src="//cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script> -->
+    <script src="clmtrackr.js"></script>
+    <script src="utils.js"></script>
+
+    <!-- User's Script -->
+    <script src="./dist/index.js"></script>
+
+    <!-- <script src="../../libs/Stats.js"></script> -->
+    <!-- <script src="script.js"></script> -->
+</body>
+
+</html>

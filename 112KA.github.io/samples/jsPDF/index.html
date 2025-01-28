@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jsPDF sample</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js" integrity="sha384-THVO/sM0mFD9h7dfSndI6TS0PgAGavwKvB5hAxRRvc0o9cPLohB0wb/PTA7LdUHs" crossorigin="anonymous"></script>
+</head>
+<body>
+<div>
+    <p><a href="https://github.com/MrRio/jsPDF" target="_blank">Github</a></p>
+    <p><a href="https://rawgit.com/MrRio/jsPDF/master/docs/index.html" target="_blank">Document</a></p>
+    <button onclick="download();">ダウンロード</button>
+    <button onclick="output();">プレビュー</button>
+</div>
+
+<script>
+// utf16をHexにする。
+// 参考)https://qiita.com/JunichiWatanuki/items/07bcb842e5532068fd62
+function utf16_to_hexcode(str) {
+    var strText = str.replace(/[A-Za-z0-9]/g, function(s) {
+                return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);
+                });
+    var tmpCode = "";
+    var strCode = "";
+    var strTmpCode = "";
+    var arr = strText.split('');
+    var intArr = Number(arr.length);
+    for( var i = 0; i < intArr; i ++ ){
+        strCode=strCode + escape(arr[i]).replace( /%u/g , "" );
+    }
+    return strCode;
+}
+
+function download() {
+    // Default export is a4 paper, portrait, using milimeters for units
+    var doc = new jsPDF("landscape", "pt", "a4")
+
+    doc.text('Test Page', 30, 30)
+    doc.addPage()
+    
+    doc.text('Test Page2', 30, 30)
+    doc.addPage()
+    doc.text('Test Page3', 30, 30)
+    doc.addPage()
+    doc.text('Test Page4', 30, 30)
+    doc.save('a4.pdf')
+}
+
+function output() {
+    // Default export is a4 paper, portrait, using milimeters for units
+    var doc = new jsPDF("landscape", "pt", "a4")
+
+    doc.text('Test Page', 30, 30)
+    doc.addPage()
+    doc.text('Test Page2', 30, 30)
+    doc.addPage()
+    doc.text('Test Page3', 30, 30)
+    doc.addPage()
+    doc.text('Test Page4', 30, 30)
+
+    //Edge対応
+    //https://stackoverflow.com/questions/32217537/windows-edge-and-opening-a-blob-url
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(doc.output('blob'), "test.pdf");  
+    }
+    else {
+        window.open(doc.output('bloburl'), '_blank');
+    }
+}
+</script>
+</body>
+</html>

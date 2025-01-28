@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        @font-face {
+            font-family: 'Noto Sans';
+            font-style: italic;
+            font-weight: 700;
+            src: local('Noto Sans Bold Italic'), local('NotoSans-BoldItalic'), url(https://fonts.gstatic.com/s/notosans/v7/o-0TIpQlx3QUlC5A4PNr4Az5ZuyDzW1IPrie.woff2) format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+
+        #my-node {
+            width: 300px; height: 300px;
+            background: red;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #my-node p {
+			font: italic normal 700 normal 16px/23px 'Noto Sans', sans-serif;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+</head>
+<body>
+    <div id="my-node">
+        <p>Test String</p>
+    </div>
+
+    <script>
+var node = document.getElementById('my-node');
+
+console.log(node)
+
+// domtoimage.toPng(node)
+//     .then(function (dataUrl) {
+//         console.log(dataUrl)
+//         var img = new Image();
+//         img.src = dataUrl;
+//         document.body.appendChild(img);
+//     })
+//     .catch(function (error) {
+//         console.error('oops, something went wrong!', error);
+//     });
+
+domtoimage.toSvg(node)
+    .then(function(uri) {
+        console.log('uri', uri)
+        return domtoimage.impl.util.makeImage(uri)
+    })
+    .then(domtoimage.impl.util.delay(100))
+    .then(function (image) {
+        console.log(image)
+        document.body.appendChild(image);
+    })
+    // .then(function (svg) {
+    //     var s = svg.replace('data:image/svg+xml;charset=utf-8,', ''),
+    //     // var s = '<div></div>'
+    //     dom = new DOMParser().parseFromString(s, "text/xml");
+	// 	console.log('svg: ', s);
+    //     console.log(dom)
+    //     document.body.appendChild(dom.childNodes[0]);
+    // })
+    .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+    });
+    </script>
+</body>
+</html>

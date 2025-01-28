@@ -1,0 +1,8 @@
+# Node #
+/**/node_modules
+
+# precompress images
+/_develop/**/image
+
+# exe
+
