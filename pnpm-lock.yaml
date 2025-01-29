@@ -36,8 +36,8 @@ importers:
         specifier: 3.1.4
         version: 3.1.4
       x:
-        specifier: npm:@112ka/x@0.0.5
-        version: '@112ka/x@0.0.5'
+        specifier: npm:@112ka/x@0.0.7
+        version: '@112ka/x@0.0.7'
     devDependencies:
       '@types/three':
         specifier: 0.148.1
@@ -58,8 +58,8 @@ importers:
         specifier: 4.0.5
         version: 4.0.5
       x:
-        specifier: npm:@112ka/x@0.0.5
-        version: '@112ka/x@0.0.5'
+        specifier: npm:@112ka/x@0.0.7
+        version: '@112ka/x@0.0.7'
     devDependencies:
       '@types/three':
         specifier: 0.172.0
@@ -70,8 +70,8 @@ importers:
 
 packages:
 
-  '@112ka/x@0.0.5':
-    resolution: {integrity: sha512-sbUKhy9fp+5HoSgf6BbUJZfR8NkNJK87g8B0FqaDabGp5pLiHcs0n4/jA/r2uuvYgOo9we5iTxwGpuj1Eyxvig==, tarball: https://npm.pkg.github.com/download/@112ka/x/0.0.5/5001f00c6e7fc0e0958b85f74e126e2443599255}
+  '@112ka/x@0.0.7':
+    resolution: {integrity: sha512-LCA14R4vkj4HXwywiUqebkqIbuVX6FD6+MooNTfxcGvtE1VRg5XVeFqZiTGgwaLcok0BFMBPQVU2DGv7z1D4Xw==, tarball: https://npm.pkg.github.com/download/@112ka/x/0.0.7/0d90e946f3690ef1fc8464b0284ac707898fb468}
 
   '@biomejs/biome@1.9.4':
     resolution: {integrity: sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==}
@@ -889,7 +889,7 @@ packages:
 
 snapshots:
 
-  '@112ka/x@0.0.5': {}
+  '@112ka/x@0.0.7': {}
 
   '@biomejs/biome@1.9.4':
     optionalDependencies:

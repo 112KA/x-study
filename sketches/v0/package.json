@@ -14,7 +14,7 @@
 		"@compai/font-noto-sans": "^0.0.4",
 		"three": "0.148.0",
 		"tweakpane": "3.1.4",
-		"x": "npm:@112ka/x@0.0.5"
+		"x": "npm:@112ka/x@0.0.7"
 	},
 	"devDependencies": {
 		"@types/three": "0.148.1",

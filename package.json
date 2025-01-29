@@ -9,9 +9,9 @@
 		"yarn": "use pnpm"
 	},
 	"scripts": {
-		"watch": "tsc -b ./tsconfig.watch.json -w",
-		"dev": "pnpm --filter v0 dev",
-		"build": "pnpm --filter v0 build"
+		"dev": "pnpm v1 dev",
+		"v0": "pnpm --filter v0",
+		"v1": "pnpm --filter v1"
 	},
 	"keywords": [],
 	"author": "Masayuki Iizuka <mas.iizuka@gmail.com>",
