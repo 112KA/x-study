@@ -7,7 +7,7 @@ export default defineConfig({
 	base: "/sketches/",
 	build: {
 		outDir: resolve(__dirname, "../../112KA.github.io/sketches"),
-		emptyOutDir: true,
+		emptyOutDir: false,
 		rollupOptions: {
 			input: {
 				"gpgpu-particle-bravo": resolve(
