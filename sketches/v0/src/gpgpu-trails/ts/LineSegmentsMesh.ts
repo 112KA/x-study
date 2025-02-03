@@ -1,10 +1,4 @@
-import {
-	BufferAttribute,
-	BufferGeometry,
-	LineSegments,
-	Points,
-	ShaderMaterial,
-} from "three";
+import { BufferAttribute, BufferGeometry, LineSegments, Points, ShaderMaterial } from "three";
 import { TEXTURE_SIZE } from "./Constants";
 import { LineSegmentsShader } from "./glsl";
 

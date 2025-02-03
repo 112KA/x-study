@@ -40,10 +40,7 @@ async function setup() {
 	// biome-ignore lint/suspicious/noExplicitAny: そのうち直す
 	const { scene, animations } = assetLoader.models.model as any;
 	const object = scene.getObjectByName("Armature");
-	const instancedObject = InstancedSkeletonUtils.convertToInstancedObject(
-		object,
-		N_INSTANCE,
-	);
+	const instancedObject = InstancedSkeletonUtils.convertToInstancedObject(object, N_INSTANCE);
 	const skeletonHelper = new SkeletonHelper(instancedObject);
 
 	container.scene.add(instancedObject);

@@ -29,10 +29,7 @@ export class Container {
 
 		this.camera.position.set(0, 5, 10);
 
-		this._cameraControls = new OrbitControls(
-			this.camera,
-			this.renderer.domElement,
-		);
+		this._cameraControls = new OrbitControls(this.camera, this.renderer.domElement);
 
 		const grid = new GridHelper(10, 10);
 		this.scene.add(grid);

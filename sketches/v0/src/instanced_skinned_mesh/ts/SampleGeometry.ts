@@ -1,9 +1,4 @@
-import {
-	CylinderGeometry,
-	Float32BufferAttribute,
-	Uint16BufferAttribute,
-	Vector3,
-} from "three";
+import { CylinderGeometry, Float32BufferAttribute, Uint16BufferAttribute, Vector3 } from "three";
 
 type CylinderSizing = {
 	segmentHeight: number;

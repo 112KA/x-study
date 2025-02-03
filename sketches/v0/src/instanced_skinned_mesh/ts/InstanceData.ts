@@ -20,11 +20,7 @@ export class InstanceData {
 	#actions: Record<string, AnimationAction> = {};
 	#currentAnimationName = "";
 	#rootInvertMatrix: Matrix4;
-	#position: Vector3 = new Vector3(
-		(0.5 - Math.random()) * 40,
-		0,
-		(0.5 - Math.random()) * 40,
-	);
+	#position: Vector3 = new Vector3((0.5 - Math.random()) * 40, 0, (0.5 - Math.random()) * 40);
 	#scale: Vector3 = new Vector3(1, 1, 1);
 	constructor(
 		public instanceIndex: number,
@@ -91,11 +87,7 @@ export class InstanceData {
 		this.#changeAnimation();
 	}
 
-	executeCrossFade(
-		startAction: AnimationAction,
-		endAction: AnimationAction,
-		duration: number,
-	) {
+	executeCrossFade(startAction: AnimationAction, endAction: AnimationAction, duration: number) {
 		// Not only the start action, but also the end action must get a weight of 1 before fading
 		// (concerning the start action this is already guaranteed in this place)
 
@@ -117,9 +109,7 @@ export class InstanceData {
 		// console.log('#updateMatrix', this.#position)
 		this.matrix.identity();
 		this.matrix.scale(this.#scale);
-		this.matrix.setPosition(
-			this.#position.clone().applyMatrix4(this.#rootInvertMatrix),
-		);
+		this.matrix.setPosition(this.#position.clone().applyMatrix4(this.#rootInvertMatrix));
 
 		// console.log('#updateMatrix', this.matrix)
 		this.#instancedObject.traverse((node: Object3D) => {

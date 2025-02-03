@@ -1,12 +1,4 @@
-import {
-	AmbientLight,
-	GridHelper,
-	PCFSoftShadowMap,
-	PerspectiveCamera,
-	PointLight,
-	Scene,
-	WebGLRenderer,
-} from "three";
+import { AmbientLight, GridHelper, PCFSoftShadowMap, PerspectiveCamera, PointLight, Scene, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -41,10 +33,7 @@ export class Container {
 
 		this.camera.position.set(0, 5, 1000);
 
-		this._cameraControls = new OrbitControls(
-			this.camera,
-			this.renderer.domElement,
-		);
+		this._cameraControls = new OrbitControls(this.camera, this.renderer.domElement);
 
 		// var grid = new GridHelper(10, 10)
 		// this.scene.add(grid)

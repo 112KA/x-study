@@ -1,45 +1,29 @@
-import {
-	Mesh,
-	MeshBasicMaterial,
-	PlaneGeometry,
-	ShaderMaterial,
-	Vector2,
-	type WebGLRenderer,
-} from "three";
-import type { Container } from "./Container";
-import { GradationShader } from "./glsl";
+import { abs, oscSine, texture, time, uv, vec4 } from "three/tsl";
+import { NodeMaterial, QuadMesh, type Texture, type WebGPURenderer } from "three/webgpu";
 
-export class Background extends Mesh {
-	private _renderer: WebGLRenderer;
+export class Background extends QuadMesh {
+	constructor() {
+		const material = new NodeMaterial();
+		// material.colorNode = vec4(1, 0, 0, 1);
+		material.colorNode = vec4(uv(), abs(oscSine(time.mul(0.1))), 1);
 
-	constructor({ scene, renderer }: Container) {
-		const geometry = new PlaneGeometry(2, 2);
-		//   const material = new MeshBasicMaterial({ color: 0xff0000 })
-		const { vertexShader, fragmentShader } = GradationShader;
-		const material = new ShaderMaterial({
-			vertexShader,
-			fragmentShader,
-			uniforms: {
-				time: { value: 0 },
-				resolution: { value: new Vector2() },
-			},
-		});
-		super(geometry, material);
+		super(material);
+	}
 
-		this._renderer = renderer;
-
-		scene.add(this);
+	setup(map: Texture) {
+		console.log({ map });
+		(this.material as NodeMaterial).colorNode = texture(map);
 	}
 
 	update(dt: number, elapsedTime: number) {
-		(this.material as ShaderMaterial).uniforms.time.value = elapsedTime;
+		// (this.material as ShaderMaterial).uniforms.time.value = elapsedTime;
 	}
 
 	resize() {
-		const { width, height } = this._renderer.domElement;
-		(this.material as ShaderMaterial).uniforms.resolution.value.set(
-			width,
-			height,
-		);
+		// const { width, height } = this.#renderer.domElement;
+		// (this.material as ShaderMaterial).uniforms.resolution.value.set(
+		// 	width,
+		// 	height,
+		// );
 	}
 }

@@ -13,7 +13,7 @@ export class Container {
 	public scene = new Scene();
 	public camera = new PerspectiveCamera(45, 1, 0.1, 10000);
 	private _cameraControls: OrbitControls;
-	private _stats = Stats();
+	#stats = new Stats();
 
 	constructor({ canvas }: ContainerProps) {
 		this.renderer = new WebGLRenderer({
@@ -29,20 +29,17 @@ export class Container {
 
 		this.camera.position.set(0, 5, 10);
 
-		this._cameraControls = new OrbitControls(
-			this.camera,
-			this.renderer.domElement,
-		);
+		this._cameraControls = new OrbitControls(this.camera, this.renderer.domElement);
 
 		const grid = new GridHelper(10, 10);
 		this.scene.add(grid);
 
-		document.querySelector("body")?.appendChild(this._stats.dom);
+		document.querySelector("body")?.appendChild(this.#stats.dom);
 	}
 	render() {
 		this._cameraControls.update();
 		this.renderer.render(this.scene, this.camera);
-		this._stats.update();
+		this.#stats.update();
 		// console.log('this.renderer', this.renderer);
 	}
 	resize() {

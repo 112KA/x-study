@@ -1,10 +1,4 @@
-import {
-	BufferAttribute,
-	BufferGeometry,
-	GLSL3,
-	Points,
-	ShaderMaterial,
-} from "three";
+import { BufferAttribute, BufferGeometry, GLSL3, Points, ShaderMaterial } from "three";
 import { TEXTURE_SIZE } from "./Constants";
 import { ParticleShader } from "./glsl";
 

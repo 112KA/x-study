@@ -27,13 +27,7 @@ const BLADE_TIP_OFFSET = 0.1;
 
 const Y_AXIS = new Vector3(0, 1, 0);
 
-function interpolate(
-	val: number,
-	oldMin: number,
-	oldMax: number,
-	newMin: number,
-	newMax: number,
-) {
+function interpolate(val: number, oldMin: number, oldMax: number, newMin: number, newMax: number) {
 	return ((val - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
 }
 
@@ -50,10 +44,7 @@ class GrassGeometry extends InstancedBufferGeometry {
 		positions.push(...blade.positions);
 		indices.push(...blade.indices);
 
-		this.setAttribute(
-			"position",
-			new BufferAttribute(new Float32Array(positions), 3),
-		);
+		this.setAttribute("position", new BufferAttribute(new Float32Array(positions), 3));
 		this.setIndex(indices);
 		// this.computeVertexNormals()
 	}
@@ -121,33 +112,18 @@ export class InstancedGrass extends Mesh {
 
 			offsetPositions.push(x, 0, y);
 
-			uvs.push(
-				interpolate(x, surfaceMin, surfaceMax, 0, 1),
-				interpolate(y, surfaceMin, surfaceMax, 0, 1),
-			);
+			uvs.push(interpolate(x, surfaceMin, surfaceMax, 0, 1), interpolate(y, surfaceMin, surfaceMax, 0, 1));
 		}
 
 		console.log({ instanceMatrices });
 
-		geometry.setAttribute(
-			"offsetPosition",
-			new InstancedBufferAttribute(new Float32Array(offsetPositions), 3),
-		);
-		geometry.setAttribute(
-			"instanceMatrix",
-			new InstancedBufferAttribute(new Float32Array(instanceMatrices), 16),
-		);
-		geometry.setAttribute(
-			"uv",
-			new InstancedBufferAttribute(new Float32Array(uvs), 2),
-		);
+		geometry.setAttribute("offsetPosition", new InstancedBufferAttribute(new Float32Array(offsetPositions), 3));
+		geometry.setAttribute("instanceMatrix", new InstancedBufferAttribute(new Float32Array(instanceMatrices), 16));
+		geometry.setAttribute("uv", new InstancedBufferAttribute(new Float32Array(uvs), 2));
 
 		parent.add(this);
 
-		const floor = new Mesh(
-			new CircleGeometry(15, 8).rotateX(Math.PI / 2),
-			material,
-		);
+		const floor = new Mesh(new CircleGeometry(15, 8).rotateX(Math.PI / 2), material);
 		floor.position.y = -Number.EPSILON;
 		this.add(floor);
 	}

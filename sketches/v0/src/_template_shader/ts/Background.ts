@@ -1,11 +1,4 @@
-import {
-	Mesh,
-	MeshBasicMaterial,
-	PlaneGeometry,
-	ShaderMaterial,
-	Vector2,
-	type WebGLRenderer,
-} from "three";
+import { Mesh, MeshBasicMaterial, PlaneGeometry, ShaderMaterial, Vector2, type WebGLRenderer } from "three";
 import type { Container } from "./Container";
 import { GradationShader } from "./glsl";
 
@@ -37,9 +30,6 @@ export class Background extends Mesh {
 
 	resize() {
 		const { width, height } = this._renderer.domElement;
-		(this.material as ShaderMaterial).uniforms.resolution.value.set(
-			width,
-			height,
-		);
+		(this.material as ShaderMaterial).uniforms.resolution.value.set(width, height);
 	}
 }

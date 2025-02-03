@@ -1,32 +1,29 @@
-import { Camera, Scene, WebGLRenderer } from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import { WebGPURenderer } from "three/webgpu";
 
 import type { DeviceSize } from "x";
 
 export type ContainerProps = {
-	canvas: HTMLElement;
+	canvas: HTMLCanvasElement;
 };
 export class Container {
-	public renderer: WebGLRenderer;
-	public scene = new Scene();
-	public camera = new Camera();
-	private _stats = Stats();
+	public renderer: WebGPURenderer;
+	#stats = new Stats();
 
 	constructor({ canvas }: ContainerProps) {
-		this.renderer = new WebGLRenderer({
+		this.renderer = new WebGPURenderer({
 			canvas,
-			antialias: false,
-			alpha: false,
+			// forceWebGL: true,
 		});
-		this.renderer.setClearColor(0x000000, 0);
+
+		this.renderer.setClearColor(0x000000, 1);
 		this.renderer.setPixelRatio(1);
 
-		document.querySelector("body")?.appendChild(this._stats.dom);
+		document.querySelector("body")?.appendChild(this.#stats.dom);
 	}
 
-	render() {
-		this.renderer.render(this.scene, this.camera);
-		this._stats.update();
+	update(dt: number, elapsedTime: number) {
+		this.#stats.update();
 	}
 
 	resize() {

@@ -21,10 +21,7 @@ import {
 	WebGLRenderTarget,
 } from "three";
 import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler";
-import {
-	GPUComputationRenderer,
-	type Variable,
-} from "three/examples/jsm/misc/GPUComputationRenderer.js";
+import { GPUComputationRenderer, type Variable } from "three/examples/jsm/misc/GPUComputationRenderer.js";
 
 import {
 	InstancedParticleDistanceShader,
@@ -92,9 +89,7 @@ export class Particle {
 
 		console.log("positionUniform", positionUniform);
 
-		this.computeRenderer.setVariableDependencies(this.positionVariable, [
-			this.positionVariable,
-		]);
+		this.computeRenderer.setVariableDependencies(this.positionVariable, [this.positionVariable]);
 
 		const error = this.computeRenderer.init();
 		if (error !== null) {
@@ -251,14 +246,8 @@ export class Particle {
 
 		geometry.copy(new ShapeGeometry(shape));
 
-		geometry.setAttribute(
-			"instanceIndex",
-			new InstancedBufferAttribute(instanceIndex, 1, false, 1),
-		);
-		geometry.setAttribute(
-			"color",
-			new InstancedBufferAttribute(color, 3, false, 1),
-		);
+		geometry.setAttribute("instanceIndex", new InstancedBufferAttribute(instanceIndex, 1, false, 1));
+		geometry.setAttribute("color", new InstancedBufferAttribute(color, 3, false, 1));
 		geometry.instanceCount = N_PARTICLES;
 
 		const mesh = new Mesh(geometry, material);
@@ -286,14 +275,9 @@ export class Particle {
 		this.positionVariable.material.uniforms.time.value += dt * 0.001;
 		// this.positionVariable.material.uniforms.rotation.value = 0; //dt * 0.001;
 		this.computeRenderer.compute();
-		const texture: Texture = this.computeRenderer.getCurrentRenderTarget(
-			this.positionVariable,
-		).texture;
-		(this.mesh.material as ShaderMaterial).uniforms.texturePosition.value =
-			texture;
-		(
-			this.mesh.customDistanceMaterial as ShaderMaterial
-		).uniforms.texturePosition.value = texture;
+		const texture: Texture = this.computeRenderer.getCurrentRenderTarget(this.positionVariable).texture;
+		(this.mesh.material as ShaderMaterial).uniforms.texturePosition.value = texture;
+		(this.mesh.customDistanceMaterial as ShaderMaterial).uniforms.texturePosition.value = texture;
 	}
 
 	setDeviceSize(deviceSize: DeviceSize) {

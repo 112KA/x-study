@@ -58,15 +58,7 @@ export class TextObject {
 
 		for (let i = 0; i < N_PARTICLES; i++) {
 			this.sampler.sample(position);
-			data.set(
-				[
-					position.x - offset.x,
-					position.y - offset.y,
-					position.z,
-					Math.random(),
-				],
-				i * 4,
-			);
+			data.set([position.x - offset.x, position.y - offset.y, position.z, Math.random()], i * 4);
 		}
 	}
 

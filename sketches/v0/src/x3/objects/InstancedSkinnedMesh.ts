@@ -30,10 +30,7 @@ export class InstancedSkinnedMesh<
 	) {
 		super(geometry, material);
 
-		this.instanceMatrix = new InstancedBufferAttribute(
-			new Float32Array(count * 16),
-			16,
-		);
+		this.instanceMatrix = new InstancedBufferAttribute(new Float32Array(count * 16), 16);
 
 		for (let i = 0; i < count; i++) {
 			this.setMatrixAt(i, _identityMatrix);
@@ -47,8 +44,7 @@ export class InstancedSkinnedMesh<
 			const sourceMesh = source as InstancedSkinnedMesh;
 			this.instanceMatrix.copy(sourceMesh.instanceMatrix);
 
-			if (sourceMesh.instanceColor !== null)
-				this.instanceColor = sourceMesh.instanceColor.clone();
+			if (sourceMesh.instanceColor !== null) this.instanceColor = sourceMesh.instanceColor.clone();
 
 			this.count = sourceMesh.count;
 		}
@@ -88,10 +84,7 @@ export class InstancedSkinnedMesh<
 
 	setColorAt(index: number, color: Color) {
 		if (this.instanceColor === null) {
-			this.instanceColor = new InstancedBufferAttribute(
-				new Float32Array(this.instanceMatrix.count * 3),
-				3,
-			);
+			this.instanceColor = new InstancedBufferAttribute(new Float32Array(this.instanceMatrix.count * 3), 3);
 		}
 
 		color.toArray(this.instanceColor.array, index * 3);

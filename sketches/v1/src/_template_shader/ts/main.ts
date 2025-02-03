@@ -1,20 +1,28 @@
-import { Clock } from "three";
+import { Clock, type MeshBasicMaterial } from "three";
 import { assertIsDefined } from "x";
-import { Background } from "./Background";
-import { Container } from "./Container";
+import { AssetManager } from "x3/index.js";
+import { Background } from "./Background.js";
+import { Container } from "./Container.js";
 
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+
+const assetManager = new AssetManager();
+
 assertIsDefined(canvas);
+
 const clock = new Clock();
 const container = new Container({
 	canvas,
 });
-const background = new Background(container);
+const background = new Background();
 
-function setup() {
-	update();
+async function setup() {
+	// await assetManager.load([{ id: "checker", url: "../common/CustomUVChecker_byValle_2K.webp" }], container.renderer);
+	// background.setup(assetManager.textures.checker);
+
+	container.renderer.setAnimationLoop(update);
+
 	resize();
-
 	window.addEventListener("resize", resize);
 }
 
@@ -23,14 +31,14 @@ function update() {
 	const elapsedTime = clock.elapsedTime;
 
 	background.update(dt, elapsedTime);
-	container.render();
+	container.update(dt, elapsedTime);
 
-	requestAnimationFrame(update);
+	background.render(container.renderer);
 }
 
 function resize() {
-	container.resize();
 	background.resize();
+	container.resize();
 }
 
 setup();

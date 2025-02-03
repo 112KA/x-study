@@ -18,12 +18,9 @@ export class Particle {
 		this._gpuCompute.update();
 
 		const { uniforms } = this._mesh.material as ShaderMaterial;
-		const { gpuComputationRenderer, positionVariable, velocityVariable } =
-			this._gpuCompute;
+		const { gpuComputationRenderer, positionVariable, velocityVariable } = this._gpuCompute;
 
-		uniforms.texturePosition.value =
-			gpuComputationRenderer.getCurrentRenderTarget(positionVariable).texture;
-		uniforms.textureVelocity.value =
-			gpuComputationRenderer.getCurrentRenderTarget(velocityVariable).texture;
+		uniforms.texturePosition.value = gpuComputationRenderer.getCurrentRenderTarget(positionVariable).texture;
+		uniforms.textureVelocity.value = gpuComputationRenderer.getCurrentRenderTarget(velocityVariable).texture;
 	}
 }

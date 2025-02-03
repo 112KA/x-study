@@ -48,11 +48,7 @@ export class PolygonalTrailMesh extends Mesh {
 						const underBase = (cNum - 1) * this._nSectionShapes;
 						const kNext = (k + 1) % this._nSectionShapes;
 
-						indexArray.push(
-							currentBase + k,
-							underBase + kNext,
-							currentBase + kNext,
-						);
+						indexArray.push(currentBase + k, underBase + kNext, currentBase + kNext);
 						indexArray.push(currentBase + k, underBase + k, underBase + kNext);
 					}
 				}

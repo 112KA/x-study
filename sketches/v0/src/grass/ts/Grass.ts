@@ -17,13 +17,7 @@ const BLADE_HEIGHT_VARIATION = 0.6;
 const BLADE_VERTEX_COUNT = 5;
 const BLADE_TIP_OFFSET = 0;
 
-function interpolate(
-	val: number,
-	oldMin: number,
-	oldMax: number,
-	newMin: number,
-	newMax: number,
-) {
+function interpolate(val: number, oldMin: number, oldMax: number, newMin: number, newMax: number) {
 	return ((val - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
 }
 
@@ -56,10 +50,7 @@ export class GrassGeometry extends BufferGeometry {
 			indices.push(...blade.indices);
 		}
 
-		this.setAttribute(
-			"position",
-			new BufferAttribute(new Float32Array(positions), 3),
-		);
+		this.setAttribute("position", new BufferAttribute(new Float32Array(positions), 3));
 		this.setAttribute("uv", new BufferAttribute(new Float32Array(uvs), 2));
 		this.setIndex(indices);
 		this.computeVertexNormals();
@@ -91,17 +82,7 @@ export class GrassGeometry extends BufferGeometry {
 
 		return {
 			positions: [...bl, ...br, ...tr, ...tl, ...tc],
-			indices: [
-				vIndex,
-				vIndex + 1,
-				vIndex + 2,
-				vIndex + 2,
-				vIndex + 4,
-				vIndex + 3,
-				vIndex + 3,
-				vIndex,
-				vIndex + 2,
-			],
+			indices: [vIndex, vIndex + 1, vIndex + 2, vIndex + 2, vIndex + 4, vIndex + 3, vIndex + 3, vIndex, vIndex + 2],
 		};
 	}
 }

@@ -1,11 +1,4 @@
-import {
-	NoBlending,
-	ShaderMaterial,
-	type ShaderMaterialParameters,
-	UniformsLib,
-	UniformsUtils,
-	Vector3,
-} from "three";
+import { NoBlending, ShaderMaterial, type ShaderMaterialParameters, UniformsLib, UniformsUtils, Vector3 } from "three";
 
 export class ParticleDistanceMaterial extends ShaderMaterial {
 	public referencePosition: Vector3 = new Vector3();

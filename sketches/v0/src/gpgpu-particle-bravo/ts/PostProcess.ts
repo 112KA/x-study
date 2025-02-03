@@ -39,9 +39,6 @@ export class PostProcess {
 
 		this.unrealBloomPass.resolution.set(width, height);
 
-		this.fxaaPass.material.uniforms.resolution.value.set(
-			1 / (width * this.pixelRatio),
-			1 / (height * this.pixelRatio),
-		);
+		this.fxaaPass.material.uniforms.resolution.value.set(1 / (width * this.pixelRatio), 1 / (height * this.pixelRatio));
 	}
 }

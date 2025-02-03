@@ -1,8 +1,4 @@
-import {
-	ApiChangeEvents,
-	type TpChangeEvent,
-	TpUpdateEvent,
-} from "@tweakpane/core";
+import { ApiChangeEvents, type TpChangeEvent, TpUpdateEvent } from "@tweakpane/core";
 import { type ListApi, Pane } from "tweakpane";
 import { Container } from "../Container";
 import type { Grass } from "../Grass";

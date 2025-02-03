@@ -1,12 +1,4 @@
-import {
-	type Bone,
-	DataTexture,
-	FloatType,
-	MathUtils,
-	Matrix4,
-	RGBAFormat,
-	Skeleton,
-} from "three";
+import { type Bone, DataTexture, FloatType, MathUtils, Matrix4, RGBAFormat, Skeleton } from "three";
 import type { Geometry } from "x";
 
 const _offsetMatrix = /*@__PURE__*/ new Matrix4();
@@ -37,9 +29,7 @@ export class InstancedSkeleton extends Skeleton {
 			// handle special case
 
 			if (bones.length !== boneInverses.length) {
-				console.warn(
-					"THREE.Skeleton: Number of inverse bone matrices does not match amount of bones.",
-				);
+				console.warn("THREE.Skeleton: Number of inverse bone matrices does not match amount of bones.");
 
 				this.boneInverses = [];
 
@@ -65,13 +55,7 @@ export class InstancedSkeleton extends Skeleton {
 		const boneMatrices = new Float32Array(size.width * size.height * 4); // 4 floats per RGBA pixel
 		boneMatrices.set(this.boneMatrices); // copy current values
 
-		const boneTexture = new DataTexture(
-			boneMatrices,
-			size.width,
-			size.height,
-			RGBAFormat,
-			FloatType,
-		);
+		const boneTexture = new DataTexture(boneMatrices, size.width, size.height, RGBAFormat, FloatType);
 		boneTexture.needsUpdate = true;
 
 		this.boneMatrices = boneMatrices;
@@ -94,10 +78,7 @@ export class InstancedSkeleton extends Skeleton {
 			const matrix = bones[boneIndex].matrixWorld;
 
 			_offsetMatrix.multiplyMatrices(matrix, boneInverses[boneIndex]);
-			_offsetMatrix.toArray(
-				boneMatrices,
-				16 * (boneIndex + instanceIndex * bones.length),
-			);
+			_offsetMatrix.toArray(boneMatrices, 16 * (boneIndex + instanceIndex * bones.length));
 		}
 
 		if (boneTexture !== null) {

@@ -4,9 +4,9 @@ import { glslify } from "vite-plugin-glslify";
 
 export default defineConfig({
 	root: resolve(__dirname, "src"),
-	base: "/sketches/",
+	base: "/study/",
 	build: {
-		outDir: resolve(__dirname, "../../112KA.github.io/sketches"),
+		outDir: resolve(__dirname, "../../112KA.github.io/study"),
 		emptyOutDir: false,
 		rollupOptions: {
 			input: {},
@@ -29,7 +29,7 @@ export default defineConfig({
 	assetsInclude: ["**/*.gltf", "**/*.glb", "**/*.frag"],
 	resolve: {
 		alias: {
-			x3: resolve(__dirname, "./src/x3_src"),
+			x3: resolve(__dirname, "./x3_src"),
 		},
 	},
 });

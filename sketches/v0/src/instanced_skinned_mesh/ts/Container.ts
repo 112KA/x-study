@@ -1,10 +1,4 @@
-import {
-	GridHelper,
-	PerspectiveCamera,
-	PointLight,
-	Scene,
-	WebGLRenderer,
-} from "three";
+import { GridHelper, PerspectiveCamera, PointLight, Scene, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -36,10 +30,7 @@ export class Container {
 
 		this.camera.position.set(0, 5, 10);
 
-		this._cameraControls = new OrbitControls(
-			this.camera,
-			this.renderer.domElement,
-		);
+		this._cameraControls = new OrbitControls(this.camera, this.renderer.domElement);
 
 		const lights = [];
 		lights[0] = new PointLight(0xffffff, 1, 0);

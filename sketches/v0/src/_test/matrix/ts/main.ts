@@ -23,23 +23,13 @@ function setup() {
 	const vectorTarget = new Vector3(2, 1, 3);
 	const arrowDirection = new ArrowHelper(vectorDirection, origin, 2, 0xff0000);
 	const arrowNormal = new ArrowHelper(vectorNormal, origin, 2, 0x00ff00);
-	const arrowTarget = new ArrowHelper(
-		vectorTarget.normalize(),
-		origin,
-		1,
-		0x0000ff,
-	);
+	const arrowTarget = new ArrowHelper(vectorTarget.normalize(), origin, 1, 0x0000ff);
 	targetObject.add(arrowDirection, arrowNormal);
 	container.scene.add(targetObject, arrowTarget);
 
-	const axisVector = new Vector3()
-		.crossVectors(vectorNormal, vectorTarget)
-		.normalize();
+	const axisVector = new Vector3().crossVectors(vectorNormal, vectorTarget).normalize();
 	const radians = Math.acos(vectorNormal.dot(vectorTarget));
-	const attitudeQuaternion = new Quaternion().setFromAxisAngle(
-		axisVector,
-		radians,
-	);
+	const attitudeQuaternion = new Quaternion().setFromAxisAngle(axisVector, radians);
 
 	targetObject.quaternion.multiply(attitudeQuaternion);
 

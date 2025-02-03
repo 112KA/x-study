@@ -13,9 +13,7 @@ export class Particle {
 	// private _mesh: PointsMesh = new PointsMesh()
 	// private _mesh: LineSegmentsMesh = new LineSegmentsMesh()
 	// private _mesh: PolygonalTrailMesh = new PolygonalTrailMesh(3)
-	private _mesh: InstancedPolygonalTrailMesh = new InstancedPolygonalTrailMesh(
-		3,
-	);
+	private _mesh: InstancedPolygonalTrailMesh = new InstancedPolygonalTrailMesh(3);
 	private _frameInterval = 1;
 	private _frame = 0;
 	private _timeout: Timeout = new Timeout(3 * this._frameInterval, -1);
@@ -34,13 +32,10 @@ export class Particle {
 		this._gpuCompute.update();
 
 		const { uniforms } = this._mesh.material as ShaderMaterial;
-		const { gpuComputationRenderer, positionVariable, velocityVariable } =
-			this._gpuCompute;
+		const { gpuComputationRenderer, positionVariable, velocityVariable } = this._gpuCompute;
 
-		uniforms.texturePosition.value =
-			gpuComputationRenderer.getCurrentRenderTarget(positionVariable).texture;
-		uniforms.textureVelocity.value =
-			gpuComputationRenderer.getCurrentRenderTarget(velocityVariable).texture;
+		uniforms.texturePosition.value = gpuComputationRenderer.getCurrentRenderTarget(positionVariable).texture;
+		uniforms.textureVelocity.value = gpuComputationRenderer.getCurrentRenderTarget(velocityVariable).texture;
 		// }
 	}
 

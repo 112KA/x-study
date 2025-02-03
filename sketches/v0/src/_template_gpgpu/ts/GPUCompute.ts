@@ -1,17 +1,11 @@
 import type { DataTexture, WebGLRenderer } from "three";
-import {
-	GPUComputationRenderer,
-	type Variable,
-} from "three/examples/jsm/misc/GPUComputationRenderer.js";
+import { GPUComputationRenderer, type Variable } from "three/examples/jsm/misc/GPUComputationRenderer.js";
 import { TEXTURE_SIZE } from "./Constants";
 import { ComputeShader } from "./glsl";
 
 const SIZE = TEXTURE_SIZE;
 
-function fillTextures(
-	texturePosition: DataTexture,
-	textureVelocity: DataTexture,
-) {
+function fillTextures(texturePosition: DataTexture, textureVelocity: DataTexture) {
 	const posArray = texturePosition.image.data;
 	const velArray = textureVelocity.image.data;
 
@@ -42,11 +36,7 @@ export class GPUCompute {
 	public velocityVariable: Variable;
 
 	constructor(renderer: WebGLRenderer) {
-		this.gpuComputationRenderer = new GPUComputationRenderer(
-			SIZE,
-			SIZE,
-			renderer,
-		);
+		this.gpuComputationRenderer = new GPUComputationRenderer(SIZE, SIZE, renderer);
 		const dtPosition = this.gpuComputationRenderer.createTexture();
 		const dtVelocity = this.gpuComputationRenderer.createTexture();
 

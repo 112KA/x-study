@@ -40,11 +40,7 @@ class InstancedPolygonalTrailGeometry extends InstancedBufferGeometry {
 					const underBase = (i - 1) * this._nSectionShapes;
 					const kNext = (k + 1) % this._nSectionShapes;
 
-					indexArray.push(
-						currentBase + k,
-						underBase + kNext,
-						currentBase + kNext,
-					);
+					indexArray.push(currentBase + k, underBase + kNext, currentBase + kNext);
 					indexArray.push(currentBase + k, underBase + k, underBase + kNext);
 				}
 			}

@@ -12,14 +12,10 @@ export const InstancedSkeletonUtils = {
 		const sourceLookup = new Map<Object3D, Object3D>();
 		const cloneLookup = new Map<Object3D, Object3D>();
 
-		InstancedSkeletonUtils.parallelTraverse(
-			source,
-			clone,
-			(sourceNode: Object3D, clonedNode: Object3D) => {
-				sourceLookup.set(clonedNode, sourceNode);
-				cloneLookup.set(sourceNode, clonedNode);
-			},
-		);
+		InstancedSkeletonUtils.parallelTraverse(source, clone, (sourceNode: Object3D, clonedNode: Object3D) => {
+			sourceLookup.set(clonedNode, sourceNode);
+			cloneLookup.set(sourceNode, clonedNode);
+		});
 
 		clone.traverse((node: Object3D) => {
 			// console.log('traverse', { node })
@@ -44,9 +40,7 @@ export const InstancedSkeletonUtils = {
 		let clone: Object3D;
 		if (source instanceof SkinnedMesh) {
 			const { geometry, material } = source;
-			const m = new InstancedSkinnedMesh(geometry, material, count).copy(
-				source,
-			);
+			const m = new InstancedSkinnedMesh(geometry, material, count).copy(source);
 			m.material = new InstancedSkinnedMeshBasicMaterial({
 				map: material.map,
 			});
@@ -60,28 +54,17 @@ export const InstancedSkeletonUtils = {
 		}
 
 		for (let i = 0; i < source.children.length; i++) {
-			const child = InstancedSkeletonUtils.replaceInstancedObject(
-				source.children[i],
-				count,
-			);
+			const child = InstancedSkeletonUtils.replaceInstancedObject(source.children[i], count);
 			clone.add(child);
 		}
 		return clone;
 	},
 
-	parallelTraverse(
-		a: Object3D,
-		b: Object3D,
-		callback: (a: Object3D, b: Object3D) => void,
-	) {
+	parallelTraverse(a: Object3D, b: Object3D, callback: (a: Object3D, b: Object3D) => void) {
 		callback(a, b);
 		a;
 		for (let i = 0; i < a.children.length; i++) {
-			InstancedSkeletonUtils.parallelTraverse(
-				a.children[i],
-				b.children[i],
-				callback,
-			);
+			InstancedSkeletonUtils.parallelTraverse(a.children[i], b.children[i], callback);
 		}
 	},
 };

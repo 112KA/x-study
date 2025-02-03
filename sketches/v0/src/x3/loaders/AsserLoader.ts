@@ -1,12 +1,4 @@
-import {
-	EventDispatcher,
-	LoadingManager,
-	type Object3D,
-	REVISION,
-	Texture,
-	TextureLoader,
-	WebGLRenderer,
-} from "three";
+import { EventDispatcher, LoadingManager, type Object3D, REVISION, Texture, TextureLoader, WebGLRenderer } from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
@@ -32,17 +24,11 @@ export class AssetLoader extends EventDispatcher {
 
 		const THREE_PATH = `https://unpkg.com/three@0.${REVISION}.x`;
 
-		this.#manager = new LoadingManager(
-			this.#onLoad,
-			this.#onProgress,
-			this.#onError,
-		);
+		this.#manager = new LoadingManager(this.#onLoad, this.#onProgress, this.#onError);
 
 		const gltfLoader = new GLTFLoader(this.#manager);
 
-		const dracoLoader = new DRACOLoader().setDecoderPath(
-			`${THREE_PATH}/examples/jsm/libs/draco/gltf/`,
-		);
+		const dracoLoader = new DRACOLoader().setDecoderPath(`${THREE_PATH}/examples/jsm/libs/draco/gltf/`);
 		gltfLoader.setDRACOLoader(dracoLoader);
 
 		const ktx2Loader = new KTX2Loader(this.#manager)
@@ -51,9 +37,7 @@ export class AssetLoader extends EventDispatcher {
 		gltfLoader.setKTX2Loader(ktx2Loader);
 
 		//NOTE: https://discourse.threejs.org/t/basis-textures-with-alpha-appearing-fully-black-and-white-on-some-ipads-and-older-mobile-devices-when-rgb-pvrtc-4bppv1-format-is-used/22575/18
-		(
-			ktx2Loader as KTX2Loader & { workerConfig: { etc1Supported: boolean } }
-		).workerConfig.etc1Supported = false;
+		(ktx2Loader as KTX2Loader & { workerConfig: { etc1Supported: boolean } }).workerConfig.etc1Supported = false;
 
 		this.#manager.addHandler(/\.(ktx2)$/i, ktx2Loader);
 

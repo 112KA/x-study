@@ -1,9 +1,4 @@
-import {
-	ApiChangeEvents,
-	type InputBindingApi,
-	type TpChangeEvent,
-	TpUpdateEvent,
-} from "@tweakpane/core";
+import { ApiChangeEvents, type InputBindingApi, type TpChangeEvent, TpUpdateEvent } from "@tweakpane/core";
 import { Object3D, type WebGLRenderer } from "three";
 import { ListApi, Pane } from "tweakpane";
 import type { Container } from "../Container";
