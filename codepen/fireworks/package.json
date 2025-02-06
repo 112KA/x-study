@@ -1,0 +1,23 @@
+{
+	"name": "codepen-fireworks",
+	"type": "module",
+	"version": "1.0.0",
+	"private": true,
+	"author": "Masayuki Iizuka <mas.iizuka@gmail.com>",
+	"keywords": [],
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"format": "biome format --write",
+		"lint": "biome lint --write",
+		"test": "biome format src/index.html --write"
+	},
+	"dependencies": {
+		"@lumaai/luma-web": "0.2.2",
+		"three": "0.165.0",
+		"three.quarks": "0.13.1"
+	},
+	"devDependencies": {
+		"@types/three": "0.165.0"
+	}
+}

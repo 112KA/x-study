@@ -1,0 +1,6 @@
+export const N_CARDS = 1700;
+export const N_DIVIDE = 25;
+export const COLORS = [
+	0xe60012, 0xf5717f, 0xf7bfc4, 0xf85b2c, 0xff8767, 0xffc6ad, 0xf0830d,
+	0xffae42, 0xffd97a,
+];

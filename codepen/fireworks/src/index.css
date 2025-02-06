@@ -1,0 +1,8 @@
+body {
+	margin: 0;
+}
+
+:root {
+	--chakra-space-4: 1rem;
+	--chakra-space-8: 2rem;
+}

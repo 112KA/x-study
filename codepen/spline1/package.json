@@ -1,0 +1,17 @@
+{
+	"name": "codepen-spline1",
+	"type": "module",
+	"version": "1.0.0",
+	"private": true,
+	"author": "Masayuki Iizuka <mas.iizuka@gmail.com>",
+	"keywords": [],
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"format": "biome format --write",
+		"lint": "biome lint --write"
+	},
+	"dependencies": {
+		"three": "0.160.1"
+	}
+}

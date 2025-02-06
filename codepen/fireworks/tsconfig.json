@@ -1,0 +1,10 @@
+{
+	"extends": "@tsconfig/recommended/tsconfig.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"three.quarks": ["./node_modules/three.quarks/dist/types/index.d.ts"]
+		}
+	},
+	"include": ["./**/*.ts"]
+}
