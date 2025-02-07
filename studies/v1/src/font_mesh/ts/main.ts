@@ -1,4 +1,4 @@
-import { MeshLambertNodeMaterial } from "three/webgpu";
+import { MeshLambertNodeMaterial, WebGPURenderer } from "three/webgpu";
 import { assertIsDefined } from "x";
 import { AssetManager } from "x3/index.js";
 import { Container } from "./Container.js";
@@ -11,12 +11,17 @@ assertIsDefined(canvas);
 
 const assetManager = new AssetManager();
 
-const container = new Container({
-	canvas,
-});
+const renderer = new WebGPURenderer({ canvas });
+const container = new Container({ renderer });
 
 async function setup() {
-	await assetManager.load([{ id: "roboto", url: "../common/Roboto-Medium.ttf" }], container.renderer);
+	await assetManager.load(
+		[
+			{ id: "roboto", url: "../common/Roboto-Medium.ttf" },
+			// { id: "model", url: "../common/SimpleTexture.gltf" },
+		],
+		renderer,
+	);
 
 	const materials = [new MeshLambertNodeMaterial({ name: "Lambert" }), new ToonMaterial(), new NormalMaterial()];
 
@@ -28,7 +33,7 @@ async function setup() {
 
 	resize();
 
-	container.renderer.setAnimationLoop(update);
+	renderer.setAnimationLoop(update);
 	window.addEventListener("resize", resize);
 }
 

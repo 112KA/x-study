@@ -1,1 +1,1 @@
-# Sketches
+# Studies

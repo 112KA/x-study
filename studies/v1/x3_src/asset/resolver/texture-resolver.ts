@@ -1,4 +1,4 @@
-import { SRGBColorSpace, type Texture, TextureLoader } from "three";
+import { SRGBColorSpace, type Texture, TextureLoader, type WebGLRenderer } from "three";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import type { Renderer, WebGPURenderer } from "three/webgpu";
 import type { AssetManager } from "../asset-manager.js";
@@ -6,6 +6,7 @@ import type { ResourceItem } from "../types.js";
 import type { IResolver } from "./types.js";
 
 export class TextureResolver implements IResolver {
+	name = "TextureResolver";
 	constructor(
 		public manager: AssetManager,
 		threeCDNPath: string,
@@ -20,7 +21,7 @@ export class TextureResolver implements IResolver {
 		return (loaded as Texture).isTexture;
 	}
 
-	resolve(resource: ResourceItem, loaded: unknown, renderer: Renderer): void {
+	resolve(resource: ResourceItem, loaded: unknown, renderer: Renderer | WebGLRenderer): void {
 		if (renderer.outputColorSpace === SRGBColorSpace) {
 			(loaded as Texture).colorSpace = SRGBColorSpace;
 		}

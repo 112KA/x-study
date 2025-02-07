@@ -1,9 +1,10 @@
-import { EventDispatcher, type Object3D, REVISION, type Texture } from "three";
+import { EventDispatcher, type Object3D, REVISION, type Texture, type WebGLRenderer } from "three";
+import type { Font } from "three/examples/jsm/Addons.js";
 import type { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { LoadingManager, type Renderer } from "three/webgpu";
 import { assertIsDefined } from "x";
 import type { TextureAtlas } from "x3/textures/texture-atlas.js";
-import { GLTFResolver, type IResolver, TextureAtlasResolver, TextureResolver } from "./resolver/index.js";
+import { FontResolver, GLTFResolver, type IResolver, TextureAtlasResolver, TextureResolver } from "./resolver/index.js";
 import type { GLTFObject, ResourceItem } from "./types.js";
 
 export interface AssetManagerEventMap {
@@ -26,6 +27,7 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 	public loadingManager: LoadingManager = new LoadingManager();
 
 	#resolvers: Record<string, IResolver> = {
+		font: new FontResolver(this),
 		texture: new TextureResolver(this, THREE_CDN_PATH),
 		gltf: new GLTFResolver(this, THREE_CDN_PATH),
 		atlas: new TextureAtlasResolver(this),
@@ -34,6 +36,7 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 	textures: Record<string, Texture> = {};
 	objects: Record<string, Object3D | GLTFObject> = {};
 	atlases: Record<string, TextureAtlas> = {};
+	fonts: Record<string, Font> = {};
 
 	constructor() {
 		super();
@@ -47,14 +50,18 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 		return await loader.loadAsync(url);
 	}
 
-	public async load(resources: ResourceItem[], renderer: Renderer): Promise<void> {
+	public async load(resources: ResourceItem[], renderer: Renderer | WebGLRenderer): Promise<void> {
 		if (!renderer) {
 			throw new Error("You must provide a renderer to the load function.");
 		}
 
 		const ktx2Loader = this.loadingManager.getHandler(".ktx2") as KTX2Loader;
 		assertIsDefined(ktx2Loader);
-		await ktx2Loader.detectSupportAsync(renderer);
+		if ((renderer as Renderer).isRenderer) {
+			await ktx2Loader.detectSupportAsync(renderer as Renderer);
+		} else {
+			ktx2Loader.detectSupport(renderer as WebGLRenderer);
+		}
 
 		console.groupCollapsed(`${LOG_PREFIX} load`);
 
@@ -87,6 +94,7 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 			});
 		}
 
+		console.info(LOG_PREFIX, "Load Completed", { assetManager: this });
 		console.groupEnd();
 
 		this.dispatchEvent({ type: "loaded" });

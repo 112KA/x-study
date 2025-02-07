@@ -4,7 +4,7 @@ import { glslify } from "vite-plugin-glslify";
 
 export default defineConfig({
 	root: resolve(__dirname, "src"),
-	base: "/study/",
+	base: "/studies/",
 	build: {
 		outDir: resolve(__dirname, "../../112KA.github.io/study"),
 		emptyOutDir: false,

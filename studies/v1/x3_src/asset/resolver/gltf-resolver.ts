@@ -7,6 +7,7 @@ import type { GLTFObject, ResourceItem } from "../types.js";
 import type { IResolver } from "./types.js";
 
 export class GLTFResolver implements IResolver {
+	name = "GLTFResolver";
 	constructor(
 		public manager: AssetManager,
 		threeCDNPath: string,
@@ -20,7 +21,7 @@ export class GLTFResolver implements IResolver {
 	}
 
 	check(loaded: unknown): boolean {
-		return true;
+		return (loaded as GLTFObject).scene !== undefined;
 	}
 
 	resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer): void {

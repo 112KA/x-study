@@ -1,4 +1,5 @@
 import { Clock, type MeshBasicMaterial } from "three";
+import { WebGPURenderer } from "three/webgpu";
 import { assertIsDefined } from "x";
 import { AssetManager } from "x3/index.js";
 import { Background } from "./Background.js";
@@ -11,13 +12,12 @@ const assetManager = new AssetManager();
 assertIsDefined(canvas);
 
 const clock = new Clock();
-const container = new Container({
-	canvas,
-});
+const renderer = new WebGPURenderer({ canvas });
+const container = new Container({ renderer });
 const background = new Background();
 
 async function setup() {
-	// await assetManager.load([{ id: "checker", url: "../common/CustomUVChecker_byValle_2K.webp" }], container.renderer);
+	// await assetManager.load([{ id: "checker", url: "../common/CustomUVChecker_byValle_2K.webp" }], renderer);
 	// background.setup(assetManager.textures.checker);
 
 	container.renderer.setAnimationLoop(update);
@@ -33,7 +33,7 @@ function update() {
 	background.update(dt, elapsedTime);
 	container.update(dt, elapsedTime);
 
-	background.render(container.renderer);
+	background.render(renderer);
 }
 
 function resize() {

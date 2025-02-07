@@ -7,6 +7,7 @@ import type { ResourceItem } from "../types.js";
 import type { IResolver } from "./types.js";
 
 export class TextureAtlasResolver implements IResolver {
+	name = "TextureAtlasResolver";
 	constructor(
 		public manager: AssetManager,
 		_threeCDNPath = "",

@@ -1,31 +1,25 @@
-import { GridHelper, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { GridHelper, PerspectiveCamera, Scene, type WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import { WebGPURenderer } from "three/webgpu";
+import type { WebGPURenderer } from "three/webgpu";
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import type { DeviceSize } from "x";
 
 export type ContainerProps = {
-	canvas: HTMLCanvasElement;
+	renderer: WebGPURenderer | WebGLRenderer;
 };
 export class Container {
-	public renderer: WebGPURenderer;
+	public renderer: WebGPURenderer | WebGLRenderer;
 	public scene = new Scene();
 	public camera = new PerspectiveCamera(45, 1, 0.1, 10000);
 	private _cameraControls: OrbitControls;
 	#stats = new Stats();
 
-	constructor({ canvas }: ContainerProps) {
-		this.renderer = new WebGPURenderer({
-			canvas,
-			// forceWebGL: true,
-		});
-		this.renderer.setClearColor(0x000000, 0);
-		// this.renderer.setPixelRatio(window.devicePixelRatio)
-		this.renderer.setPixelRatio(1);
-		// this.renderer.shadowMap.type = PCFSoftShadowMap;
-		// this.renderer.shadowMap.enabled = true;
+	constructor({ renderer }: ContainerProps) {
+		this.renderer = renderer;
+		this.renderer.setClearColor(0x000000, 1);
+		this.renderer.setPixelRatio(window.devicePixelRatio);
 
 		this.camera.position.set(0, 5, 10);
 
