@@ -1,12 +1,11 @@
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import type { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
+import { DRACOLoader, GLTFLoader, type KTX2Loader } from "three/examples/jsm/Addons.js";
 import type { Renderer } from "three/webgpu";
 import type { AssetManager } from "../asset-manager.js";
 import type { GLTFObject, ResourceItem } from "../types.js";
 import type { IResolver } from "./types.js";
 
 export class GLTFResolver implements IResolver {
+	name = "GLTFResolver";
 	constructor(
 		public manager: AssetManager,
 		threeCDNPath: string,
@@ -20,7 +19,7 @@ export class GLTFResolver implements IResolver {
 	}
 
 	check(loaded: unknown): boolean {
-		return true;
+		return (loaded as GLTFObject).scene !== undefined;
 	}
 
 	resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer): void {
