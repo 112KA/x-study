@@ -1,6 +1,7 @@
+import { WebGLRenderer } from "three";
 import { MeshLambertNodeMaterial, WebGPURenderer } from "three/webgpu";
 import { assertIsDefined } from "x";
-import { AssetManager } from "x3/index.js";
+import { AssetManager, type GLTFObject } from "x3/index.js";
 import { Container } from "./Container.js";
 import { FontMesh } from "./FontMesh.js";
 import { GC } from "./GC.js";
@@ -12,16 +13,11 @@ assertIsDefined(canvas);
 const assetManager = new AssetManager();
 
 const renderer = new WebGPURenderer({ canvas });
+
 const container = new Container({ renderer });
 
 async function setup() {
-	await assetManager.load(
-		[
-			{ id: "roboto", url: "../common/Roboto-Medium.ttf" },
-			// { id: "model", url: "../common/SimpleTexture.gltf" },
-		],
-		renderer,
-	);
+	await assetManager.load([{ id: "roboto", url: "../common/Roboto-Medium.ttf" }], renderer);
 
 	const materials = [new MeshLambertNodeMaterial({ name: "Lambert" }), new ToonMaterial(), new NormalMaterial()];
 
@@ -29,7 +25,9 @@ async function setup() {
 	fontMesh.material = materials[0];
 	container.scene.add(fontMesh);
 
-	new GC({ fontMesh, materials });
+	const { ambientLight, directionalLight } = container;
+
+	new GC({ fontMesh, materials, ambientLight, directionalLight });
 
 	resize();
 

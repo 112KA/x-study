@@ -1,4 +1,4 @@
-import { GridHelper, PerspectiveCamera, Scene, type WebGLRenderer } from "three";
+import { AmbientLight, GridHelper, PerspectiveCamera, Scene, type WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import type { WebGPURenderer } from "three/webgpu";
@@ -16,6 +16,8 @@ export class Container {
 	private _cameraControls: OrbitControls;
 	#stats = new Stats();
 
+	public ambientLight = new AmbientLight(0xffffff, 1);
+
 	constructor({ renderer }: ContainerProps) {
 		this.renderer = renderer;
 		this.renderer.setClearColor(0x000000, 1);
@@ -24,6 +26,8 @@ export class Container {
 		this.camera.position.set(0, 5, 10);
 
 		this._cameraControls = new OrbitControls(this.camera, this.renderer.domElement);
+
+		this.scene.add(this.ambientLight);
 
 		const grid = new GridHelper(10, 10);
 		this.scene.add(grid);

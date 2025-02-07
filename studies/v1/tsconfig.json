@@ -5,7 +5,8 @@
 		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"paths": {
-			"x3/*": ["./x3_src/*"]
+			"x3/*": ["./x3_src/*"],
+			"x3-controls/*": ["./x3-controls_src/*"]
 		}
 	}
 }

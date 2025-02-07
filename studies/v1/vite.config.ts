@@ -30,6 +30,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			x3: resolve(__dirname, "./x3_src"),
+			"x3-controls": resolve(__dirname, "./x3-controls_src"),
 		},
 	},
 });

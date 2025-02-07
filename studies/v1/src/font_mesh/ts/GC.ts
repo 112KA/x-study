@@ -1,18 +1,29 @@
-import type { Material } from "three";
+import type { AmbientLight, DirectionalLight, Material } from "three";
 import { Pane } from "tweakpane";
+import { LightsFolder } from "x3-controls/lights/lights-folder";
 import type { FontMesh } from "./FontMesh";
 
 export type GCParams = {
 	fontMesh: FontMesh;
 	materials: Material[];
+	ambientLight?: AmbientLight;
+	directionalLight?: DirectionalLight;
 };
 
 /**
  * Graphics Control class
  */
 export class GC extends Pane {
-	constructor({ fontMesh, materials }: GCParams) {
+	public lightsFolder = new LightsFolder();
+
+	constructor({ fontMesh, materials, ambientLight, directionalLight }: GCParams) {
 		super();
+
+		const lightTargets = [];
+		ambientLight && lightTargets.push(ambientLight);
+		directionalLight && lightTargets.push(directionalLight);
+
+		this.lightsFolder.setup(this, lightTargets, false);
 
 		const fontMeshFolder = this.addFolder({
 			title: "FontMesh",
