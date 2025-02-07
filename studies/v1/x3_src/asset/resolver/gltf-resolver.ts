@@ -1,6 +1,4 @@
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import type { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
+import { DRACOLoader, GLTFLoader, type KTX2Loader } from "three/examples/jsm/Addons.js";
 import type { Renderer } from "three/webgpu";
 import type { AssetManager } from "../asset-manager.js";
 import type { GLTFObject, ResourceItem } from "../types.js";

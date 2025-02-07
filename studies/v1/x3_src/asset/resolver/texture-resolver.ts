@@ -1,5 +1,5 @@
 import { SRGBColorSpace, type Texture, TextureLoader, type WebGLRenderer } from "three";
-import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
+import { KTX2Loader } from "three/examples/jsm/Addons.js";
 import type { Renderer, WebGPURenderer } from "three/webgpu";
 import type { AssetManager } from "../asset-manager.js";
 import type { ResourceItem } from "../types.js";

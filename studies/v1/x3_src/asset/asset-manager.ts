@@ -1,6 +1,5 @@
 import { EventDispatcher, type Object3D, REVISION, type Texture, type WebGLRenderer } from "three";
-import type { Font } from "three/examples/jsm/Addons.js";
-import type { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
+import type { Font, KTX2Loader } from "three/examples/jsm/Addons.js";
 import { LoadingManager, type Renderer } from "three/webgpu";
 import { assertIsDefined } from "x";
 import type { TextureAtlas } from "x3/textures/texture-atlas.js";
