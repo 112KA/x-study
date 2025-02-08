@@ -5,7 +5,7 @@ import { AssetManager, type GLTFObject } from "x3/index.js";
 import { Container } from "./Container.js";
 import { FontMesh } from "./FontMesh.js";
 import { GC } from "./GC.js";
-import { NormalMaterial, ToonMaterial } from "./materials/index.js";
+import { HalfToneMaterial, NormalMaterial, ToonMaterial } from "./materials/index.js";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 assertIsDefined(canvas);
@@ -19,7 +19,12 @@ const container = new Container({ renderer });
 async function setup() {
 	await assetManager.load([{ id: "roboto", url: "../common/Roboto-Medium.ttf" }], renderer);
 
-	const materials = [new MeshLambertNodeMaterial({ name: "Lambert" }), new ToonMaterial(), new NormalMaterial()];
+	const materials = [
+		new HalfToneMaterial(),
+		new MeshLambertNodeMaterial({ name: "Lambert" }),
+		new ToonMaterial(),
+		new NormalMaterial(),
+	];
 
 	const fontMesh = new FontMesh(assetManager.fonts.roboto, "ABCDE");
 	fontMesh.material = materials[0];

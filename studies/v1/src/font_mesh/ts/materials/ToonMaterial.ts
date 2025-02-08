@@ -7,7 +7,7 @@ export class ToonMaterial extends MeshToonNodeMaterial {
 		for (let i = 0; i < colors.length; i++) {
 			colors[i] = (i / (colors.length - 1)) * 255;
 		}
-		console.log({ colors });
+		// console.log({ colors });
 		const gradientMap = new DataTexture(colors, colors.length, 1, RedFormat);
 		gradientMap.needsUpdate = true;
 		super({ color, gradientMap });
