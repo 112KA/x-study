@@ -4,12 +4,13 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build",
+		"build": "vite build",
 		"preview": "vite preview",
 		"format": "biome format --write",
 		"lint": "biome lint --write"
 	},
 	"dependencies": {
+		"stats-gl": "3.6.0",
 		"three": "0.173.0",
 		"tweakpane": "4.0.5",
 		"x": "npm:@112ka/x@0.0.7"

@@ -6,10 +6,12 @@ export default defineConfig({
 	root: resolve(__dirname, "src"),
 	base: "/studies/",
 	build: {
-		outDir: resolve(__dirname, "../../112KA.github.io/study"),
-		emptyOutDir: false,
+		outDir: resolve(__dirname, "../../112KA.github.io/studies"),
+		emptyOutDir: true,
 		rollupOptions: {
-			input: {},
+			input: {
+				font_mesh: resolve("src/font_mesh", "index.html"),
+			},
 			output: {
 				manualChunks(id) {
 					if (id.includes("/x/")) {
