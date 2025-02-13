@@ -1,6 +1,7 @@
 import Stats from "stats-gl";
 import { Clock, EventDispatcher, type WebGLRenderer } from "three";
-import type { WebGPURenderer } from "three/webgpu";
+import type { Camera, Mesh, PerspectiveCamera, Scene, WebGPURenderer } from "three/webgpu";
+import { assertIsDefined } from "x";
 
 export interface AbstractContainerEventMap {
 	update: {
@@ -23,6 +24,8 @@ export abstract class AbstractContainer<
 	// TEventMap extends AbstractContainerEventMap = AbstractContainerEventMap,
 > extends EventDispatcher<AbstractContainerEventMap> {
 	public renderer: T;
+	public scene: Scene | null = null;
+	public camera: Camera | null = null;
 	#clock = new Clock();
 	#stats = new Stats({
 		precision: 4,
@@ -33,6 +36,7 @@ export abstract class AbstractContainer<
 		graphsPerSecond: 60,
 		samplesGraph: 30,
 	});
+
 	constructor(
 		public wrapper: HTMLDivElement,
 		rendererClass: new (params: RendererParams) => T,
@@ -72,10 +76,34 @@ export abstract class AbstractContainer<
 	public resize(width: number, height: number) {
 		this.renderer.setSize(width, height);
 
+		if (this.camera !== null && (this.camera as PerspectiveCamera).isPerspectiveCamera) {
+			const camera = this.camera as PerspectiveCamera;
+
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
+		}
+
 		this.dispatchEvent({
 			type: "resize",
 			width,
 			height,
 		});
+	}
+
+	public async debugShader(targetMesh: Mesh) {
+		if (this.renderer !== null && (this.renderer as WebGPURenderer).isWebGPURenderer) {
+			const renderer = this.renderer as WebGPURenderer;
+			const { scene, camera } = this;
+			assertIsDefined(scene);
+			assertIsDefined(camera);
+			const rawShader = await renderer.debug.getShaderAsync(scene, camera, targetMesh);
+			const style =
+				"background-color: #333; color: white; font-style: italic; border: 2px solid #777; font-size: 22px;";
+
+			console.log("%c  [ WGSL ] Vertex Shader      ", style);
+			console.log(rawShader.vertexShader);
+			console.log("%c  [ WGSL ] Fragment Shader    ", style);
+			console.log(rawShader.fragmentShader);
+		}
 	}
 }

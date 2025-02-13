@@ -2,10 +2,7 @@ import { AmbientLight, Color, DirectionalLight, GridHelper, PerspectiveCamera, S
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { toonOutlinePass } from "three/tsl";
 import { PostProcessing, type WebGPURenderer } from "three/webgpu";
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
-import type { DeviceSize } from "x";
-import { AbstractContainer, type AbstractContainerEventMap, type RendererParams } from "../../common/AbstractContainer";
+import { AbstractContainer, type RendererParams } from "../../common/AbstractContainer";
 
 export class Container<T extends WebGLRenderer | WebGPURenderer> extends AbstractContainer<T> {
 	public scene = new Scene();
@@ -45,8 +42,5 @@ export class Container<T extends WebGLRenderer | WebGPURenderer> extends Abstrac
 
 	public override resize(width: number, height: number) {
 		super.resize(width, height);
-
-		this.camera.aspect = width / height;
-		this.camera.updateProjectionMatrix();
 	}
 }

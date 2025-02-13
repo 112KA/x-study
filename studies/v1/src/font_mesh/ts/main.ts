@@ -36,6 +36,8 @@ async function setup() {
 	const { ambientLight, directionalLight } = container;
 
 	new GC({ fontMesh, materials, ambientLight, directionalLight });
+
+	await container.debugShader(fontMesh);
 }
 
 setup();

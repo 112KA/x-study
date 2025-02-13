@@ -1,4 +1,14 @@
-import { Fn, type ShaderNodeObject, mix, normalWorld, rotate, screenCoordinate, screenSize, vec4 } from "three/tsl";
+import {
+	Fn,
+	type ShaderNodeObject,
+	mix,
+	normalWorld,
+	rotate,
+	screenCoordinate,
+	screenSize,
+	varying,
+	vec4,
+} from "three/tsl";
 import type { Color, PropertyNode, UniformNode, Vector3 } from "three/webgpu";
 
 export type HalftoneTuple = [
@@ -21,7 +31,7 @@ export const halftone = /*@__PURE__*/ Fn(
 
 		// orientation strength
 
-		const orientationStrength = normalWorld.dot(direction.normalize()).remapClamp(end, start, 0, 1);
+		const orientationStrength = direction.remapClamp(end, start, 0, 1);
 
 		// mask
 
@@ -51,8 +61,10 @@ export type BlendHalftoneColorTuple = [
 
 export const blendHalftoneColor = /*@__PURE__*/ Fn(([input, uniforms]: BlendHalftoneColorTuple) => {
 	const blendedOutput = input;
+
 	const { count, color, direction, start, end, radius, mixLow, mixHigh } = uniforms;
-	const halftoneOutput = halftone(count, color, direction, start, end, radius, mixLow, mixHigh);
+	const vDirection = varying(normalWorld.dot(direction.normalize()));
+	const halftoneOutput = halftone(count, color, vDirection, start, end, radius, mixLow, mixHigh);
 	blendedOutput.rgb.assign(mix(blendedOutput.rgb, halftoneOutput.rgb, halftoneOutput.a));
 	return blendedOutput;
 });

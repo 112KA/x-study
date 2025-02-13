@@ -1,7 +1,6 @@
 import { AmbientLight, GridHelper, PerspectiveCamera, Scene, type WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import type { WebGPURenderer } from "three/webgpu";
-import { assertIsDefined } from "x";
 import { AbstractContainer, type RendererParams } from "../../common/AbstractContainer";
 
 export class Container<T extends WebGLRenderer | WebGPURenderer> extends AbstractContainer<T> {
@@ -26,8 +25,6 @@ export class Container<T extends WebGLRenderer | WebGPURenderer> extends Abstrac
 
 	public override update() {
 		super.update();
-
-		assertIsDefined(this.camera);
 
 		this._cameraControls.update();
 		this.renderer.render(this.scene, this.camera);
