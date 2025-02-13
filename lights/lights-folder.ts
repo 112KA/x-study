@@ -12,23 +12,23 @@ export class LightsFolder {
 
 		targetList.forEach((light, index) => {
 			if ((light as AmbientLight).isAmbientLight) {
-				light.name = light.name || `Ambient${index}`;
-				f.addBinding(light, "color", { title: `${light.name} color` });
-				f.addBinding(light, "intensity", { title: `${light.name} intensity` });
+				light.name = light.name || `A${index}`;
+				f.addBinding(light, "color", { label: `${light.name}:color`, color: { type: "float" } });
+				f.addBinding(light, "intensity", { label: `${light.name}:intensity` });
 			} else if ((light as DirectionalLight).isDirectionalLight) {
-				light.name = light.name || `Directional${index}`;
-				f.addBinding(light, "color", { title: `${light.name} color` });
-				f.addBinding(light, "intensity", { title: `${light.name} intensity` });
-				f.addBinding(light, "position", { title: `${light.name} position` });
+				light.name = light.name || `D${index}`;
+				f.addBinding(light, "color", { label: `${light.name}:color`, color: { type: "float" } });
+				f.addBinding(light, "intensity", { label: `${light.name}:intensity` });
+				f.addBinding(light, "position", { label: `${light.name}:position` });
 			} else if ((light as PointLight).isPointLight) {
-				light.name = light.name || `Point${index}`;
-				f.addBinding(light, "color", { title: `${light.name} color` });
-				f.addBinding(light, "intensity", { title: `${light.name} intensity` });
-				f.addBinding(light, "position", { title: `${light.name} position` });
+				light.name = light.name || `P${index}`;
+				f.addBinding(light, "color", { label: `${light.name}:color`, color: { type: "float" } });
+				f.addBinding(light, "intensity", { label: `${light.name}:intensity` });
+				f.addBinding(light, "position", { label: `${light.name}:position` });
 				const pointLight = light as PointLight;
-				f.addBinding(pointLight, "distance", { title: `${light.name} distance` });
-				f.addBinding(pointLight, "decay", { title: `${light.name} decay` });
-				f.addBinding(pointLight, "power", { title: `${light.name} power` });
+				f.addBinding(pointLight, "distance", { label: `${light.name}:distance` });
+				f.addBinding(pointLight, "decay", { label: `${light.name}:decay` });
+				f.addBinding(pointLight, "power", { label: `${light.name}:power` });
 			}
 		});
 	}
