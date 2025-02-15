@@ -1,10 +1,10 @@
 import type { AmbientLight, DirectionalLight, Material } from "three";
-import { type FolderApi, type ListBladeApi, Pane } from "tweakpane";
+import { type FolderApi, type ListBladeApi, Pane, VERSION } from "tweakpane";
 import { LightsFolder } from "x3-controls/lights/lights-folder";
 import type { FontMesh } from "./FontMesh";
-import type { HalfToneMaterial } from "./materials";
+import type { HalfToneDotMaterial, HalfToneLineMaterial } from "./materials";
 
-export type GCParams = {
+export type ControlsParams = {
 	fontMesh: FontMesh;
 	materials: Material[];
 	ambientLight?: AmbientLight;
@@ -14,14 +14,17 @@ export type GCParams = {
 /**
  * Graphics Control class
  */
-export class GC extends Pane {
+export class Controls extends Pane {
 	public lightsFolder = new LightsFolder();
 
 	public materialFolder: FolderApi;
 	#materialBindings: unknown[] = [];
 
-	constructor({ fontMesh, materials, ambientLight, directionalLight }: GCParams) {
+	constructor({ fontMesh, materials, ambientLight, directionalLight }: ControlsParams) {
 		super();
+
+		const v = VERSION;
+		console.log(v);
 
 		const lightTargets = [];
 		ambientLight && lightTargets.push(ambientLight);
@@ -83,9 +86,10 @@ export class GC extends Pane {
 		this.#materialBindings = [];
 
 		switch (targetMaterial.name) {
-			case "HalfTone":
+			case "HalfToneDot":
+			case "HalfToneLine":
 				{
-					const material = targetMaterial as HalfToneMaterial;
+					const material = targetMaterial as HalfToneDotMaterial | HalfToneLineMaterial;
 					this.#materialBindings.push(
 						f.addBinding(material.uniforms.count, "value", { label: "count" }),
 						f.addBinding(material.uniforms.color, "value", {

@@ -26,9 +26,6 @@ importers:
       '@compai/font-noto-sans':
         specifier: ^0.0.4
         version: 0.0.4
-      '@tweakpane/core':
-        specifier: 1.1.4
-        version: 1.1.4
       three:
         specifier: 0.148.0
         version: 0.148.0
@@ -61,8 +58,8 @@ importers:
         specifier: 4.0.5
         version: 4.0.5
       x:
-        specifier: npm:@112ka/x@0.0.8
-        version: '@112ka/x@0.0.8'
+        specifier: npm:@112ka/x@0.0.7
+        version: '@112ka/x@0.0.7'
     devDependencies:
       '@tweakpane/core':
         specifier: 2.0.5
@@ -81,9 +78,6 @@ packages:
 
   '@112ka/x@0.0.7':
     resolution: {integrity: sha512-LCA14R4vkj4HXwywiUqebkqIbuVX6FD6+MooNTfxcGvtE1VRg5XVeFqZiTGgwaLcok0BFMBPQVU2DGv7z1D4Xw==, tarball: https://npm.pkg.github.com/download/@112ka/x/0.0.7/0d90e946f3690ef1fc8464b0284ac707898fb468}
-
-  '@112ka/x@0.0.8':
-    resolution: {integrity: sha512-Dt0HAzMcyMRcMvkPS/bQ960mf2w8lvPVWpMQcS7zHCdVlDiTm3VpgQVyMJnOU20isd3DKoDozMtkChoDDB4SOA==, tarball: https://npm.pkg.github.com/download/@112ka/x/0.0.8/358e3dab361893c46d052a06b7c90d121743a5f2}
 
   '@biomejs/biome@1.9.4':
     resolution: {integrity: sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==}
@@ -478,9 +472,6 @@ packages:
 
   '@tsconfig/recommended@1.0.8':
     resolution: {integrity: sha512-TotjFaaXveVUdsrXCdalyF6E5RyG6+7hHHQVZonQtdlk1rJZ1myDIvPUUKPhoYv+JAzThb2lQJh9+9ZfF46hsA==}
-
-  '@tweakpane/core@1.1.4':
-    resolution: {integrity: sha512-Z0l5U7IYnLjSzK6PWohEaxqZDV99saa3dymXd5ymw9zrVuVvVzcvK/2TzgyN+suWOIH0DaMzOeLU935qBmUV+w==}
 
   '@tweakpane/core@2.0.5':
     resolution: {integrity: sha512-punBgD5rKCF5vcNo6BsSOXiDR/NSs9VM7SG65QSLJIxfRaGgj54ree9zQW6bO3pNFf3AogiGgaNODUVQRk9YqQ==}
@@ -911,8 +902,6 @@ snapshots:
 
   '@112ka/x@0.0.7': {}
 
-  '@112ka/x@0.0.8': {}
-
   '@biomejs/biome@1.9.4':
     optionalDependencies:
       '@biomejs/cli-darwin-arm64': 1.9.4
@@ -1153,8 +1142,6 @@ snapshots:
     optional: true
 
   '@tsconfig/recommended@1.0.8': {}
-
-  '@tweakpane/core@1.1.4': {}
 
   '@tweakpane/core@2.0.5': {}
 
