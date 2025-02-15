@@ -11,7 +11,11 @@
 	"scripts": {
 		"dev": "pnpm v1 dev",
 		"v0": "pnpm --filter v0",
-		"v1": "pnpm --filter v1"
+		"v1": "pnpm --filter v1",
+		"x3:push": "git subtree push --prefix=studies/v1/x3_src x3_src main",
+		"x3:pull": "git subtree pull --prefix=studies/v1/x3_src x3_src main --squash",
+		"x3-controls:push": "git subtree push --prefix=studies/v1/x3-controls_src x3-controls_src main",
+		"x3-controls:pull": "git subtree pull --prefix=studies/v1/x3-controls_src x3-controls_src main --squash"
 	},
 	"keywords": [],
 	"author": "Masayuki Iizuka <mas.iizuka@gmail.com>",

@@ -61,8 +61,8 @@ importers:
         specifier: 4.0.5
         version: 4.0.5
       x:
-        specifier: npm:@112ka/x@0.0.7
-        version: '@112ka/x@0.0.7'
+        specifier: npm:@112ka/x@0.0.8
+        version: '@112ka/x@0.0.8'
     devDependencies:
       '@tweakpane/core':
         specifier: 2.0.5
@@ -81,6 +81,9 @@ packages:
 
   '@112ka/x@0.0.7':
     resolution: {integrity: sha512-LCA14R4vkj4HXwywiUqebkqIbuVX6FD6+MooNTfxcGvtE1VRg5XVeFqZiTGgwaLcok0BFMBPQVU2DGv7z1D4Xw==, tarball: https://npm.pkg.github.com/download/@112ka/x/0.0.7/0d90e946f3690ef1fc8464b0284ac707898fb468}
+
+  '@112ka/x@0.0.8':
+    resolution: {integrity: sha512-Dt0HAzMcyMRcMvkPS/bQ960mf2w8lvPVWpMQcS7zHCdVlDiTm3VpgQVyMJnOU20isd3DKoDozMtkChoDDB4SOA==, tarball: https://npm.pkg.github.com/download/@112ka/x/0.0.8/358e3dab361893c46d052a06b7c90d121743a5f2}
 
   '@biomejs/biome@1.9.4':
     resolution: {integrity: sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==}
@@ -907,6 +910,8 @@ packages:
 snapshots:
 
   '@112ka/x@0.0.7': {}
+
+  '@112ka/x@0.0.8': {}
 
   '@biomejs/biome@1.9.4':
     optionalDependencies:
