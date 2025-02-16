@@ -1,5 +1,4 @@
 import { Mesh, MeshBasicMaterial, PlaneGeometry, WebGLRenderer } from "three";
-import { WebGPURenderer } from "three/webgpu";
 import { assertIsDefined } from "x";
 import { AssetManager, type GLTFObject } from "x3/index.js";
 import { checkWebGPUSupport } from "x3/misc/environment.js";
@@ -15,7 +14,7 @@ async function setup() {
 		return;
 	}
 
-	const container = new Container(wrapper, WebGPURenderer);
+	const container = new Container(wrapper);
 	const { renderer, scene } = container;
 
 	const assetManager = new AssetManager();
@@ -33,11 +32,11 @@ async function setup() {
 
 	scene.add((assetManager.objects.model as GLTFObject).scene);
 
+	const update = async ({ delta, elapsedTime }: AbstractContainerEventMap["update"]) => {};
 	container.addEventListener("update", update);
-	function update({ delta, elapsedTime }: AbstractContainerEventMap["update"]) {}
 
+	const resize = ({ width, height }: AbstractContainerEventMap["resize"]) => {};
 	container.addEventListener("resize", resize);
-	function resize({ width, height }: AbstractContainerEventMap["resize"]) {}
 }
 
 setup();

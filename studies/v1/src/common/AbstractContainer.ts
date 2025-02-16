@@ -63,7 +63,7 @@ export abstract class AbstractContainer<
 		document.querySelector("body")?.appendChild(this.#stats.dom);
 	}
 
-	public update() {
+	public async update() {
 		this.#stats.update();
 
 		this.dispatchEvent({

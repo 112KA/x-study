@@ -1,18 +1,17 @@
-import { AmbientLight, GridHelper, PerspectiveCamera, Scene, type WebGLRenderer } from "three";
+import { AmbientLight, GridHelper, PerspectiveCamera, Scene } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { WebGPURenderer } from "three/webgpu";
 import { assertIsDefined } from "x";
-import { AbstractContainer, type RendererParams } from "../../common/AbstractContainer";
+import { AbstractWebGPUContainer } from "../../common/AbstractWebGPUContainer";
 
-export class Container<T extends WebGLRenderer | WebGPURenderer> extends AbstractContainer<T> {
+export class Container extends AbstractWebGPUContainer {
 	public scene = new Scene();
 	public camera = new PerspectiveCamera(45, 1, 0.1, 10000);
 	private _cameraControls: OrbitControls;
 
 	public ambientLight = new AmbientLight(0xffffff, 1);
 
-	constructor(wrapper: HTMLDivElement, rendererClass: new (params: RendererParams) => T) {
-		super(wrapper, rendererClass);
+	constructor(wrapper: HTMLDivElement) {
+		super(wrapper);
 
 		this.camera.position.set(0, 5, 10);
 
@@ -24,13 +23,13 @@ export class Container<T extends WebGLRenderer | WebGPURenderer> extends Abstrac
 		this.scene.add(grid);
 	}
 
-	public override update() {
+	public override async update() {
 		super.update();
 
 		assertIsDefined(this.camera);
 
 		this._cameraControls.update();
-		this.renderer.render(this.scene, this.camera);
+		await this.renderer.renderAsync(this.scene, this.camera);
 	}
 
 	public override resize(width: number, height: number) {

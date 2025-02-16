@@ -1,11 +1,7 @@
-import type { WebGLRenderer } from "three";
-import Stats from "three/examples/jsm/libs/stats.module.js";
-import type { WebGPURenderer } from "three/webgpu";
+import { AbstractWebGPUContainer } from "../../common/AbstractWebGPUContainer";
 
-import { AbstractContainer } from "../../common/AbstractContainer";
-
-export class Container<T extends WebGLRenderer | WebGPURenderer> extends AbstractContainer<T> {
-	public override update() {
+export class Container extends AbstractWebGPUContainer {
+	public override async update() {
 		super.update();
 	}
 

@@ -1,4 +1,3 @@
-import { WebGPURenderer } from "three/webgpu";
 import { assertIsDefined } from "x";
 import { checkWebGPUSupport } from "x3/misc/environment.js";
 import type { AbstractContainerEventMap } from "../../common/AbstractContainer.js";
@@ -16,19 +15,18 @@ async function setup() {
 		return;
 	}
 
-	const container = new Container(wrapper, WebGPURenderer);
+	const container = new Container(wrapper);
 
-	container.addEventListener("update", update);
-	function update({ delta, elapsedTime }: AbstractContainerEventMap["update"]) {
+	const update = async ({ delta, elapsedTime }: AbstractContainerEventMap["update"]) => {
 		background.update(delta, elapsedTime);
-
 		background.render(container.renderer);
-	}
+	};
+	container.addEventListener("update", update);
 
-	container.addEventListener("resize", resize);
-	function resize(_e: AbstractContainerEventMap["resize"]) {
+	const resize = (_e: AbstractContainerEventMap["resize"]) => {
 		background.resize();
-	}
+	};
+	container.addEventListener("resize", resize);
 }
 
 setup();

@@ -1,10 +1,10 @@
-import { AmbientLight, Color, DirectionalLight, GridHelper, PerspectiveCamera, Scene, type WebGLRenderer } from "three";
+import { AmbientLight, Color, DirectionalLight, GridHelper, PerspectiveCamera, Scene } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { toonOutlinePass } from "three/tsl";
 import { PostProcessing, type WebGPURenderer } from "three/webgpu";
-import { AbstractContainer, type RendererParams } from "../../common/AbstractContainer";
+import { AbstractWebGPUContainer } from "../../common/AbstractWebGPUContainer";
 
-export class Container<T extends WebGLRenderer | WebGPURenderer> extends AbstractContainer<T> {
+export class Container extends AbstractWebGPUContainer {
 	public scene = new Scene();
 	public camera = new PerspectiveCamera(45, 1, 0.1, 10000);
 	private _cameraControls: OrbitControls;
@@ -13,8 +13,8 @@ export class Container<T extends WebGLRenderer | WebGPURenderer> extends Abstrac
 	public directionalLight = new DirectionalLight(0xffffff, 1);
 	public postProcessing: PostProcessing;
 
-	constructor(wrapper: HTMLDivElement, rendererClass: new (params: RendererParams) => T) {
-		super(wrapper, rendererClass);
+	constructor(wrapper: HTMLDivElement) {
+		super(wrapper);
 
 		this.renderer.setClearColor(0xfff9ee, 1);
 
@@ -31,12 +31,12 @@ export class Container<T extends WebGLRenderer | WebGPURenderer> extends Abstrac
 		this.postProcessing.outputNode = toonOutlinePass(this.scene, this.camera, undefined, 0.005);
 	}
 
-	public override update() {
+	public override async update() {
 		super.update();
 
 		this._cameraControls.update();
 		// this.renderer.render(this.scene, this.camera);
-		this.postProcessing.render();
+		await this.postProcessing.renderAsync();
 		// console.log('this.renderer', this.renderer);
 	}
 

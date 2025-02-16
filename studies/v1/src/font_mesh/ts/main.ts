@@ -1,4 +1,4 @@
-import { MeshLambertNodeMaterial, WebGPURenderer } from "three/webgpu";
+import { MeshLambertNodeMaterial } from "three/webgpu";
 import { assertIsDefined } from "x";
 import { AssetManager, type GLTFObject } from "x3/index.js";
 import { checkWebGPUSupport } from "x3/misc/environment.js";
@@ -18,7 +18,7 @@ async function setup() {
 		return;
 	}
 
-	const container = new Container(wrapper, WebGPURenderer);
+	const container = new Container(wrapper);
 
 	await assetManager.load([{ id: "roboto", url: "/studies/assets/Roboto-Medium.ttf" }], container.renderer);
 
