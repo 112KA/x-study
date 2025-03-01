@@ -103,3 +103,4 @@ dist
 .temp
 
 .npmrc
+studies/glsl/

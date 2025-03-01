@@ -41,6 +41,10 @@ import { TextObject } from "./TextObject";
 const SIZE = TEXTURE_SIZE;
 const N_PARTICLES = SIZE * SIZE;
 
+/**
+ * shaderはここのを書き写しているっぽい
+ * @see https://codepen.io/xingway/pen/eYNERMg
+ */
 export class Particle {
 	public mesh: Mesh;
 	public computeRenderer: GPUComputationRenderer;

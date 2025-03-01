@@ -31,7 +31,7 @@ export class Container extends AbstractWebGPUContainer {
 	}
 
 	public async render() {
-		await this.renderer.renderAsync(this.scene, this.camera);
+		this.renderer.render(this.scene, this.camera);
 		this.renderer.resolveTimestampsAsync(TimestampQuery.RENDER);
 	}
 

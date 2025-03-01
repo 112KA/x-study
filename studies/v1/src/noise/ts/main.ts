@@ -4,7 +4,7 @@ import type { AbstractContainerEventMap } from "../../common/AbstractContainer.j
 import { Background } from "./Background.js";
 import { Container } from "./Container.js";
 import { Controls } from "./Controls.js";
-import { NoiseMaterial } from "./materials/index.js";
+import { NoiseMaterial, SNoise3ColorMaterial, SNoise3Material } from "./materials/index.js";
 
 const wrapper = document.getElementById("canvas-wrapper") as HTMLDivElement;
 assertIsDefined(wrapper);
@@ -19,7 +19,7 @@ async function setup() {
 
 	const container = new Container(wrapper);
 
-	const materials = [new NoiseMaterial()];
+	const materials = [new SNoise3ColorMaterial(), new SNoise3Material(), new NoiseMaterial()];
 	background.material = materials[0];
 	const controls = new Controls({ targetMesh: background, materials });
 

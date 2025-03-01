@@ -4,6 +4,7 @@ import { AssetManager, type GLTFObject } from "x3/index.js";
 import { checkWebGPUSupport } from "x3/misc/environment.js";
 import type { AbstractContainerEventMap } from "../../common/AbstractContainer.js";
 import { Container } from "./Container.js";
+import { Controls } from "./Controls.js";
 import { PointParticle } from "./Particle.js";
 
 const wrapper = document.getElementById("canvas-wrapper") as HTMLDivElement;
@@ -22,6 +23,8 @@ async function setup() {
 
 	scene.add(particle);
 
+	const controls = new Controls({ particle });
+
 	// const assetManager = new AssetManager();
 
 	// await assetManager.load(
@@ -38,7 +41,7 @@ async function setup() {
 	// scene.add((assetManager.objects.model as GLTFObject).scene);
 
 	const update = async ({ delta, elapsedTime }: AbstractContainerEventMap["update"]) => {
-		await renderer.computeAsync(particle.computeNode);
+		renderer.compute(particle.computeNode);
 		renderer.resolveTimestampsAsync(TimestampQuery.COMPUTE);
 
 		await container.render();

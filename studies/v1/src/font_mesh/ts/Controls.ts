@@ -1,5 +1,5 @@
 import type { AmbientLight, DirectionalLight, Material } from "three";
-import { type FolderApi, type ListBladeApi, Pane, VERSION } from "tweakpane";
+import { type FolderApi, type ListBladeApi, Pane } from "tweakpane";
 import { LightsFolder } from "x3-controls/lights/lights-folder";
 import type { FontMesh } from "./FontMesh";
 import type { HalfToneDotMaterial, HalfToneLineMaterial } from "./materials";
@@ -22,9 +22,6 @@ export class Controls extends Pane {
 
 	constructor({ fontMesh, materials, ambientLight, directionalLight }: ControlsParams) {
 		super();
-
-		const v = VERSION;
-		console.log(v);
 
 		const lightTargets = [];
 		ambientLight && lightTargets.push(ambientLight);

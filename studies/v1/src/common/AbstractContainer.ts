@@ -15,8 +15,8 @@ export interface AbstractContainerEventMap {
 }
 
 export type RendererParams = {
-	antialias: boolean;
-	transparent: boolean;
+	antialias?: boolean;
+	transparent?: boolean;
 };
 
 export abstract class AbstractContainer<
@@ -47,6 +47,7 @@ export abstract class AbstractContainer<
 			antialias: true,
 			transparent: true,
 		});
+		this.#stats.init(this.renderer);
 
 		this.renderer.setClearColor(0x000000, 1);
 		this.renderer.setPixelRatio(window.devicePixelRatio);
