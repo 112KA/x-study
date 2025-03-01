@@ -41,7 +41,7 @@ async function setup() {
 	// scene.add((assetManager.objects.model as GLTFObject).scene);
 
 	const update = async ({ delta, elapsedTime }: AbstractContainerEventMap["update"]) => {
-		renderer.compute(particle.computeNode);
+		await renderer.computeAsync(particle.computeNode);
 		renderer.resolveTimestampsAsync(TimestampQuery.COMPUTE);
 
 		await container.render();

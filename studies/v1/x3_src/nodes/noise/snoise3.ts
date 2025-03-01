@@ -13,7 +13,6 @@
 // 本ファイルは上記リポジトリのコードをベースに、MITライセンスに従って作成されました。
 // 元のコードの著作権は Ashima Arts に帰属します。
 
-import type OperatorNode from "three/src/nodes/math/OperatorNode.js";
 import {
 	Fn,
 	type ShaderNodeObject,
@@ -30,8 +29,9 @@ import {
 	vec3,
 	vec4,
 } from "three/tsl";
+import type { VarNode } from "three/webgpu";
 
-export const mod289_v3 = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<OperatorNode>]) => {
+export const mod289_v3 = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<VarNode>]) => {
 	const x = vec3(x_immutable).toVar();
 
 	return x.sub(floor(x.mul(1.0 / 289.0)).mul(289.0));
@@ -41,7 +41,7 @@ export const mod289_v3 = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<Oper
 	inputs: [{ name: "x", type: "vec3" }],
 });
 
-export const mod289_v4 = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<OperatorNode>]) => {
+export const mod289_v4 = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<VarNode>]) => {
 	const x = vec4(x_immutable).toVar();
 
 	return x.sub(floor(x.mul(1.0 / 289.0)).mul(289.0));
@@ -51,7 +51,7 @@ export const mod289_v4 = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<Oper
 	inputs: [{ name: "x", type: "vec4" }],
 });
 
-export const permute = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<OperatorNode>]) => {
+export const permute = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<VarNode>]) => {
 	const x = vec4(x_immutable).toVar();
 
 	return mod289_v4(x.mul(34.0).add(10.0).mul(x));
@@ -61,7 +61,7 @@ export const permute = /*#__PURE__*/ Fn(([x_immutable]: [ShaderNodeObject<Operat
 	inputs: [{ name: "x", type: "vec4" }],
 });
 
-export const taylorInvSqrt = /*#__PURE__*/ Fn(([r_immutable]: [ShaderNodeObject<OperatorNode>]) => {
+export const taylorInvSqrt = /*#__PURE__*/ Fn(([r_immutable]: [ShaderNodeObject<VarNode>]) => {
 	const r = vec4(r_immutable).toVar();
 
 	return sub(1.79284291400159, mul(0.85373472095314, r));
@@ -71,7 +71,7 @@ export const taylorInvSqrt = /*#__PURE__*/ Fn(([r_immutable]: [ShaderNodeObject<
 	inputs: [{ name: "r", type: "vec4" }],
 });
 
-export const snoise3 = /*#__PURE__*/ Fn(([v_immutable]: [ShaderNodeObject<OperatorNode>]) => {
+export const snoise3 = /*#__PURE__*/ Fn(([v_immutable]: [ShaderNodeObject<VarNode>]) => {
 	const v = vec3(v_immutable).toVar();
 	const C = vec2(1.0 / 6.0, 1.0 / 3.0);
 	const D = vec4(0.0, 0.5, 1.0, 2.0);
