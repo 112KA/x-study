@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, Points } from "three";
+import { BufferAttribute, BufferGeometry, Points, Sprite } from "three";
 import {
 	Fn,
 	If,
@@ -8,23 +8,38 @@ import {
 	hash,
 	instanceIndex,
 	instancedArray,
+	instancedBufferAttribute,
 	range,
+	shapeCircle,
+	storage,
 	uint,
 	vec3,
 } from "three/tsl";
-import { type ComputeNode, PointsNodeMaterial, type StorageArrayElementNode, WebGPURenderer } from "three/webgpu";
+import {
+	type ComputeNode,
+	PointsNodeMaterial,
+	type StorageArrayElementNode,
+	StorageInstancedBufferAttribute,
+	WebGPURenderer,
+} from "three/webgpu";
 import { curl } from "x3/nodes/noise/curl";
 
-export class PointParticle extends Points {
+export class SpriteParticle extends Sprite {
 	computeNode: ShaderNodeObject<ComputeNode>;
-	constructor(count = 10000) {
-		const geometry = new BufferGeometry();
-		geometry.setAttribute("position", new BufferAttribute(new Float32Array(3), 3)); // single vertex ( not triangle )
-		geometry.drawRange.count = 1; // force render points as instances ( not triangle )
+	constructor(count = 100000) {
+		const sizes = new Float32Array(count);
+		const instanceSizeBufferAttribute = new StorageInstancedBufferAttribute(sizes, 1);
+		const instanceSizeStorage = storage(instanceSizeBufferAttribute, "float", instanceSizeBufferAttribute.count);
 
-		const material = new PointsNodeMaterial();
+		const material = new PointsNodeMaterial({
+			opacityNode: shapeCircle(),
+			sizeNode: instancedBufferAttribute(instanceSizeBufferAttribute),
+			vertexColors: true,
+			sizeAttenuation: false,
+			alphaToCoverage: true,
+		});
 
-		super(geometry, material);
+		super(material);
 
 		this.count = count;
 
@@ -48,15 +63,20 @@ export class PointParticle extends Points {
 				velocity.assign(vec3(randTheta.cos().mul(sinPhi), randTheta.sin().mul(sinPhi), randPhi.cos()).mul(0.01));
 
 				position.assign(vec3(0.0, 0.0, 0.0));
+
+				instanceSizeStorage.element(instanceIndex).assign(hash(instanceIndex.add(randUint())).mul(4).add(1));
 			}).Else(() => {
 				life.assign(life.x.sub(1));
-				velocity.assign(velocity.add(curl(position).mul(0.001)));
-				position.assign(position.add(velocity));
+				velocity.addAssign(curl(position).mul(0.001));
+				position.addAssign(velocity);
 			});
 		});
 		this.computeNode = computeFn().compute(count);
 
-		material.colorNode = positionArray.element(instanceIndex).add(color(0xffffff));
+		material.colorNode = color(0xffffff);
 		material.positionNode = positionArray.element(instanceIndex);
+
+		// this.castShadow = true;	// SpriteはcastShadowがない
+		this.receiveShadow = true;
 	}
 }

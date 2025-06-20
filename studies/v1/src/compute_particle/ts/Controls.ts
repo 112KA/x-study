@@ -1,5 +1,5 @@
 import { Pane } from "tweakpane";
-import type { PointParticle } from "./Particle";
+import type { PointParticle } from "./PointsParticle";
 
 export type ControlsParams = {
 	particle: PointParticle;
