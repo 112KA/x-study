@@ -1,0 +1,16 @@
+{
+	"name": "compress-model",
+	"version": "1.0.0",
+	"type": "module",
+	"description": "",
+	"scripts": {
+		"draco": "tsx src/index.ts draco",
+		"etc1s": "tsx src/index.ts etc1s",
+		"meshopt": "tsx src/index.ts meshopt",
+		"inspect": "tsx src/index.ts inspect",
+		"format": "biome format --write",
+		"lint": "biome lint --write"
+	},
+	"keywords": [],
+	"author": "mas.iizuka@gmail.com"
+}

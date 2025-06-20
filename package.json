@@ -19,6 +19,7 @@
 		"@biomejs/biome": "1.9.4",
 		"@tsconfig/recommended": "^1.0.8",
 		"@types/node": "^22.13.14",
+		"tsx": "4.20.3",
 		"typescript": "^5.8.2"
 	},
 	"license": "MIT"
