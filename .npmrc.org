@@ -2,3 +2,4 @@
 @112ka:registry=https://npm.pkg.github.com
 
 save-exact=true
+engine-strict=true

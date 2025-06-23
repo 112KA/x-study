@@ -4,9 +4,17 @@
 	"description": "",
 	"engines": {
 		"node": ">=22.11",
-		"npm": "use pnpm",
-		"pnpm": ">=9",
-		"yarn": "use pnpm"
+		"pnpm": ">=9"
+	},
+	"devEngines": {
+		"runtime": {
+			"name": "node",
+			"onFail": "error"
+		},
+		"packageManager": {
+			"name": "pnpm",
+			"onFail": "error"
+		}
 	},
 	"scripts": {
 		"dev": "pnpm v1 dev",
