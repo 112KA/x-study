@@ -4,6 +4,7 @@
 	"type": "module",
 	"description": "",
 	"scripts": {
+		"compress": "tsx src/index.ts compress",
 		"draco": "tsx src/index.ts draco",
 		"etc1s": "tsx src/index.ts etc1s",
 		"meshopt": "tsx src/index.ts meshopt",

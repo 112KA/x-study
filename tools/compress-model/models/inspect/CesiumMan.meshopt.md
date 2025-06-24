@@ -30,9 +30,9 @@
 
  MESHES
  ────────────────────────────────────────────
-| #   | name       | mode      | meshPrimitives | glPrimitives | vertices | indices | attributes                                                                             | instances | size¹    |
-| --- | ---        | ---       | ---            | ---          | ---      | ---     | ---                                                                                    | ---       | ---      |
-| 0   | Cesium_Man | TRIANGLES | 1              | 4,672        | 3,273    | u16     | JOINTS_0:u8, NORMAL:i8_norm, POSITION:i16_norm, TEXCOORD_0:u16_norm, WEIGHTS_0:u8_norm | 1         | 96.77 KB |
+| #   | name       | mode      | meshPrimitives | glPrimitives | vertices | indices | attributes                                                                              | instances | size¹     |
+| --- | ---        | ---       | ---            | ---          | ---      | ---     | ---                                                                                     | ---       | ---       |
+| 0   | Cesium_Man | TRIANGLES | 1              | 4,672        | 3,273    | u16     | JOINTS_0:u8, NORMAL:i16_norm, POSITION:i16_norm, TEXCOORD_0:u16_norm, WEIGHTS_0:u8_norm | 1         | 106.58 KB |
 
 ⁴ size estimates GPU memory required by a mesh, in isolation. If accessors are
   shared by other mesh primitives, but the meshes themselves are not reused, then
@@ -63,6 +63,6 @@
  ────────────────────────────────────────────
 | #   | name | channels | samplers | duration | keyframes | size     |
 | --- | ---  | ---      | ---      | ---      | ---       | ---      |
-| 0   |      | 57       | 57       | 1.958    | 2,736     | 29.38 KB |
+| 0   |      | 57       | 57       | 1.958    | 2,736     | 36.67 KB |
 
 
