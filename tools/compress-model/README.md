@@ -1,10 +1,21 @@
 # compress-model tool
 
 ## Setup
-1. CLI install
+1. @gltf-transform/cli install
 > npm install --global @gltf-transform/cli
 2. KTX Software install & pathを通す
 https://github.com/KhronosGroup/KTX-Software/releases/tag/v4.4.0
+
+
+## Usage
+```shell
+# `srcDir`以下のgltf,glbファイルを再帰的に取得&圧縮して、`dstDir`に出力
+pnpm all [srcDir] [dstDir]
+
+# `srcDir`以下の指定ファイルを`dstDir`に出力
+# ※ファイルパスは`srcDir`が基準となる
+pnpm compress [ファイル名] [srcDir] [dstDir]
+```
 
 
 ## model素材元

@@ -4,11 +4,12 @@
 	"type": "module",
 	"description": "",
 	"scripts": {
-		"compress": "tsx src/index.ts compress",
-		"draco": "tsx src/index.ts draco",
-		"etc1s": "tsx src/index.ts etc1s",
-		"meshopt": "tsx src/index.ts meshopt",
-		"inspect": "tsx src/index.ts inspect",
+		"all": "tsx src/all.ts",
+		"compress": "tsx src/command.ts compress",
+		"draco": "tsx src/command.ts draco",
+		"etc1s": "tsx src/command.ts etc1s",
+		"meshopt": "tsx src/command.ts meshopt",
+		"inspect": "tsx src/command.ts inspect",
 		"format": "biome format --write",
 		"lint": "biome lint --write"
 	},

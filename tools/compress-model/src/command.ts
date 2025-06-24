@@ -1,9 +1,11 @@
+import { unlink } from "node:fs/promises";
+
 import { compressByDraco } from "./compress-by-draco.js";
 import { compressByEtc1s } from "./compress-by-etc1s.js";
 import { compressByMeshopt } from "./compress-by-meshopt.js";
 import { outputInspectResult } from "./output-inspect-result.js";
 
-type TCommandType = "all" | "compress" | "meshopt" | "etc1s" | "draco" | "inspect";
+type TCommandType = "compress" | "meshopt" | "etc1s" | "draco" | "inspect";
 
 const commandType: TCommandType = process.argv[2] as TCommandType;
 
@@ -28,30 +30,30 @@ const srcDir = process.argv[4] || "models/";
 const dstDir = process.argv[5] || "models/";
 
 switch (commandType) {
-	case "all":
-		// not implemented yet
-		console.error("Error: The 'all' command is not implemented yet.");
-		process.exit(1);
-		break;
 	case "compress":
 		{
-			compressByDraco(inputFilePath, srcDir, srcDir);
+			await compressByMeshopt(inputFilePath, srcDir, srcDir);
 
-			const outputFilePath = inputFilePath.replace(/(\.gltf|\.glb)$/i, ".draco$1");
-			compressByEtc1s(outputFilePath, srcDir, dstDir);
+			const inputFilePath2 = inputFilePath.replace(/(\.gltf|\.glb)$/i, ".meshopt$1");
+
+			await compressByEtc1s(inputFilePath2, srcDir, dstDir);
+
+			// 中間ファイルを削除
+			await unlink(srcDir + inputFilePath2);
+			console.info(`Deleted intermediate file ${srcDir + inputFilePath2}`);
 		}
 		break;
 	case "meshopt":
-		compressByMeshopt(inputFilePath, srcDir, dstDir);
+		await compressByMeshopt(inputFilePath, srcDir, dstDir);
 		break;
 	case "etc1s":
-		compressByEtc1s(inputFilePath, srcDir, dstDir);
+		await compressByEtc1s(inputFilePath, srcDir, dstDir);
 		break;
 	case "draco":
-		compressByDraco(inputFilePath, srcDir, dstDir);
+		await compressByDraco(inputFilePath, srcDir, dstDir);
 		break;
 	case "inspect":
-		outputInspectResult(inputFilePath, srcDir);
+		await outputInspectResult(inputFilePath, srcDir);
 		break;
 	default:
 		console.error(`Error: Unknown command type "${commandType}".`);
