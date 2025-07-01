@@ -1,6 +1,6 @@
 import type { WebGLRenderer } from "three";
 import { Font, type FontData, TTFLoader } from "three/examples/jsm/Addons.js";
-import type { Renderer, WebGPURenderer } from "three/webgpu";
+import type { Renderer } from "three/webgpu";
 import type { AssetManager } from "../asset-manager.js";
 import type { ResourceItem } from "../types.js";
 import type { IResolver } from "./types.js";
