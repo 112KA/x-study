@@ -1,5 +1,5 @@
-import { Fn, type ShaderNodeObject, mix, normalWorld, rotate, screenCoordinate, screenSize, vec4 } from "three/tsl";
-import type { Color, PropertyNode, UniformNode, Vector3 } from "three/webgpu";
+import { Fn, mix, rotate, type ShaderNodeObject, screenCoordinate, screenSize, sin, vec4 } from "three/tsl";
+import type { Color, UniformNode, Vector3 } from "three/webgpu";
 
 export type HalftoneTuple = [
 	ShaderNodeObject<UniformNode<number>>,
@@ -12,7 +12,11 @@ export type HalftoneTuple = [
 	ShaderNodeObject<UniformNode<number>>,
 ];
 
-export const halftone = /*@__PURE__*/ Fn(
+/**
+ * Dot pattern
+ * @see https://threejs.org/examples/#webgpu_tsl_halftone
+ */
+export const dotPattern = /*@__PURE__*/ Fn(
 	([count, color, direction, start, end, radius, mixLow, mixHigh]: HalftoneTuple) => {
 		// grid pattern
 
@@ -21,7 +25,7 @@ export const halftone = /*@__PURE__*/ Fn(
 
 		// orientation strength
 
-		const orientationStrength = normalWorld.dot(direction.normalize()).remapClamp(end, start, 0, 1);
+		const orientationStrength = direction.remapClamp(end, start, 0, 1);
 
 		// mask
 
@@ -35,24 +39,27 @@ export const halftone = /*@__PURE__*/ Fn(
 	},
 );
 
-export type BlendHalftoneColorTuple = [
-	ShaderNodeObject<PropertyNode>,
-	{
-		count: ShaderNodeObject<UniformNode<number>>;
-		color: ShaderNodeObject<UniformNode<Color>>;
-		direction: ShaderNodeObject<UniformNode<Vector3>>;
-		start: ShaderNodeObject<UniformNode<number>>;
-		end: ShaderNodeObject<UniformNode<number>>;
-		radius: ShaderNodeObject<UniformNode<number>>;
-		mixLow: ShaderNodeObject<UniformNode<number>>;
-		mixHigh: ShaderNodeObject<UniformNode<number>>;
-	},
-];
+/**
+ * Dot pattern
+ * @see https://wgld.org/d/webgl/w077.html
+ */
+export const linePattern = /*@__PURE__*/ Fn(
+	([count, color, direction, start, end, radius, mixLow, mixHigh]: HalftoneTuple) => {
+		// grid pattern
 
-export const blendHalftoneColor = /*@__PURE__*/ Fn(([input, uniforms]: BlendHalftoneColorTuple) => {
-	const blendedOutput = input;
-	const { count, color, direction, start, end, radius, mixLow, mixHigh } = uniforms;
-	const halftoneOutput = halftone(count, color, direction, start, end, radius, mixLow, mixHigh);
-	blendedOutput.rgb.assign(mix(blendedOutput.rgb, halftoneOutput.rgb, halftoneOutput.a));
-	return blendedOutput;
-});
+		const gridUv = screenCoordinate.xy.div(screenSize.yy).mul(count);
+
+		// orientation strength
+
+		const orientationStrength = direction.remapClamp(end, start, 0, 1);
+
+		// mask
+
+		const mask = sin(gridUv.x.add(gridUv.y))
+			.oneMinus()
+			.step(orientationStrength.mul(radius))
+			.mul(mix(mixLow, mixHigh, orientationStrength));
+
+		return vec4(color, mask);
+	},
+);

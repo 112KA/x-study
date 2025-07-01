@@ -16,7 +16,7 @@ export class TextureAtlasResolver implements IResolver {
 		loadingManager.addHandler(/\.json$/i, new JSONLoader(loadingManager));
 	}
 
-	check(loaded: unknown): boolean {
+	check(_loaded: unknown): boolean {
 		return false; //no check
 	}
 
