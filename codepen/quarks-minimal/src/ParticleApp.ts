@@ -1,4 +1,14 @@
-import { AxesHelper, Clock, GridHelper, PerspectiveCamera, Scene, type Texture, WebGLRenderer } from "three";
+import {
+	AmbientLight,
+	AxesHelper,
+	Clock,
+	DirectionalLight,
+	GridHelper,
+	PerspectiveCamera,
+	Scene,
+	type Texture,
+	WebGLRenderer,
+} from "three";
 import { BatchedRenderer, type Vector4 } from "three.quarks";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import type { ParticleSystemGroup } from "./ParticleSystemGroupBase";
@@ -37,6 +47,9 @@ export enum ParticleSystemType {
 export class ParticleApp {
 	private scene: Scene;
 	private camera: PerspectiveCamera;
+	private ambientLight = new AmbientLight(0xffffff, 0.5);
+	private fillLight = new DirectionalLight(0xffffff, 0.5);
+	private backLight = new DirectionalLight(0xffffff, 0.5);
 	private renderer: WebGLRenderer;
 	private clock: Clock;
 	private batchRenderer: BatchedRenderer;
@@ -82,6 +95,9 @@ export class ParticleApp {
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = 0.25;
+
+		// Setup Light
+		this.scene.add(this.ambientLight);
 
 		// Add batch renderer to scene
 		this.scene.add(this.batchRenderer);

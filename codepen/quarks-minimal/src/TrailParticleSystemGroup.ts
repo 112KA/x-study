@@ -1,11 +1,9 @@
-import { AdditiveBlending, BoxGeometry, Group, Mesh, MeshBasicMaterial, MeshNormalMaterial, type Texture } from "three";
+import { BoxGeometry, Group, Mesh, MeshNormalMaterial, SphereGeometry, type Texture } from "three";
 import {
 	ColorOverLife,
 	ConstantValue,
 	Gradient,
-	type ParticleEmitter,
 	ParticleSystem,
-	PointEmitter,
 	RandomColor,
 	RenderMode,
 	Vector3,
@@ -32,18 +30,22 @@ export class TrailParticleSystemGroup extends Group implements ParticleSystemGro
 			startSize: new ConstantValue(0.1),
 			startColor: new RandomColor(new Vector4(1, 0.91, 0.51, 1), new Vector4(1, 0.44, 0.16, 1)),
 			worldSpace: true,
-			maxParticle: 1000,
-			emissionOverTime: new ConstantValue(1000),
+			emissionOverTime: new ConstantValue(100),
 			emissionBursts: [],
-			shape: new PointEmitter(),
-			material: new MeshBasicMaterial({
-				map,
-				blending: AdditiveBlending,
+			shape: new TrailEmitter(this.trailTarget),
+			// material: new MeshStandardMaterial({
+			// 	// map,
+			// 	blending: AdditiveBlending,
+			// 	transparent: true,
+			// 	// side: DoubleSide,
+			// 	emissive: new Color(0xffffff),
+			// }),
+			material: new MeshNormalMaterial({
 				transparent: true,
-				// side: DoubleSide,
 			}),
-			renderMode: RenderMode.BillBoard,
-			renderOrder: 1,
+			instancingGeometry: new SphereGeometry(1, 8, 8),
+			renderMode: RenderMode.Mesh,
+			// renderOrder: 1,
 		});
 
 		this.particleSystem.addBehavior(
@@ -52,7 +54,7 @@ export class TrailParticleSystemGroup extends Group implements ParticleSystemGro
 				new Gradient(
 					[
 						[new Vector3(1, 0, 0), 0],
-						[new Vector3(1, 1, 1), 0.5],
+						[new Vector3(1, 1, 1), 0.1],
 					],
 					[
 						[1, 0],
@@ -63,7 +65,7 @@ export class TrailParticleSystemGroup extends Group implements ParticleSystemGro
 		);
 
 		// this.particleSystem.emitterShape = new PointEmitter();
-		this.particleSystem.emitterShape = new TrailEmitter(this.trailTarget);
+		// this.particleSystem.emitterShape = new TrailEmitter(this.trailTarget);
 		this.particleSystem.emitter.name = "Point";
 
 		this.add(this.particleSystem.emitter);
