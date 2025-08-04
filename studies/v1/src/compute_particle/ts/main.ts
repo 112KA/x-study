@@ -1,8 +1,20 @@
-import { BoxGeometry, Mesh, PlaneGeometry, TimestampQuery, TorusKnotGeometry } from "three";
-import { Fn, hash, mx_fractal_noise_vec3, positionWorld, vec4, vertexIndex } from "three/tsl";
+import {
+	BoxGeometry,
+	Mesh,
+	PlaneGeometry,
+	TimestampQuery,
+	TorusKnotGeometry,
+} from "three";
+import {
+	Fn,
+	hash,
+	mx_fractal_noise_vec3,
+	positionWorld,
+	vec4,
+	vertexIndex,
+} from "three/tsl";
 import { MeshBasicNodeMaterial, MeshPhongNodeMaterial } from "three/webgpu";
 import { assertIsDefined } from "x";
-import { AssetManager, type GLTFObject } from "x3/index.js";
 import { checkWebGPUSupport } from "x3/misc/environment.js";
 import type { AbstractContainerEventMap } from "../../common/AbstractContainer.js";
 import { Container } from "./Container.js";
@@ -65,7 +77,10 @@ async function setup() {
 
 	// scene.add((assetManager.objects.model as GLTFObject).scene);
 
-	const update = async ({ delta, elapsedTime }: AbstractContainerEventMap["update"]) => {
+	const update = async ({
+		delta,
+		elapsedTime,
+	}: AbstractContainerEventMap["update"]) => {
 		await renderer.computeAsync(particle.computeNode);
 		renderer.resolveTimestampsAsync(TimestampQuery.COMPUTE);
 

@@ -14,8 +14,3 @@ export type TextureAtlasResourceItem = {
 };
 
 export type ResourceItem = DefaultResourceItem | TextureAtlasResourceItem;
-
-export type GLTFObject = {
-	scene: Object3D;
-	animations: AnimationClip[];
-};

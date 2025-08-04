@@ -1,10 +1,22 @@
-import { EventDispatcher, type Object3D, REVISION, type Texture, type WebGLRenderer } from "three";
-import type { Font, KTX2Loader } from "three/examples/jsm/Addons.js";
+import {
+	EventDispatcher,
+	type Object3D,
+	REVISION,
+	type Texture,
+	type WebGLRenderer,
+} from "three";
+import type { Font, GLTF, KTX2Loader } from "three/examples/jsm/Addons.js";
 import { LoadingManager, type Renderer } from "three/webgpu";
 import { assertIsDefined } from "x";
 import type { TextureAtlas } from "x3/textures/texture-atlas.js";
-import { FontResolver, GLTFResolver, type IResolver, TextureAtlasResolver, TextureResolver } from "./resolver/index.js";
-import type { GLTFObject, ResourceItem } from "./types.js";
+import {
+	FontResolver,
+	GLTFResolver,
+	type IResolver,
+	TextureAtlasResolver,
+	TextureResolver,
+} from "./resolver/index.js";
+import type { ResourceItem } from "./types.js";
 
 export interface AssetManagerEventMap {
 	// biome-ignore lint/complexity/noBannedTypes: 何もないときは何もない
@@ -33,7 +45,7 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 	};
 
 	textures: Record<string, Texture> = {};
-	objects: Record<string, Object3D | GLTFObject> = {};
+	objects: Record<string, Object3D | GLTF> = {};
 	atlases: Record<string, TextureAtlas> = {};
 	fonts: Record<string, Font> = {};
 
@@ -49,7 +61,10 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 		return await loader.loadAsync(url);
 	}
 
-	public async load(resources: ResourceItem[], renderer: Renderer | WebGLRenderer): Promise<void> {
+	public async load(
+		resources: ResourceItem[],
+		renderer: Renderer | WebGLRenderer,
+	): Promise<void> {
 		if (!renderer) {
 			throw new Error("You must provide a renderer to the load function.");
 		}
@@ -80,7 +95,10 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 			} else if (type === "atlas") {
 				const { jsonUrl, textureUrl } = resource;
 				targetUrl = [jsonUrl, textureUrl];
-				const loaded: unknown[] = await Promise.all([this.loadSingle(jsonUrl), this.loadSingle(textureUrl)]);
+				const loaded: unknown[] = await Promise.all([
+					this.loadSingle(jsonUrl),
+					this.loadSingle(textureUrl),
+				]);
 				this.#resolvers.atlas.resolve(resource, loaded, renderer);
 			}
 
