@@ -55,7 +55,6 @@ export class ApplicationBase {
 	}
 
 	protected initializeScene() {
-		console.log("Initializing scene...");
 		this.camera = new PerspectiveCamera(
 			75,
 			this.viewport.aspectRatio,
@@ -92,8 +91,6 @@ export class ApplicationBase {
 	};
 
 	protected resize(width: number, height: number) {
-		console.log("Resizing...", { width, height });
-
 		// Update camera aspect ratio
 		const camera = this.camera as PerspectiveCamera;
 		if (camera.isPerspectiveCamera) {

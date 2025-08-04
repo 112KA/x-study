@@ -77,4 +77,8 @@ export class Application extends ApplicationBase {
 
 		super.update(dt, time);
 	}
+
+	protected async resize(dt: number, time: number) {
+		super.resize(dt, time);
+	}
 }
