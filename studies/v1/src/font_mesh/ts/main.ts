@@ -1,52 +1,34 @@
-import { MeshLambertNodeMaterial } from "three/webgpu";
 import { assertIsDefined } from "x";
-import { AssetManager } from "x3/index.js";
-import { checkWebGPUSupport } from "x3/misc/environment.js";
-import { Container } from "./Container.js";
-import { Controls } from "./Controls.js";
-import { FontMesh } from "./FontMesh.js";
 import {
-	HalfToneDotMaterial,
-	HalfToneLineMaterial,
-	NormalMaterial,
-	ToonMaterial,
-} from "./materials/index.js";
+	AssetPlugin,
+	DebugShaderPlugin,
+	OrbitControlsPlugin,
+	StatsGLPlugin,
+} from "x3/application";
+import { Application } from "./Application";
 
-const wrapper = document.getElementById("canvas-wrapper") as HTMLDivElement;
-assertIsDefined(wrapper);
+const setup = async () => {
+	const wrapper = document.getElementById("canvas-wrapper") as HTMLDivElement;
+	assertIsDefined(wrapper);
 
-const assetManager = new AssetManager();
+	const app = new Application(wrapper, {
+		renderer: {
+			type: "webgpu",
+		},
+	});
 
-async function setup() {
-	if (!(await checkWebGPUSupport())) {
-		wrapper.innerHTML = "WebGPU is not supported on this device.";
-		return;
-	}
-
-	const container = new Container(wrapper);
-
-	await assetManager.load(
-		[{ id: "roboto", url: "/studies/assets/Roboto-Medium.ttf" }],
-		container.renderer,
+	app.plugin.register(
+		new AssetPlugin([
+			{ id: "roboto", url: "/studies/assets/Roboto-Medium.ttf" },
+		]),
 	);
+	app.plugin.register(new OrbitControlsPlugin());
+	app.plugin.register(new StatsGLPlugin());
+	app.plugin.register(new DebugShaderPlugin());
 
-	const materials = [
-		new HalfToneDotMaterial(),
-		new HalfToneLineMaterial(),
-		new MeshLambertNodeMaterial({ name: "Lambert" }),
-		new ToonMaterial(),
-		new NormalMaterial(),
-	];
-
-	const fontMesh = new FontMesh(assetManager.fonts.roboto, "ABCDE");
-	fontMesh.material = materials[0];
-	container.scene.add(fontMesh);
-
-	const { ambientLight, directionalLight } = container;
-
-	new Controls({ fontMesh, materials, ambientLight, directionalLight });
-
-	await container.debugShader(fontMesh);
-}
+	await app.initialize();
+	app.shaderInfo();
+	app.start();
+};
 
 setup();

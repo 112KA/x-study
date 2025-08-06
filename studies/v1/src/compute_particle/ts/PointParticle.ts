@@ -1,15 +1,15 @@
 import { BufferAttribute, BufferGeometry, Points, Sprite } from "three";
 import {
-	Fn,
-	If,
-	type ShaderNodeObject,
 	color,
+	Fn,
 	float,
 	hash,
-	instanceIndex,
+	If,
 	instancedArray,
 	instancedBufferAttribute,
+	instanceIndex,
 	range,
+	type ShaderNodeObject,
 	shapeCircle,
 	storage,
 	uint,
@@ -24,16 +24,26 @@ import {
 } from "three/webgpu";
 import { curl } from "x3/nodes/noise/curl";
 
-export class PointsParticle extends Points {
+export class PointParticle extends Points {
 	computeNode: ShaderNodeObject<ComputeNode>;
 	constructor(count = 100000) {
 		const geometry = new BufferGeometry();
-		geometry.setAttribute("position", new BufferAttribute(new Float32Array(3), 3)); // single vertex ( not triangle )
+		geometry.setAttribute(
+			"position",
+			new BufferAttribute(new Float32Array(3), 3),
+		); // single vertex ( not triangle )
 		geometry.drawRange.count = 1; // force render points as instances ( not triangle )
 
 		const sizes = new Float32Array(count);
-		const instanceSizeBufferAttribute = new StorageInstancedBufferAttribute(sizes, 1);
-		const instanceSizeStorage = storage(instanceSizeBufferAttribute, "float", instanceSizeBufferAttribute.count);
+		const instanceSizeBufferAttribute = new StorageInstancedBufferAttribute(
+			sizes,
+			1,
+		);
+		const instanceSizeStorage = storage(
+			instanceSizeBufferAttribute,
+			"float",
+			instanceSizeBufferAttribute.count,
+		);
 
 		const material = new PointsNodeMaterial();
 
@@ -58,11 +68,19 @@ export class PointsParticle extends Points {
 				const randTheta = hash(instanceIndex.add(randUint())).mul(Math.PI * 2);
 				const randPhi = hash(instanceIndex.add(randUint())).mul(Math.PI);
 				const sinPhi = randPhi.sin();
-				velocity.assign(vec3(randTheta.cos().mul(sinPhi), randTheta.sin().mul(sinPhi), randPhi.cos()).mul(0.01));
+				velocity.assign(
+					vec3(
+						randTheta.cos().mul(sinPhi),
+						randTheta.sin().mul(sinPhi),
+						randPhi.cos(),
+					).mul(0.01),
+				);
 
 				position.assign(vec3(0.0, 0.0, 0.0));
 
-				instanceSizeStorage.element(instanceIndex).assign(hash(instanceIndex.add(randUint())).mul(40).add(1));
+				instanceSizeStorage
+					.element(instanceIndex)
+					.assign(hash(instanceIndex.add(randUint())).mul(40).add(1));
 			}).Else(() => {
 				life.assign(life.x.sub(1));
 				velocity.addAssign(curl(position).mul(0.001));

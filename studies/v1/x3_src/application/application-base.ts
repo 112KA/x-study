@@ -12,7 +12,7 @@ export class ApplicationBase {
 	public viewport!: Viewport;
 	public rendererAdapter!: RendererAdapter;
 
-	protected scene = new Scene();
+	public scene = new Scene();
 	public camera!: Camera;
 
 	constructor(
