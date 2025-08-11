@@ -1,4 +1,11 @@
-import { blendColor, normalWorld, output, color as tslColor, uniform, varying } from "three/tsl";
+import {
+	blendColor,
+	normalWorld,
+	output,
+	color as tslColor,
+	uniform,
+	varying,
+} from "three/tsl";
 import { MeshStandardNodeMaterial, Vector3 } from "three/webgpu";
 import { dotPattern } from "x3/nodes/halftone";
 
@@ -6,6 +13,7 @@ import { dotPattern } from "x3/nodes/halftone";
  * HalfToneDotMaterial class
  */
 export class HalfToneDotMaterial extends MeshStandardNodeMaterial {
+	name = "HalfToneDot";
 	public uniforms = {
 		count: uniform(90),
 		color: uniform(tslColor("#94ffd1")),
@@ -19,11 +27,20 @@ export class HalfToneDotMaterial extends MeshStandardNodeMaterial {
 
 	constructor() {
 		super({ color: "#ff622e" });
-		this.name = "HalfToneDot";
 
-		const { count, color, direction, start, end, radius, mixLow, mixHigh } = this.uniforms;
+		const { count, color, direction, start, end, radius, mixLow, mixHigh } =
+			this.uniforms;
 		const vDirection = varying(normalWorld.dot(direction.normalize()));
-		const dotPatternOutput = dotPattern(count, color, vDirection, start, end, radius, mixLow, mixHigh);
+		const dotPatternOutput = dotPattern(
+			count,
+			color,
+			vDirection,
+			start,
+			end,
+			radius,
+			mixLow,
+			mixHigh,
+		);
 		this.outputNode = blendColor(output, dotPatternOutput);
 	}
 }

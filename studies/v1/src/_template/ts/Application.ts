@@ -69,16 +69,16 @@ export class Application extends ApplicationBase {
 		this.scene.add(this.box);
 	}
 
-	protected async update(dt: number, time: number) {
+	protected async update(dt: number, timeMS: number) {
 		const delta = dt / 1000; // Convert milliseconds to seconds
 		this.box.rotation.x += 0.25 * delta;
 		this.box.rotation.y += 2 * delta;
 		this.box.rotation.z += 1 * delta;
 
-		super.update(dt, time);
+		super.update(dt, timeMS);
 	}
 
-	protected async resize(dt: number, time: number) {
-		super.resize(dt, time);
+	protected async resize(width: number, height: number) {
+		super.resize(width, height);
 	}
 }

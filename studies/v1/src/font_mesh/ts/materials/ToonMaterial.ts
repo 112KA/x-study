@@ -1,6 +1,12 @@
-import { Color, DataTexture, MeshToonNodeMaterial, RedFormat } from "three/webgpu";
+import {
+	Color,
+	DataTexture,
+	MeshToonNodeMaterial,
+	RedFormat,
+} from "three/webgpu";
 
 export class ToonMaterial extends MeshToonNodeMaterial {
+	name = "Toon";
 	constructor() {
 		const color = new Color(0xff7f00);
 		const colors = new Uint8Array(5);
@@ -11,6 +17,5 @@ export class ToonMaterial extends MeshToonNodeMaterial {
 		const gradientMap = new DataTexture(colors, colors.length, 1, RedFormat);
 		gradientMap.needsUpdate = true;
 		super({ color, gradientMap });
-		this.name = "Toon";
 	}
 }

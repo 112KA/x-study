@@ -1,84 +1,57 @@
-import {
-	AmbientLight,
-	BasicShadowMap,
-	BoxGeometry,
-	CameraHelper,
-	GridHelper,
-	Mesh,
-	PlaneGeometry,
-	SpotLight,
-} from "three";
-import type { GLTF } from "three/examples/jsm/Addons.js";
-import { texture } from "three/tsl";
-import { MeshPhongNodeMaterial, NodeMaterial } from "three/webgpu";
+import { AmbientLight, Color, Fog } from "three";
+import type { WebGPURenderer } from "three/webgpu";
 import { ApplicationBase, type AssetPlugin } from "x3/application";
+import { Ground } from "./Ground.js";
+import { LightGroup } from "./LightGroup.js";
+import { TiledLightingPostProcessing } from "./TiledLightingPostProcessing.js";
 
 export class Application extends ApplicationBase {
-	public ambientLight = new AmbientLight(0xffffff, 1);
-	public spotLight = new SpotLight(0xffffff, 500);
-
-	private box!: Mesh<BoxGeometry, MeshPhongNodeMaterial>;
+	count = 200;
+	lightGroup!: LightGroup;
+	postProcessing!: TiledLightingPostProcessing;
 
 	protected override initializeScene() {
 		super.initializeScene();
 
-		this.rendererAdapter.renderer.shadowMap.enabled = true;
-		this.rendererAdapter.renderer.shadowMap.type = BasicShadowMap;
+		this.camera.position.set(0, 30, 200);
 
-		this.camera.position.set(0, 5, 10);
+		this.scene.fog = new Fog(0x111111, 300, 500);
+		this.scene.background = new Color(0x111111);
 
-		this.scene.add(this.ambientLight);
+		// ライト管理の初期化
+		this.lightGroup = new LightGroup(this.count);
+		this.scene.add(this.lightGroup);
 
-		this.spotLight.name = "Spot Light";
-		this.spotLight.angle = Math.PI / 5;
-		this.spotLight.penumbra = 0.3;
-		this.spotLight.position.set(10, 10, 5);
-		this.spotLight.castShadow = true;
-		this.spotLight.shadow.camera.near = 8;
-		this.spotLight.shadow.camera.far = 30;
-		this.spotLight.shadow.mapSize.width = 1024;
-		this.spotLight.shadow.mapSize.height = 1024;
-		this.scene.add(this.spotLight);
-		this.scene.add(new CameraHelper(this.spotLight.shadow.camera));
+		// 環境光
+		const lightAmbient = new AmbientLight(0xffffff, 0.1);
+		this.scene.add(lightAmbient);
 
-		const grid = new GridHelper(10, 10);
-		this.scene.add(grid);
-
+		// textures
 		const { assetManager } = this.plugin.get<AssetPlugin>("asset")!;
 
-		// loaded texture
-		const nodeMaterial = new NodeMaterial();
-		nodeMaterial.fragmentNode = texture(assetManager.textures.checker);
+		const {
+			FloorsCheckerboard_S_Diffuse: texDiffuse,
+			FloorsCheckerboard_S_Normal: texNormal,
+		} = assetManager.textures;
 
-		const plane = new Mesh(new PlaneGeometry(1, 1), nodeMaterial);
-		this.scene.add(plane);
+		// 地面の作成
+		const ground = new Ground(texDiffuse, texNormal);
+		this.scene.add(ground);
 
-		// loaded GLTF Object
-		this.scene.add((assetManager.objects.model as GLTF).scene);
-
-		// box
-		const phoneMaterial = new MeshPhongNodeMaterial({
-			color: 0xff0000,
-			shininess: 150,
-			specular: 0x222222,
-		});
-		this.box = new Mesh(new BoxGeometry(1, 1, 1), phoneMaterial);
-		this.box.castShadow = true;
-		this.box.receiveShadow = true;
-		this.box.position.set(-2, 0, 0);
-		this.scene.add(this.box);
+		// post processing
+		this.postProcessing = new TiledLightingPostProcessing(this, this.count);
 	}
 
-	protected async update(dt: number, time: number) {
-		const delta = dt / 1000; // Convert milliseconds to seconds
-		this.box.rotation.x += 0.25 * delta;
-		this.box.rotation.y += 2 * delta;
-		this.box.rotation.z += 1 * delta;
+	protected async update(dt: number, timeMS: number) {
+		const timeS = timeMS / 1000;
 
-		super.update(dt, time);
+		// ライトの更新
+		this.lightGroup.updateLights(timeS);
+
+		super.update(dt, timeMS);
 	}
 
-	protected async resize(dt: number, time: number) {
-		super.resize(dt, time);
+	protected async resize(width: number, height: number) {
+		super.resize(width, height);
 	}
 }

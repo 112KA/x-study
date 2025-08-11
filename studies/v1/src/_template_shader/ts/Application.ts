@@ -15,11 +15,11 @@ export class Application extends ApplicationBase {
 		new Controls({ targetMesh: this.background, materials });
 	}
 
-	protected async update(dt: number, time: number) {
+	protected async update(dt: number, timeMS: number) {
 		// super.update(dt, time);
-		this.plugin.updateAll(dt, time);
+		this.plugin.updateAll(dt, timeMS);
 
-		this.background.update(dt, time);
+		this.background.update(dt, timeMS);
 		this.background.render(this.rendererAdapter.renderer as WebGPURenderer);
 	}
 

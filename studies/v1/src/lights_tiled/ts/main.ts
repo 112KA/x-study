@@ -13,16 +13,20 @@ const setup = async () => {
 	const app = new Application(wrapper, {
 		renderer: {
 			type: "webgpu",
+			antialias: true,
 		},
 	});
 
 	app.plugin.register(
 		new AssetPlugin([
 			{
-				id: "checker",
-				url: "/studies/assets/CustomUVChecker_byValle_2K.webp",
+				id: "FloorsCheckerboard_S_Diffuse",
+				url: "/studies/assets/floors/FloorsCheckerboard_S_Diffuse.jpg",
 			},
-			{ id: "model", url: "/studies/assets/SimpleTexture.gltf" },
+			{
+				id: "FloorsCheckerboard_S_Normal",
+				url: "/studies/assets/floors/FloorsCheckerboard_S_Normal.jpg",
+			},
 		]),
 	);
 	app.plugin.register(new OrbitControlsPlugin());

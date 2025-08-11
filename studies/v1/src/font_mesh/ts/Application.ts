@@ -1,10 +1,5 @@
 import { AmbientLight, DirectionalLight } from "three";
-import { toonOutlinePass } from "three/tsl";
-import {
-	MeshLambertNodeMaterial,
-	PostProcessing,
-	type WebGPURenderer,
-} from "three/webgpu";
+import { MeshLambertNodeMaterial, type WebGPURenderer } from "three/webgpu";
 import {
 	ApplicationBase,
 	type AssetPlugin,
@@ -18,11 +13,12 @@ import {
 	NormalMaterial,
 	ToonMaterial,
 } from "./materials/index.js";
+import { ToonOutlinePostProcessing } from "./ToonOutlinePostProcessing.js";
 
 export class Application extends ApplicationBase {
 	public ambientLight = new AmbientLight(0xffffff, 1);
 	public directionalLight = new DirectionalLight(0xffffff, 1);
-	public postProcessing!: PostProcessing;
+	public postProcessing!: ToonOutlinePostProcessing;
 	fontMesh!: FontMesh;
 
 	protected override initializeScene() {
@@ -60,16 +56,7 @@ export class Application extends ApplicationBase {
 			directionalLight,
 		});
 
-		this.postProcessing = new PostProcessing(
-			this.rendererAdapter.renderer as WebGPURenderer,
-		);
-
-		this.postProcessing.outputNode = toonOutlinePass(
-			this.scene,
-			this.camera,
-			undefined,
-			0.005,
-		);
+		this.postProcessing = new ToonOutlinePostProcessing(this);
 	}
 
 	public shaderInfo() {
@@ -77,11 +64,8 @@ export class Application extends ApplicationBase {
 		debugShader.info(this.fontMesh);
 	}
 
-	protected async update(dt: number, time: number) {
-		// super.update(dt, time);
-		this.plugin.updateAll(dt, time);
-
-		await this.postProcessing.renderAsync();
+	protected async update(dt: number, timeMS: number) {
+		super.update(dt, timeMS);
 	}
 
 	protected async resize(width: number, height: number) {

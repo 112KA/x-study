@@ -1,4 +1,10 @@
-import { SRGBColorSpace, type Texture, TextureLoader, type WebGLRenderer } from "three";
+import {
+	RepeatWrapping,
+	SRGBColorSpace,
+	type Texture,
+	TextureLoader,
+	type WebGLRenderer,
+} from "three";
 import { KTX2Loader } from "three/examples/jsm/Addons.js";
 import type { Renderer, WebGPURenderer } from "three/webgpu";
 import type { AssetManager } from "../asset-manager.js";
@@ -12,8 +18,13 @@ export class TextureResolver implements IResolver {
 		threeCDNPath: string,
 	) {
 		const { loadingManager } = manager;
-		loadingManager.addHandler(/\.(png|jpg|webp)$/i, new TextureLoader(loadingManager));
-		const ktx2Loader = new KTX2Loader(loadingManager).setTranscoderPath(`${threeCDNPath}/examples/jsm/libs/basis/`);
+		loadingManager.addHandler(
+			/\.(png|jpg|webp)$/i,
+			new TextureLoader(loadingManager),
+		);
+		const ktx2Loader = new KTX2Loader(loadingManager).setTranscoderPath(
+			`${threeCDNPath}/examples/jsm/libs/basis/`,
+		);
 		loadingManager.addHandler(/\.(ktx2)$/i, ktx2Loader);
 	}
 
@@ -21,13 +32,21 @@ export class TextureResolver implements IResolver {
 		return (loaded as Texture).isTexture;
 	}
 
-	resolve(resource: ResourceItem, loaded: unknown, renderer: Renderer | WebGLRenderer): void {
+	resolve(
+		resource: ResourceItem,
+		loaded: unknown,
+		renderer: Renderer | WebGLRenderer,
+	): void {
+		const texture = loaded as Texture;
+
 		if (renderer.outputColorSpace === SRGBColorSpace) {
-			(loaded as Texture).colorSpace = SRGBColorSpace;
+			texture.colorSpace = SRGBColorSpace;
 		}
 
+		texture.wrapS = texture.wrapT = RepeatWrapping;
+
 		if ((renderer as WebGPURenderer).isWebGPURenderer) {
-			(loaded as Texture).flipY = false;
+			texture.flipY = false;
 		}
 
 		this.manager.textures[resource.id] = loaded as Texture;

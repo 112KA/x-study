@@ -1,5 +1,7 @@
-import type { WebGLRenderer } from "three";
+import type { Camera, Scene, WebGLRenderer } from "three";
 import type { WebGPURenderer } from "three/webgpu";
+import type { Viewport } from "../viewport";
+import type { RendererAdapter } from "./renderer-adapter";
 
 export type SupportedRenderer = WebGLRenderer | WebGPURenderer;
 
@@ -19,7 +21,14 @@ export type WebGPURendererConfig = {
 
 export type RendererConfig = WebGLRendererConfig | WebGPURendererConfig;
 
-// export enum RendererType {
-// 	WebGL = "webgl",
-// 	WebGPU = "webgpu",
-// }
+export interface RendererHostContext {
+	readonly scene: Scene;
+	readonly camera: Camera;
+}
+
+export interface PostProcessingHostContext {
+	readonly scene: Scene;
+	readonly camera: Camera;
+	readonly rendererAdapter: RendererAdapter;
+	readonly viewport: Viewport;
+}

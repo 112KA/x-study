@@ -1,6 +1,6 @@
 import { EventDispatcher } from "three";
 
-type TViewportEventMap = {
+export type TViewportEventMap = {
 	resize: { width: number; height: number; aspectRatio: number };
 };
 

@@ -74,11 +74,11 @@ export class Application extends ApplicationBase {
 		new Controls({ particle: this.particle });
 	}
 
-	protected async update(dt: number, time: number) {
+	protected async update(dt: number, timeMS: number) {
 		const renderer = this.rendererAdapter.renderer as WebGPURenderer;
 		await renderer.computeAsync(this.particle.computeNode);
 		renderer.resolveTimestampsAsync(TimestampQuery.COMPUTE);
-		super.update(dt, time);
+		super.update(dt, timeMS);
 
 		// this.spotLightShadowMapViewer.render(this.renderer);
 	}

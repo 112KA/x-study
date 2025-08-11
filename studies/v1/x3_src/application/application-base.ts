@@ -1,12 +1,20 @@
-import { type Camera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { Ticker } from "x";
+import {
+	type Camera,
+	type EventListener,
+	PerspectiveCamera,
+	Scene,
+} from "three";
 import { PluginManager } from "./plugins";
-import { RendererAdapter, RendererFactory } from "./renderer/index.js";
+import {
+	RendererAdapter,
+	type RendererAdapterHostContext,
+	RendererFactory,
+	type TRendererAdapterEventMap,
+} from "./renderer/index.js";
 import type { ApplicationConfig } from "./types";
-import { Viewport } from "./viewport";
+import { type TViewportEventMap, Viewport } from "./viewport";
 
-export class ApplicationBase {
-	public ticker = new Ticker();
+export class ApplicationBase implements RendererAdapterHostContext {
 	public plugin = new PluginManager(this);
 
 	public viewport!: Viewport;
@@ -42,10 +50,10 @@ export class ApplicationBase {
 		// レンダラーの初期化
 		if (this.config.renderer) {
 			const renderer = await RendererFactory.create(this.config.renderer);
-			this.rendererAdapter = new RendererAdapter(renderer);
+			this.rendererAdapter = new RendererAdapter(renderer, this);
 		} else {
 			const renderer = await RendererFactory.createBestAvailable();
-			this.rendererAdapter = new RendererAdapter(renderer);
+			this.rendererAdapter = new RendererAdapter(renderer, this);
 		}
 		this.rendererAdapter.setSize(this.viewport.width, this.viewport.height);
 		this.rendererAdapter.setPixelRatio(window.devicePixelRatio);
@@ -66,28 +74,27 @@ export class ApplicationBase {
 	}
 
 	protected setupEventListeners(): void {
-		this.viewport.addEventListener("resize", this.handleResize);
-		this.ticker.addEventListener("tick", this.handleTick as EventListener);
+		this.viewport.addEventListener("resize", this.onResize);
+		this.rendererAdapter.addEventListener("tick", this.onTick);
 	}
 
 	public start() {
-		this.ticker.start();
+		this.rendererAdapter.start();
 	}
 
-	protected handleTick = (e: CustomEvent<{ dt: number; time: number }>) => {
-		const { dt, time } = e.detail;
+	protected onTick = ({ dt, time }: TRendererAdapterEventMap["tick"]) => {
 		this.update(dt, time);
 	};
 
-	protected async update(dt: number, time: number) {
+	protected async update(dt: number, timeMS: number) {
 		// プラグインの更新を先に実行
-		this.plugin.updateAll(dt, time);
+		this.plugin.updateAll(dt, timeMS);
 
-		await this.rendererAdapter.render(this.scene, this.camera);
+		await this.rendererAdapter.render();
 	}
 
-	protected handleResize = (event: { width: number; height: number }) => {
-		this.resize(event.width, event.height);
+	protected onResize = ({ width, height }: TViewportEventMap["resize"]) => {
+		this.resize(width, height);
 	};
 
 	protected resize(width: number, height: number) {
@@ -107,7 +114,6 @@ export class ApplicationBase {
 
 	// クリーンアップ
 	public dispose(): void {
-		this.ticker.stop();
 		this.rendererAdapter.dispose();
 		this.plugin.destroyAll();
 	}
