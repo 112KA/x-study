@@ -18,10 +18,10 @@ import {
 import { AbstractControlNodeMaterial } from "../../../common/AbstractControlNodeMaterial";
 
 export class NoiseMaterial extends AbstractControlNodeMaterial {
+	name = "Noise";
+
 	constructor() {
 		super();
-
-		this.name = "Noise";
 
 		this.uniforms = {
 			timeScale: uniform(10),
@@ -30,6 +30,10 @@ export class NoiseMaterial extends AbstractControlNodeMaterial {
 		};
 
 		const { timeScale, amplitude, pivot } = this.uniforms;
-		this.colorNode = mx_noise_float(uv().mul(timeScale).add(time), amplitude, pivot);
+		this.colorNode = mx_noise_float(
+			uv().mul(timeScale).add(time),
+			amplitude,
+			pivot,
+		);
 	}
 }
