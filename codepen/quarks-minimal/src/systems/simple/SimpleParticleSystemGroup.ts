@@ -1,4 +1,9 @@
-import { AdditiveBlending, Group, MeshBasicMaterial, type Texture } from "three";
+import {
+	AdditiveBlending,
+	Group,
+	MeshBasicMaterial,
+	type Texture,
+} from "three";
 import {
 	ColorOverLife,
 	ConstantValue,
@@ -11,10 +16,13 @@ import {
 	Vector3,
 	Vector4,
 } from "three.quarks";
-import { ParticleSystemType } from "./ParticleApp";
-import type { ParticleSystemGroup } from "./ParticleSystemGroupBase";
+import type { ParticleSystemGroup } from "../ParticleSystemGroupBase";
+import { ParticleSystemType } from "../types";
 
-export class SimpleParticleSystemGroup extends Group implements ParticleSystemGroup {
+export class SimpleParticleSystemGroup
+	extends Group
+	implements ParticleSystemGroup
+{
 	type = ParticleSystemType.SIMPLE;
 	particleSystem: ParticleSystem;
 	constructor(map: Texture) {
@@ -26,7 +34,10 @@ export class SimpleParticleSystemGroup extends Group implements ParticleSystemGr
 			startLife: new ConstantValue(1),
 			startSpeed: new ConstantValue(1),
 			startSize: new ConstantValue(0.1),
-			startColor: new RandomColor(new Vector4(1, 0.91, 0.51, 1), new Vector4(1, 0.44, 0.16, 1)),
+			startColor: new RandomColor(
+				new Vector4(1, 0.91, 0.51, 1),
+				new Vector4(1, 0.44, 0.16, 1),
+			),
 			worldSpace: true,
 			maxParticle: 1000,
 			emissionOverTime: new ConstantValue(1000),

@@ -9,37 +9,16 @@ import {
 	type Texture,
 	WebGLRenderer,
 } from "three";
-import { BatchedRenderer, type Vector4 } from "three.quarks";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { ParticleSystemGroup } from "./ParticleSystemGroupBase";
-import { SimpleParticleSystemGroup } from "./SimpleParticleSystemGroup";
+import { BatchedRenderer } from "three.quarks";
+import {
+	type ParticleSystemGroup,
+	ParticleSystemType,
+	SimpleParticleSystemGroup,
+	TiledLightsParticleSystemGroup,
+	TrailParticleSystemGroup,
+} from "./systems/";
 import { TextureManager } from "./TextureManager";
-import { TrailParticleSystemGroup } from "./TrailParticleSystemGroup";
-
-/**
- * Configuration for the particle system
- */
-export interface ParticleConfig {
-	duration: number;
-	maxParticles: number;
-	emissionRate: number;
-	tileCount: { u: number; v: number };
-	life: { min: number; max: number };
-	speed: { min: number; max: number };
-	size: { min: number; max: number };
-	colors: {
-		start: Vector4;
-		end: Vector4;
-	};
-}
-
-/**
- * パーティクルシステムの種類
- */
-export enum ParticleSystemType {
-	SIMPLE = "simple",
-	TRAIL = "trail",
-}
 
 /**
  * Main application class for the particle system
@@ -48,8 +27,6 @@ export class ParticleApp {
 	private scene: Scene;
 	private camera: PerspectiveCamera;
 	private ambientLight = new AmbientLight(0xffffff, 0.5);
-	private fillLight = new DirectionalLight(0xffffff, 0.5);
-	private backLight = new DirectionalLight(0xffffff, 0.5);
 	private renderer: WebGLRenderer;
 	private clock: Clock;
 	private batchRenderer: BatchedRenderer;
@@ -62,7 +39,7 @@ export class ParticleApp {
 	private currentParticleSystemGroup!: ParticleSystemGroup;
 	private currentTexture?: Texture;
 
-	static readonly InitialParticleSystemType = ParticleSystemType.TRAIL;
+	static readonly InitialParticleSystemType = ParticleSystemType.TILED_LIGHTS;
 
 	constructor(texturePath = "texture1.png") {
 		this.texturePath = texturePath;
@@ -84,7 +61,12 @@ export class ParticleApp {
 	 */
 	private initializeScene(): void {
 		// Setup camera
-		this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		this.camera = new PerspectiveCamera(
+			75,
+			window.innerWidth / window.innerHeight,
+			0.1,
+			1000,
+		);
 		this.camera.position.set(0, 0, 5);
 
 		// Setup renderer
@@ -113,10 +95,13 @@ export class ParticleApp {
 	 * UIボタンを作成
 	 */
 	private setupUI(): void {
-		const particleSystemTypeSelect = document.getElementById("particle-system-type") as HTMLSelectElement;
+		const particleSystemTypeSelect = document.getElementById(
+			"particle-system-type",
+		) as HTMLSelectElement;
 		particleSystemTypeSelect.value = ParticleApp.InitialParticleSystemType;
 		particleSystemTypeSelect.onchange = () => {
-			const selectedValue = particleSystemTypeSelect.value as ParticleSystemType;
+			const selectedValue =
+				particleSystemTypeSelect.value as ParticleSystemType;
 			this.switchParticleSystem(selectedValue);
 		};
 	}
@@ -126,9 +111,14 @@ export class ParticleApp {
 	 */
 	private setupParticleSystem(texture: Texture): void {
 		this.currentTexture = texture;
-		this.currentParticleSystemGroup = this.createParticleSystem(ParticleApp.InitialParticleSystemType, texture);
+		this.currentParticleSystemGroup = this.createParticleSystem(
+			ParticleApp.InitialParticleSystemType,
+			texture,
+		);
 
-		this.batchRenderer.addSystem(this.currentParticleSystemGroup.particleSystem);
+		this.batchRenderer.addSystem(
+			this.currentParticleSystemGroup.particleSystem,
+		);
 		this.scene.add(this.currentParticleSystemGroup);
 
 		this.currentParticleSystemGroup.restart();
@@ -146,14 +136,21 @@ export class ParticleApp {
 
 		// 現在のパーティクルシステムを削除
 		if (this.currentParticleSystemGroup) {
-			this.batchRenderer.deleteSystem(this.currentParticleSystemGroup.particleSystem);
+			this.batchRenderer.deleteSystem(
+				this.currentParticleSystemGroup.particleSystem,
+			);
 			this.scene.remove(this.currentParticleSystemGroup);
 		}
 
 		// 新しいパーティクルシステムを作成
-		this.currentParticleSystemGroup = this.createParticleSystem(type, this.currentTexture);
+		this.currentParticleSystemGroup = this.createParticleSystem(
+			type,
+			this.currentTexture,
+		);
 
-		this.batchRenderer.addSystem(this.currentParticleSystemGroup.particleSystem);
+		this.batchRenderer.addSystem(
+			this.currentParticleSystemGroup.particleSystem,
+		);
 		this.scene.add(this.currentParticleSystemGroup);
 		this.currentParticleSystemGroup.restart();
 	}
@@ -161,12 +158,17 @@ export class ParticleApp {
 	/**
 	 * パーティクルシステムのインスタンスを作成
 	 */
-	private createParticleSystem(type: ParticleSystemType, texture: Texture): ParticleSystemGroup {
+	private createParticleSystem(
+		type: ParticleSystemType,
+		texture: Texture,
+	): ParticleSystemGroup {
 		switch (type) {
 			case ParticleSystemType.SIMPLE:
 				return new SimpleParticleSystemGroup(texture);
 			case ParticleSystemType.TRAIL:
 				return new TrailParticleSystemGroup(texture);
+			case ParticleSystemType.TILED_LIGHTS:
+				return new TiledLightsParticleSystemGroup(texture);
 			default:
 				return new SimpleParticleSystemGroup(texture);
 		}
@@ -228,7 +230,9 @@ export class ParticleApp {
 
 		// Clean up particle system
 		if (this.currentParticleSystemGroup) {
-			this.batchRenderer.deleteSystem(this.currentParticleSystemGroup.particleSystem);
+			this.batchRenderer.deleteSystem(
+				this.currentParticleSystemGroup.particleSystem,
+			);
 			this.scene.remove(this.currentParticleSystemGroup);
 		}
 

@@ -1,4 +1,11 @@
-import { BoxGeometry, Group, Mesh, MeshNormalMaterial, SphereGeometry, type Texture } from "three";
+import {
+	BoxGeometry,
+	Group,
+	Mesh,
+	MeshNormalMaterial,
+	SphereGeometry,
+	type Texture,
+} from "three";
 import {
 	ColorOverLife,
 	ConstantValue,
@@ -9,12 +16,15 @@ import {
 	Vector3,
 	Vector4,
 } from "three.quarks";
-import { ParticleSystemType } from "./ParticleApp";
-import type { ParticleSystemGroup } from "./ParticleSystemGroupBase";
+import type { ParticleSystemGroup } from "../ParticleSystemGroupBase";
+import { ParticleSystemType } from "../types";
 import { TrailEmitter } from "./TrailEmitter";
 import { TrailTarget } from "./TrailTarget";
 
-export class TrailParticleSystemGroup extends Group implements ParticleSystemGroup {
+export class TrailParticleSystemGroup
+	extends Group
+	implements ParticleSystemGroup
+{
 	type = ParticleSystemType.TRAIL;
 	particleSystem: ParticleSystem;
 	trailTarget = new TrailTarget();
@@ -28,7 +38,10 @@ export class TrailParticleSystemGroup extends Group implements ParticleSystemGro
 			startLife: new ConstantValue(1),
 			startSpeed: new ConstantValue(0.1),
 			startSize: new ConstantValue(0.1),
-			startColor: new RandomColor(new Vector4(1, 0.91, 0.51, 1), new Vector4(1, 0.44, 0.16, 1)),
+			startColor: new RandomColor(
+				new Vector4(1, 0.91, 0.51, 1),
+				new Vector4(1, 0.44, 0.16, 1),
+			),
 			worldSpace: true,
 			emissionOverTime: new ConstantValue(100),
 			emissionBursts: [],
@@ -72,7 +85,10 @@ export class TrailParticleSystemGroup extends Group implements ParticleSystemGro
 		this.add(this.trailTarget);
 
 		const size = 0.1;
-		const box = new Mesh(new BoxGeometry(size, size, size), new MeshNormalMaterial());
+		const box = new Mesh(
+			new BoxGeometry(size, size, size),
+			new MeshNormalMaterial(),
+		);
 		this.trailTarget.add(box);
 	}
 
