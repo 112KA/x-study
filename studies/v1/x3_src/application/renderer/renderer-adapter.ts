@@ -3,17 +3,14 @@ import type { WebGPURenderer } from "three/webgpu";
 import type { AbstractPostProcessing } from "./abstract-postporcessing";
 import type { RendererHostContext, SupportedRenderer } from "./types";
 
-export type TRendererAdapterEventMap = {
-	tick: { dt: number; time: DOMHighResTimeStamp };
-};
-
-export class RendererAdapter extends EventDispatcher<TRendererAdapterEventMap> {
+export class RendererAdapter extends EventDispatcher {
 	protected previousTime = 0;
 	protected postProcessing: AbstractPostProcessing | null = null;
 
 	constructor(
 		public renderer: SupportedRenderer,
 		protected hostContext: RendererHostContext,
+		protected updateCallback: (dt: number, time: DOMHighResTimeStamp) => void,
 	) {
 		super();
 	}
@@ -60,7 +57,7 @@ export class RendererAdapter extends EventDispatcher<TRendererAdapterEventMap> {
 	) => {
 		const dt = time - this.previousTime;
 		this.previousTime = time;
-		this.dispatchEvent({ type: "tick", dt, time });
+		this.updateCallback(dt, time);
 	};
 
 	dispose(): void {

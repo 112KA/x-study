@@ -6,7 +6,11 @@ import {
 	type WebGLRenderer,
 } from "three";
 import type { Font, GLTF, KTX2Loader } from "three/examples/jsm/Addons.js";
-import { LoadingManager, type Renderer } from "three/webgpu";
+import {
+	LoadingManager,
+	type Renderer,
+	type WebGPURenderer,
+} from "three/webgpu";
 import { assertIsDefined } from "x";
 import type { TextureAtlas } from "x3/textures/texture-atlas.js";
 import {
@@ -63,19 +67,21 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 
 	public async load(
 		resources: ResourceItem[],
-		renderer: Renderer | WebGLRenderer,
+		renderer: WebGPURenderer | WebGLRenderer,
 	): Promise<void> {
 		if (!renderer) {
 			throw new Error("You must provide a renderer to the load function.");
 		}
 
 		const ktx2Loader = this.loadingManager.getHandler(".ktx2") as KTX2Loader;
+		let workerConfig: unknown;
 		assertIsDefined(ktx2Loader);
-		if ((renderer as Renderer).isRenderer) {
-			await ktx2Loader.detectSupportAsync(renderer as Renderer);
+		if ((renderer as WebGPURenderer).isWebGPURenderer) {
+			await ktx2Loader.detectSupportAsync(renderer as WebGPURenderer);
 		} else {
-			ktx2Loader.detectSupport(renderer as WebGLRenderer);
+			ktx2Loader.detectSupport(renderer);
 		}
+		console.info(workerConfig);
 
 		console.groupCollapsed(`${LOG_PREFIX} load`);
 
@@ -86,12 +92,11 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
 				const { url } = resource;
 				const loaded = await this.loadSingle(url);
 				targetUrl = url;
-				for (const resolver of Object.values(this.#resolvers)) {
-					if (resolver.check(loaded)) {
-						resolver.resolve(resource, loaded, renderer);
-						break;
-					}
-				}
+				const resolver = Object.values(this.#resolvers).find((resolver) =>
+					resolver.check(loaded),
+				);
+				assertIsDefined(resolver);
+				resolver.resolve(resource, loaded, renderer);
 			} else if (type === "atlas") {
 				const { jsonUrl, textureUrl } = resource;
 				targetUrl = [jsonUrl, textureUrl];

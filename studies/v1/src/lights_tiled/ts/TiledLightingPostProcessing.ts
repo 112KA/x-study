@@ -13,7 +13,7 @@ import { AbstractPostProcessing } from "x3/application/renderer/abstract-postpor
 
 export class TiledLightingPostProcessing extends AbstractPostProcessing {
 	private compose!: ShaderNodeObject<OperatorNode>;
-	private tileInfluence!: ShaderNodeObject<UniformNode<number>>;
+	public tileInfluence!: ShaderNodeObject<UniformNode<number>>;
 	private lighting = new TiledLighting();
 
 	constructor(
@@ -50,14 +50,17 @@ export class TiledLightingPostProcessing extends AbstractPostProcessing {
 		const { scene, camera, viewport, rendererAdapter } = this.hostContext;
 		const devicePixelRatio = rendererAdapter.getPixelRatio();
 
-		// tile indexes debug, needs to be updated every time the renderer size changes
-		const tiledLightsNode = this.lighting.getNode(
-			scene,
-			camera,
-		) as TiledLightsNode;
+		// console.log("update", {
+		// 	devicePixelRatio,
+		// 	width: viewport.width,
+		// 	height: viewport.height,
+		// 	count: this.count,
+		// });
 
-		// デバッグ表示を軽量化（必要に応じてコメントアウト）
-		const debugBlockIndexes = tiledLightsNode
+		// tile indexes debug, needs to be updated every time the renderer size changes
+		const debugBlockIndexes = (
+			this.lighting.getNode(scene, camera) as TiledLightsNode
+		)
 			.setSize(
 				viewport.width * devicePixelRatio,
 				viewport.height * devicePixelRatio,
@@ -68,6 +71,7 @@ export class TiledLightingPostProcessing extends AbstractPostProcessing {
 
 		this.outputNode = this.compose.add(
 			debugBlockIndexes.mul(this.tileInfluence),
+			// debugBlockIndexes,
 		);
 		this.needsUpdate = true;
 	}

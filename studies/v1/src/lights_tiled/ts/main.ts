@@ -33,6 +33,7 @@ const setup = async () => {
 	app.plugin.register(new StatsGLPlugin());
 
 	await app.initialize();
+
 	app.start();
 };
 

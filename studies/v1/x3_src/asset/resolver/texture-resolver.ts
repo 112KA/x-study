@@ -18,14 +18,18 @@ export class TextureResolver implements IResolver {
 		threeCDNPath: string,
 	) {
 		const { loadingManager } = manager;
+
 		loadingManager.addHandler(
 			/\.(png|jpg|webp)$/i,
 			new TextureLoader(loadingManager),
 		);
-		const ktx2Loader = new KTX2Loader(loadingManager).setTranscoderPath(
-			`${threeCDNPath}/examples/jsm/libs/basis/`,
+
+		loadingManager.addHandler(
+			/\.(ktx2)$/i,
+			new KTX2Loader(loadingManager).setTranscoderPath(
+				`${threeCDNPath}/examples/jsm/libs/basis/`,
+			),
 		);
-		loadingManager.addHandler(/\.(ktx2)$/i, ktx2Loader);
 	}
 
 	check(loaded: unknown): boolean {

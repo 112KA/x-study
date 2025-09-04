@@ -4,40 +4,49 @@ import {
 	PerspectiveCamera,
 	Scene,
 } from "three";
+import type { WebGPURenderer } from "three/webgpu";
 import { PluginManager } from "./plugins";
 import {
 	RendererAdapter,
-	type RendererAdapterHostContext,
 	RendererFactory,
-	type TRendererAdapterEventMap,
+	type RendererHostContext,
+	type SupportedRenderer,
 } from "./renderer/index.js";
 import type { ApplicationConfig } from "./types";
 import { type TViewportEventMap, Viewport } from "./viewport";
 
-export class ApplicationBase implements RendererAdapterHostContext {
+export class ApplicationBase implements RendererHostContext {
 	public plugin = new PluginManager(this);
 
 	public viewport!: Viewport;
 	public rendererAdapter!: RendererAdapter;
 
 	public scene = new Scene();
-	public camera!: Camera;
+	public camera: Camera = new PerspectiveCamera(75);
 
 	constructor(
 		public $wrapper: HTMLElement,
 		protected config: ApplicationConfig = {},
 	) {
-		this.viewport = new Viewport(this.$wrapper);
-
 		if (this.config.renderer?.type === "webgpu" && !navigator.gpu) {
 			throw new Error(
 				"WebGPU is not supported on this device. Please use a different renderer.",
 			);
 		}
+
+		this.viewport = new Viewport(this.$wrapper);
+
+		this.scene.add(this.camera);
 	}
 
 	public async initialize() {
 		await this.setupRenderer();
+
+		const renderer = this.rendererAdapter.renderer as WebGPURenderer;
+		if (renderer.isWebGPURenderer) {
+			// postprocessing設定後、asset load前に実行する
+			await renderer.init();
+		}
 
 		await this.plugin.initializeAllBeforeScene();
 		this.initializeScene();
@@ -48,13 +57,19 @@ export class ApplicationBase implements RendererAdapterHostContext {
 
 	protected async setupRenderer() {
 		// レンダラーの初期化
+		let renderer: SupportedRenderer;
+
 		if (this.config.renderer) {
-			const renderer = await RendererFactory.create(this.config.renderer);
-			this.rendererAdapter = new RendererAdapter(renderer, this);
+			renderer = await RendererFactory.create(this.config.renderer);
 		} else {
-			const renderer = await RendererFactory.createBestAvailable();
-			this.rendererAdapter = new RendererAdapter(renderer, this);
+			renderer = await RendererFactory.createBestAvailable();
 		}
+
+		this.rendererAdapter = new RendererAdapter(
+			renderer,
+			this,
+			this.update.bind(this),
+		);
 		this.rendererAdapter.setSize(this.viewport.width, this.viewport.height);
 		this.rendererAdapter.setPixelRatio(window.devicePixelRatio);
 
@@ -62,29 +77,15 @@ export class ApplicationBase implements RendererAdapterHostContext {
 		this.$wrapper.appendChild(this.rendererAdapter.domElement);
 	}
 
-	protected initializeScene() {
-		this.camera = new PerspectiveCamera(
-			75,
-			this.viewport.aspectRatio,
-			0.1,
-			1000,
-		);
-
-		this.scene.add(this.camera);
-	}
+	protected initializeScene() {}
 
 	protected setupEventListeners(): void {
 		this.viewport.addEventListener("resize", this.onResize);
-		this.rendererAdapter.addEventListener("tick", this.onTick);
 	}
 
 	public start() {
 		this.rendererAdapter.start();
 	}
-
-	protected onTick = ({ dt, time }: TRendererAdapterEventMap["tick"]) => {
-		this.update(dt, time);
-	};
 
 	protected async update(dt: number, timeMS: number) {
 		// プラグインの更新を先に実行

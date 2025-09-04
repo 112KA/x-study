@@ -18,7 +18,6 @@ export class RendererFactory {
 					antialias: config.antialias ?? true,
 					alpha: config.alpha ?? false,
 				});
-				await renderer.init();
 				return renderer;
 			}
 		}

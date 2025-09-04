@@ -1,14 +1,27 @@
 import { AmbientLight, Color, Fog } from "three";
-import type { WebGPURenderer } from "three/webgpu";
+import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import { ApplicationBase, type AssetPlugin } from "x3/application";
-import { Ground } from "./Ground.js";
-import { LightGroup } from "./LightGroup.js";
-import { TiledLightingPostProcessing } from "./TiledLightingPostProcessing.js";
+import { Ground } from "./Ground";
+import { GroundSphere } from "./GroundSphere";
+import { LightGroup } from "./LightGroup";
+import { TiledLightingPostProcessing } from "./TiledLightingPostProcessing";
+
+export const LIGHT_COUNT = 1000;
 
 export class Application extends ApplicationBase {
-	count = 200;
-	lightGroup!: LightGroup;
-	postProcessing!: TiledLightingPostProcessing;
+	lights = new LightGroup(LIGHT_COUNT);
+
+	protected override async setupRenderer() {
+		await super.setupRenderer();
+
+		const postProcessing = new TiledLightingPostProcessing(this, LIGHT_COUNT);
+		this.rendererAdapter.addPostProcessing(postProcessing);
+
+		const gui = new GUI();
+		gui
+			.add(postProcessing.tileInfluence, "value", 0, 1)
+			.name("tile indexes debug");
+	}
 
 	protected override initializeScene() {
 		super.initializeScene();
@@ -18,11 +31,8 @@ export class Application extends ApplicationBase {
 		this.scene.fog = new Fog(0x111111, 300, 500);
 		this.scene.background = new Color(0x111111);
 
-		// ライト管理の初期化
-		this.lightGroup = new LightGroup(this.count);
-		this.scene.add(this.lightGroup);
+		this.scene.add(this.lights);
 
-		// 環境光
 		const lightAmbient = new AmbientLight(0xffffff, 0.1);
 		this.scene.add(lightAmbient);
 
@@ -34,24 +44,19 @@ export class Application extends ApplicationBase {
 			FloorsCheckerboard_S_Normal: texNormal,
 		} = assetManager.textures;
 
-		// 地面の作成
-		const ground = new Ground(texDiffuse, texNormal);
+		// const ground = new Ground(texDiffuse, texNormal);
+		const ground = new GroundSphere(texDiffuse, texNormal);
 		this.scene.add(ground);
-
-		// post processing
-		this.postProcessing = new TiledLightingPostProcessing(this, this.count);
 	}
 
-	protected async update(dt: number, timeMS: number) {
-		const timeS = timeMS / 1000;
-
-		// ライトの更新
-		this.lightGroup.updateLights(timeS);
-
+	override async update(dt: number, timeMS: number) {
 		super.update(dt, timeMS);
+
+		const now = timeMS / 1000;
+		this.lights.updateLights(now);
 	}
 
-	protected async resize(width: number, height: number) {
+	override resize(width: number, height: number) {
 		super.resize(width, height);
 	}
 }
