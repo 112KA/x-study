@@ -60,11 +60,13 @@ export class MaterialReplacer {
 
 			if (targetReplaceUnit) {
 				if (Array.isArray(mesh.material)) {
-					mesh.material = mesh.material.map((material) =>
-						targetReplaceUnit.replacer(material as Material),
-					);
+					mesh.material = mesh.material.map((material) => {
+						const replacedMaterial = targetReplaceUnit.replacer(material);
+						return this.cacheAndReturn(replacedMaterial);
+					});
 				} else {
-					mesh.material = targetReplaceUnit.replacer(mesh.material as Material);
+					const replacedMaterial = targetReplaceUnit.replacer(mesh.material);
+					mesh.material = this.cacheAndReturn(replacedMaterial);
 				}
 				return;
 			}
@@ -81,6 +83,18 @@ export class MaterialReplacer {
 					this.createMaterial(mesh.material, materialReplaceGroup);
 			}
 		});
+	}
+
+	protected cacheAndReturn(replacedMaterial : Material) : Material {
+		const cachedMaterial = this.cache[replacedMaterial.name];
+		if(cachedMaterial !== undefined) {
+			replacedMaterial.dispose();
+			return cachedMaterial;
+		}
+		else {
+			this.cache[replacedMaterial.name] = replacedMaterial;
+			return replacedMaterial;
+		}
 	}
 
 	protected createMaterial(
