@@ -2,7 +2,6 @@ import {
 	AmbientLight,
 	AxesHelper,
 	Clock,
-	DirectionalLight,
 	GridHelper,
 	PerspectiveCamera,
 	Scene,
@@ -30,7 +29,6 @@ export class ParticleApp {
 	private renderer: WebGLRenderer;
 	private clock: Clock;
 	private batchRenderer: BatchedRenderer;
-	private animationId?: number;
 	private controls!: OrbitControls;
 
 	private readonly texturePath: string;
@@ -122,8 +120,6 @@ export class ParticleApp {
 		this.scene.add(this.currentParticleSystemGroup);
 
 		this.currentParticleSystemGroup.restart();
-
-		this.startAnimationLoop();
 	}
 
 	/**
@@ -177,18 +173,14 @@ export class ParticleApp {
 	/**
 	 * Main animation loop
 	 */
-	private startAnimationLoop(): void {
-		const animate = (): void => {
-			const dt = this.clock.getDelta();
-			if (this.currentParticleSystemGroup.update) {
-				this.currentParticleSystemGroup.update(dt);
-			}
-			this.controls.update();
-			this.animationId = requestAnimationFrame(animate);
-			this.batchRenderer.update(dt);
-			this.renderer.render(this.scene, this.camera);
-		};
-		animate();
+	private animate = (): void => {
+		const dt = this.clock.getDelta();
+		if (this.currentParticleSystemGroup.update) {
+			this.currentParticleSystemGroup.update(dt);
+		}
+		this.controls.update();
+		this.batchRenderer.update(dt);
+		this.renderer.render(this.scene, this.camera);
 	}
 
 	/**
@@ -214,6 +206,7 @@ export class ParticleApp {
 		try {
 			const texture = await this.textureManager.loadTexture(this.texturePath);
 			this.setupParticleSystem(texture);
+			this.renderer.setAnimationLoop(this.animate);
 		} catch (error) {
 			console.error("Failed to start particle application:", error);
 		}
@@ -223,10 +216,7 @@ export class ParticleApp {
 	 * Stop the animation and clean up resources
 	 */
 	public stop(): void {
-		if (this.animationId) {
-			cancelAnimationFrame(this.animationId);
-			this.animationId = undefined;
-		}
+		this.renderer.setAnimationLoop(null);
 
 		// Clean up particle system
 		if (this.currentParticleSystemGroup) {

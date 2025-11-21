@@ -47,6 +47,8 @@ export class ApplicationBase implements RendererHostContext {
 			// postprocessing設定後、asset load前に実行する
 			await renderer.init();
 		}
+		
+		this.onResize(this.viewport);
 
 		await this.plugin.initializeAllBeforeScene();
 		this.initializeScene();
@@ -95,6 +97,7 @@ export class ApplicationBase implements RendererHostContext {
 	}
 
 	protected onResize = ({ width, height }: TViewportEventMap["resize"]) => {
+		console.log("ApplicationBase onResize", { width, height });
 		this.resize(width, height);
 	};
 
