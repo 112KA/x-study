@@ -1,1 +1,1 @@
-export * from "./lights/lights-folder.js";
+export * from './lights/lights-folder.js'
