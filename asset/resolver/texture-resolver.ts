@@ -1,35 +1,59 @@
-import { SRGBColorSpace, type Texture, TextureLoader, type WebGLRenderer } from "three";
-import { KTX2Loader } from "three/examples/jsm/Addons.js";
-import type { Renderer, WebGPURenderer } from "three/webgpu";
-import type { AssetManager } from "../asset-manager.js";
-import type { ResourceItem } from "../types.js";
-import type { IResolver } from "./types.js";
+import type { Texture, WebGLRenderer } from 'three'
+import type { Renderer, WebGPURenderer } from 'three/webgpu'
+import type { AssetManager } from '../asset-manager.js'
+import type { ResourceItem } from '../types.js'
+import type { IResolver } from './types.js'
+import {
+  RepeatWrapping,
+  SRGBColorSpace,
+
+  TextureLoader,
+
+} from 'three'
+import { KTX2Loader } from 'three/examples/jsm/Addons.js'
 
 export class TextureResolver implements IResolver {
-	name = "TextureResolver";
-	constructor(
-		public manager: AssetManager,
-		threeCDNPath: string,
-	) {
-		const { loadingManager } = manager;
-		loadingManager.addHandler(/\.(png|jpg|webp)$/i, new TextureLoader(loadingManager));
-		const ktx2Loader = new KTX2Loader(loadingManager).setTranscoderPath(`${threeCDNPath}/examples/jsm/libs/basis/`);
-		loadingManager.addHandler(/\.(ktx2)$/i, ktx2Loader);
-	}
+  name = 'TextureResolver'
+  constructor(
+    public manager: AssetManager,
+    threeCDNPath: string,
+  ) {
+    const { loadingManager } = manager
 
-	check(loaded: unknown): boolean {
-		return (loaded as Texture).isTexture;
-	}
+    loadingManager.addHandler(
+      /\.(png|jpg|webp)$/i,
+      new TextureLoader(loadingManager),
+    )
 
-	resolve(resource: ResourceItem, loaded: unknown, renderer: Renderer | WebGLRenderer): void {
-		if (renderer.outputColorSpace === SRGBColorSpace) {
-			(loaded as Texture).colorSpace = SRGBColorSpace;
-		}
+    loadingManager.addHandler(
+      /\.(ktx2)$/i,
+      new KTX2Loader(loadingManager).setTranscoderPath(
+        `${threeCDNPath}/examples/jsm/libs/basis/`,
+      ),
+    )
+  }
 
-		if ((renderer as WebGPURenderer).isWebGPURenderer) {
-			(loaded as Texture).flipY = false;
-		}
+  check(loaded: unknown): boolean {
+    return (loaded as Texture).isTexture
+  }
 
-		this.manager.textures[resource.id] = loaded as Texture;
-	}
+  resolve(
+    resource: ResourceItem,
+    loaded: unknown,
+    renderer: Renderer | WebGLRenderer,
+  ): void {
+    const texture = loaded as Texture
+
+    if (renderer.outputColorSpace === SRGBColorSpace) {
+      texture.colorSpace = SRGBColorSpace
+    }
+
+    texture.wrapS = texture.wrapT = RepeatWrapping
+
+    if ((renderer as WebGPURenderer).isWebGPURenderer) {
+      texture.flipY = false
+    }
+
+    this.manager.textures[resource.id] = loaded as Texture
+  }
 }

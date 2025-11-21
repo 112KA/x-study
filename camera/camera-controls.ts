@@ -1,9 +1,9 @@
-import type { PerspectiveCamera } from "three";
+import type { PerspectiveCamera } from 'three'
 
 export class CameraControls {
-	constructor(public camera: PerspectiveCamera) {}
+  constructor(public camera: PerspectiveCamera) {}
 
-	update(_dt: number) {
-		// console.log('update', dt)
-	}
+  update(_dt: number) {
+    // console.log('update', dt)
+  }
 }

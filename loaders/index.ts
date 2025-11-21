@@ -1,1 +1,1 @@
-export * from "./json-loader.js";
+export * from './json-loader.js'

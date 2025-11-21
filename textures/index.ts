@@ -1,2 +1,2 @@
-export * from "./color-texture.js";
-export * from "./texture-atlas.js";
+export * from './color-texture.js'
+export * from './texture-atlas.js'

@@ -1,84 +1,129 @@
-import { type Material, type Mesh, MeshBasicMaterial, type MeshStandardMaterial, type Object3D } from "three";
+import type { Material, Mesh, MeshStandardMaterial, Object3D } from 'three'
+import {
 
-export type ReplaceCallback = (originalMaterial: Material) => Material;
-export interface MaterialReplaceUnit {
-	type: "material";
-	callback: ReplaceCallback;
-	nameRegExp: RegExp;
+  MeshBasicMaterial,
+
+} from 'three'
+
+export interface ReplaceUnit {
+  target: 'material' | 'mesh'
+  nameMatcher: RegExp | string[]
+  replacer: (originalMaterial: Material) => Material
 }
-
-export interface MeshReplaceUnit {
-	type: "mesh";
-	callback: ReplaceCallback;
-	nameRegExp: RegExp;
-}
-
-export type ReplaceUnit = MaterialReplaceUnit | MeshReplaceUnit;
 
 export class MaterialReplacer {
-	protected materialReplaceUnitList: MaterialReplaceUnit[] = [];
-	protected meshReplaceUnitList: MeshReplaceUnit[] = [];
-	public cache: Record<string, Material> = {};
+  protected cache: Record<string, Material> = {}
+  protected replaceUnitList: ReplaceUnit[] = []
 
-	constructor() {
-		this.addReplaceUnit(this.createDefaultReplaceUnit());
-	}
+  constructor() {
+    this.addReplaceUnit(this.createDefaultReplaceUnit())
+  }
 
-	addReplaceUnit(replaceUnit: ReplaceUnit) {
-		switch (replaceUnit.type) {
-			case "material":
-				this.materialReplaceUnitList.push(replaceUnit);
-				break;
-			case "mesh":
-				this.meshReplaceUnitList.push(replaceUnit);
-				break;
-		}
-	}
+  addReplaceUnit(replaceUnit: ReplaceUnit) {
+    this.replaceUnitList.push(replaceUnit)
+  }
 
-	createDefaultReplaceUnit(): ReplaceUnit {
-		return {
-			callback: (originalMaterial: Material): Material => {
-				const { name, map, color } = originalMaterial as MeshStandardMaterial;
-				return new MeshBasicMaterial({ name, map, color });
-			},
-			nameRegExp: /.*/,
-			type: "material",
-		};
-	}
+  createDefaultReplaceUnit(): ReplaceUnit {
+    return {
+      target: 'material',
+      nameMatcher: /.*/,
+      replacer: (originalMaterial: Material): Material => {
+        const { name, map, color } = originalMaterial as MeshStandardMaterial
+        return new MeshBasicMaterial({ name, map, color })
+      },
+    }
+  }
 
-	replace(o: Object3D) {
-		o.traverse((child: Object3D): void => {
-			const mesh: Mesh = child as Mesh;
-			if (mesh.isMesh) {
-				const targetReplaceUnit = this.meshReplaceUnitList.find((unit: MeshReplaceUnit) => {
-					return unit.nameRegExp.test(mesh.name);
-				});
-				if (targetReplaceUnit) {
-					mesh.material = targetReplaceUnit.callback(mesh.material as Material);
-				} else {
-					const originalMaterial = mesh.material as Material;
-					mesh.material =
-						this.cache[originalMaterial.name] ?? this.createMaterial(originalMaterial as MeshStandardMaterial);
-				}
-			}
-		});
-	}
+  replace(o: Object3D) {
+    // mesh毎の置換判定グループ
+    const meshReplaceGroup = this.replaceUnitList
+      .filter(unit => unit.target === 'mesh')
+      .reverse() // 新しく追加されたものから順番にチェック
 
-	protected createMaterial(originalMaterial: MeshStandardMaterial) {
-		let index = this.materialReplaceUnitList.length - 1;
+    // material毎の置換判定グループ
+    const materialReplaceGroup = this.replaceUnitList
+      .filter(unit => unit.target === 'material')
+      .reverse() // 新しく追加されたものから順番にチェック
 
-		// 新しく追加されたものから順番にチェック
-		while (index >= 0) {
-			const unit = this.materialReplaceUnitList[index];
+    o.traverse((child: Object3D): void => {
+      const mesh: Mesh = child as Mesh
+      if (!mesh.isMesh)
+        return
 
-			// マッチしていたらcallback実行
-			if (unit.nameRegExp.test(originalMaterial.name)) {
-				const material = unit.callback(originalMaterial);
-				this.cache[originalMaterial.name] = material;
-				return material;
-			}
+      const targetReplaceUnit = meshReplaceGroup.find((unit) => {
+        if (unit.nameMatcher instanceof RegExp) {
+          return (unit.nameMatcher as RegExp).test(mesh.name)
+        }
+        else if (Array.isArray(unit.nameMatcher)) {
+          return (unit.nameMatcher as string[]).includes(mesh.name)
+        }
+        return undefined
+      })
 
-			index--;
-		}
-	}
+      if (targetReplaceUnit) {
+        if (Array.isArray(mesh.material)) {
+          mesh.material = mesh.material.map((material) => {
+            const replacedMaterial = targetReplaceUnit.replacer(material)
+            return this.cacheAndReturn(replacedMaterial)
+          })
+        }
+        else {
+          const replacedMaterial = targetReplaceUnit.replacer(mesh.material)
+          mesh.material = this.cacheAndReturn(replacedMaterial)
+        }
+        return
+      }
+
+      if (Array.isArray(mesh.material)) {
+        mesh.material = mesh.material.map(
+          material =>
+            this.cache[material.name]
+            ?? this.createMaterial(material, materialReplaceGroup),
+        )
+      }
+      else {
+        mesh.material
+          = this.cache[mesh.material.name]
+            ?? this.createMaterial(mesh.material, materialReplaceGroup)
+      }
+    })
+  }
+
+  protected cacheAndReturn(replacedMaterial: Material): Material {
+    const cachedMaterial = this.cache[replacedMaterial.name]
+    if (cachedMaterial !== undefined) {
+      replacedMaterial.dispose()
+      return cachedMaterial
+    }
+    else {
+      this.cache[replacedMaterial.name] = replacedMaterial
+      return replacedMaterial
+    }
+  }
+
+  protected createMaterial(
+    originalMaterial: Material,
+    replaceGroup: ReplaceUnit[],
+  ) {
+    const targetReplaceUnit = replaceGroup.find((unit) => {
+      if (unit.nameMatcher instanceof RegExp) {
+        return (unit.nameMatcher as RegExp).test(originalMaterial.name)
+      }
+      else if (Array.isArray(unit.nameMatcher)) {
+        return (unit.nameMatcher as string[]).includes(originalMaterial.name)
+      }
+      return undefined
+    })
+
+    if (targetReplaceUnit) {
+      const material = targetReplaceUnit.replacer(originalMaterial)
+      this.cache[originalMaterial.name] = material
+      return material
+    }
+    else {
+      console.warn(
+        `No replacement found for material: ${originalMaterial.name}`,
+      )
+    }
+  }
 }
