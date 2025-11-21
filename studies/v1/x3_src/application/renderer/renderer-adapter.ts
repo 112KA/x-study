@@ -40,7 +40,7 @@ export class RendererAdapter extends EventDispatcher {
         await this.postProcessing.renderAsync()
       }
       else {
-        await renderer.renderAsync(scene, camera)
+        renderer.render(scene, camera)
       }
       renderer.resolveTimestampsAsync(TimestampQuery.RENDER)
     }

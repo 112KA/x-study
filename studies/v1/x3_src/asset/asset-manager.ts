@@ -74,15 +74,7 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
     }
 
     const ktx2Loader = this.loadingManager.getHandler('.ktx2') as KTX2Loader
-    // let workerConfig: unknown
-    assertIsDefined(ktx2Loader)
-    if ((renderer as WebGPURenderer).isWebGPURenderer) {
-      await ktx2Loader.detectSupportAsync(renderer as WebGPURenderer)
-    }
-    else {
-      ktx2Loader.detectSupport(renderer)
-    }
-    // console.info(workerConfig)
+    ktx2Loader.detectSupport(renderer)
 
     // console.groupCollapsed(`${_LOG_PREFIX} load`)
 
