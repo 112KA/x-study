@@ -1,12 +1,12 @@
 {
-	"extends": "@tsconfig/recommended/tsconfig.json",
-	"compilerOptions": {
-		"module": "ES2015",
-		"moduleResolution": "bundler",
-		"resolveJsonModule": true,
-		"paths": {
-			"x3/*": ["./x3_src/*"],
-			"x3-controls/*": ["./x3-controls_src/*"]
-		}
-	}
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "compilerOptions": {
+    "module": "ES2015",
+    "moduleResolution": "bundler",
+    "paths": {
+      "x3/*": ["./x3_src/*"],
+      "x3-controls/*": ["./x3-controls_src/*"]
+    },
+    "resolveJsonModule": true
+  }
 }

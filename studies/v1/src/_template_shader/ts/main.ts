@@ -1,22 +1,22 @@
-import { assertIsDefined } from "x";
-import { StatsGLPlugin } from "x3/application";
-import { Application } from "./Application";
+import { assertIsDefined } from 'x'
+import { StatsGLPlugin } from 'x3/application'
+import { Application } from './Application'
 
-const setup = async () => {
-	const wrapper = document.getElementById("canvas-wrapper") as HTMLDivElement;
-	assertIsDefined(wrapper);
+async function setup() {
+  const wrapper = document.getElementById('canvas-wrapper') as HTMLDivElement
+  assertIsDefined(wrapper)
 
-	const app = new Application(wrapper, {
-		renderer: {
-			type: "webgpu",
-		},
-	});
+  const app = new Application(wrapper, {
+    renderer: {
+      type: 'webgpu',
+    },
+  })
 
-	app.plugin.register(new StatsGLPlugin());
+  app.plugin.register(new StatsGLPlugin())
 
-	await app.initialize();
+  await app.initialize()
 
-	app.start();
-};
+  app.start()
+}
 
-setup();
+setup()

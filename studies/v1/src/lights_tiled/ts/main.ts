@@ -1,40 +1,40 @@
-import { assertIsDefined } from "x";
+import { assertIsDefined } from 'x'
 import {
-	AssetPlugin,
-	OrbitControlsPlugin,
-	StatsGLPlugin,
-} from "x3/application";
-import { Application } from "./Application";
+  AssetPlugin,
+  OrbitControlsPlugin,
+  StatsGLPlugin,
+} from 'x3/application'
+import { Application } from './Application'
 
-const setup = async () => {
-	const wrapper = document.getElementById("canvas-wrapper") as HTMLDivElement;
-	assertIsDefined(wrapper);
+async function setup() {
+  const wrapper = document.getElementById('canvas-wrapper') as HTMLDivElement
+  assertIsDefined(wrapper)
 
-	const app = new Application(wrapper, {
-		renderer: {
-			type: "webgpu",
-			antialias: true,
-		},
-	});
+  const app = new Application(wrapper, {
+    renderer: {
+      type: 'webgpu',
+      antialias: true,
+    },
+  })
 
-	app.plugin.register(
-		new AssetPlugin([
-			{
-				id: "FloorsCheckerboard_S_Diffuse",
-				url: "/studies/assets/floors/FloorsCheckerboard_S_Diffuse.jpg",
-			},
-			{
-				id: "FloorsCheckerboard_S_Normal",
-				url: "/studies/assets/floors/FloorsCheckerboard_S_Normal.jpg",
-			},
-		]),
-	);
-	app.plugin.register(new OrbitControlsPlugin());
-	app.plugin.register(new StatsGLPlugin());
+  app.plugin.register(
+    new AssetPlugin([
+      {
+        id: 'FloorsCheckerboard_S_Diffuse',
+        url: '/studies/assets/floors/FloorsCheckerboard_S_Diffuse.jpg',
+      },
+      {
+        id: 'FloorsCheckerboard_S_Normal',
+        url: '/studies/assets/floors/FloorsCheckerboard_S_Normal.jpg',
+      },
+    ]),
+  )
+  app.plugin.register(new OrbitControlsPlugin())
+  app.plugin.register(new StatsGLPlugin())
 
-	await app.initialize();
+  await app.initialize()
 
-	app.start();
-};
+  app.start()
+}
 
-setup();
+setup()

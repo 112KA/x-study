@@ -1,1 +1,1 @@
-export * from "./NoiseMaterial.js";
+export * from './NoiseMaterial.js'

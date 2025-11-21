@@ -1,62 +1,62 @@
-import { AmbientLight, Color, Fog } from "three";
-import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
-import { ApplicationBase, type AssetPlugin } from "x3/application";
-import { Ground } from "./Ground";
-import { GroundSphere } from "./GroundSphere";
-import { LightGroup } from "./LightGroup";
-import { TiledLightingPostProcessing } from "./TiledLightingPostProcessing";
+import type { AssetPlugin } from 'x3/application'
+import { AmbientLight, Color, Fog } from 'three'
+import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js'
+import { ApplicationBase } from 'x3/application'
+import { GroundSphere } from './GroundSphere'
+import { LightGroup } from './LightGroup'
+import { TiledLightingPostProcessing } from './TiledLightingPostProcessing'
 
-export const LIGHT_COUNT = 1000;
+export const LIGHT_COUNT = 1000
 
 export class Application extends ApplicationBase {
-	lights = new LightGroup(LIGHT_COUNT);
+  lights = new LightGroup(LIGHT_COUNT)
 
-	protected override async setupRenderer() {
-		await super.setupRenderer();
+  protected override async setupRenderer() {
+    await super.setupRenderer()
 
-		const postProcessing = new TiledLightingPostProcessing(this, LIGHT_COUNT);
-		this.rendererAdapter.addPostProcessing(postProcessing);
+    const postProcessing = new TiledLightingPostProcessing(this, LIGHT_COUNT)
+    this.rendererAdapter.addPostProcessing(postProcessing)
 
-		const gui = new GUI();
-		gui
-			.add(postProcessing.tileInfluence, "value", 0, 1)
-			.name("tile indexes debug");
-	}
+    const gui = new GUI()
+    gui
+      .add(postProcessing.tileInfluence, 'value', 0, 1)
+      .name('tile indexes debug')
+  }
 
-	protected override initializeScene() {
-		super.initializeScene();
+  protected override initializeScene() {
+    super.initializeScene()
 
-		this.camera.position.set(0, 30, 200);
+    this.camera.position.set(0, 30, 200)
 
-		this.scene.fog = new Fog(0x111111, 300, 500);
-		this.scene.background = new Color(0x111111);
+    this.scene.fog = new Fog(0x111111, 300, 500)
+    this.scene.background = new Color(0x111111)
 
-		this.scene.add(this.lights);
+    this.scene.add(this.lights)
 
-		const lightAmbient = new AmbientLight(0xffffff, 0.1);
-		this.scene.add(lightAmbient);
+    const lightAmbient = new AmbientLight(0xFFFFFF, 0.1)
+    this.scene.add(lightAmbient)
 
-		// textures
-		const { assetManager } = this.plugin.get<AssetPlugin>("asset")!;
+    // textures
+    const { assetManager } = this.plugin.get<AssetPlugin>('asset')!
 
-		const {
-			FloorsCheckerboard_S_Diffuse: texDiffuse,
-			FloorsCheckerboard_S_Normal: texNormal,
-		} = assetManager.textures;
+    const {
+      FloorsCheckerboard_S_Diffuse: texDiffuse,
+      FloorsCheckerboard_S_Normal: texNormal,
+    } = assetManager.textures
 
-		// const ground = new Ground(texDiffuse, texNormal);
-		const ground = new GroundSphere(texDiffuse, texNormal);
-		this.scene.add(ground);
-	}
+    // const ground = new Ground(texDiffuse, texNormal);
+    const ground = new GroundSphere(texDiffuse, texNormal)
+    this.scene.add(ground)
+  }
 
-	override async update(dt: number, timeMS: number) {
-		super.update(dt, timeMS);
+  override async update(dt: number, timeMS: number) {
+    super.update(dt, timeMS)
 
-		const now = timeMS / 1000;
-		this.lights.updateLights(now);
-	}
+    const now = timeMS / 1000
+    this.lights.updateLights(now)
+  }
 
-	override resize(width: number, height: number) {
-		super.resize(width, height);
-	}
+  override resize(width: number, height: number) {
+    super.resize(width, height)
+  }
 }

@@ -1,16 +1,14 @@
-import type { AnimationClip, Object3D } from "three";
+export interface DefaultResourceItem {
+  type?: undefined
+  id: string
+  url: string
+}
 
-export type DefaultResourceItem = {
-	type?: undefined;
-	id: string;
-	url: string;
-};
+export interface TextureAtlasResourceItem {
+  type: 'atlas'
+  id: string
+  jsonUrl: string
+  textureUrl: string
+}
 
-export type TextureAtlasResourceItem = {
-	type: "atlas";
-	id: string;
-	jsonUrl: string;
-	textureUrl: string;
-};
-
-export type ResourceItem = DefaultResourceItem | TextureAtlasResourceItem;
+export type ResourceItem = DefaultResourceItem | TextureAtlasResourceItem

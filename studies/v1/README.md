@@ -1,6 +1,7 @@
 # Studies V1
 
 ## External Resources
-- *CustomUVChecker_byValle_2K.webp*
-- *Roboto-Medium.ttf*
-- *SimpleTexture.gltf*
+
+- _CustomUVChecker_byValle_2K.webp_
+- _Roboto-Medium.ttf_
+- _SimpleTexture.gltf_

@@ -1,8 +1,8 @@
-import { EventDispatcher } from "three";
+import { EventDispatcher } from 'three'
 
-export type TViewportEventMap = {
-	resize: { width: number; height: number; aspectRatio: number };
-};
+export interface TViewportEventMap {
+  resize: { width: number, height: number, aspectRatio: number }
+}
 
 /**
  * @class Viewport
@@ -11,20 +11,20 @@ export type TViewportEventMap = {
  * @template TViewportEventMap
  */
 export class Viewport extends EventDispatcher<TViewportEventMap> {
-	public width: number;
-	public height: number;
-	public aspectRatio: number;
+  public width: number
+  public height: number
+  public aspectRatio: number
 
-	constructor($element: HTMLElement) {
-		super();
+  constructor($element: HTMLElement) {
+    super()
 
-		this.width = $element.clientWidth;
-		this.height = $element.clientHeight;
-		this.aspectRatio = this.width / this.height;
+    this.width = $element.clientWidth
+    this.height = $element.clientHeight
+    this.aspectRatio = this.width / this.height
 
-		const resizeObserver = new ResizeObserver(this.handleResize);
-		resizeObserver.observe($element);
-	}
+    const resizeObserver = new ResizeObserver(this.handleResize)
+    resizeObserver.observe($element)
+  }
 
   private handleResize = (entries: ResizeObserverEntry[]): void => {
     for (const entry of entries) {

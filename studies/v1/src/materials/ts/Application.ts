@@ -1,29 +1,32 @@
-import { ApplicationBase } from "x3/application";
-import { Controls } from "./Controls";
-import { DistanceLines, type IFunction, Kaleidoscope, SDF } from "./functions";
-import { Noise } from "./functions/Noise";
+import type { IFunction } from './functions'
+import { ApplicationBase } from 'x3/application'
+import { Controls } from './Controls'
+import { DistanceLines, Kaleidoscope, SDF } from './functions'
+import { Noise } from './functions/Noise'
 
 export class Application extends ApplicationBase {
-	public currentFunction: IFunction | null = null;
+  public currentFunction: IFunction | null = null
 
-	protected override initializeScene() {
-		super.initializeScene();
+  protected override initializeScene() {
+    super.initializeScene()
 
-		const functions = [DistanceLines, SDF, Kaleidoscope, Noise];
-		this.setFunction(functions[0]);
-		new Controls({ application: this, functions });
-	}
+    const functions = [DistanceLines, SDF, Kaleidoscope, Noise]
+    this.setFunction(functions[0])
 
-	public setFunction(f: IFunction) {
-		this.currentFunction = f;
-		this.scene.backgroundNode = f.Fn;
-	}
+    // eslint-disable-next-line no-new
+    new Controls({ application: this, functions })
+  }
 
-	protected async update(dt: number, timeMS: number) {
-		super.update(dt, timeMS);
-	}
+  public setFunction(f: IFunction) {
+    this.currentFunction = f
+    this.scene.backgroundNode = f.Fn
+  }
 
-	protected async resize(width: number, height: number) {
-		super.resize(width, height);
-	}
+  protected async update(dt: number, timeMS: number) {
+    super.update(dt, timeMS)
+  }
+
+  protected async resize(width: number, height: number) {
+    super.resize(width, height)
+  }
 }

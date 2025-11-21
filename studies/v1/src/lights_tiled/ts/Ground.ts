@@ -1,28 +1,29 @@
-import { Mesh, PlaneGeometry, RepeatWrapping, type Texture } from "three";
-import { normalMap, texture, uv } from "three/tsl";
-import { MeshPhongNodeMaterial } from "three/webgpu";
+import type { Texture } from 'three'
+import { Mesh, PlaneGeometry } from 'three'
+import { normalMap, texture, uv } from 'three/tsl'
+import { MeshPhongNodeMaterial } from 'three/webgpu'
 
 export class Ground extends Mesh {
-	constructor(
-		diffuseTexture: Texture,
-		normalTexture: Texture,
-		size = 1000,
-		uvScale = 50,
-	) {
-		const uvTile = uv().mul(uvScale);
+  constructor(
+    diffuseTexture: Texture,
+    normalTexture: Texture,
+    size = 1000,
+    uvScale = 50,
+  ) {
+    const uvTile = uv().mul(uvScale)
 
-		const geometry = new PlaneGeometry(size, size);
-		const material = new MeshPhongNodeMaterial({
-			colorNode: texture(diffuseTexture, uvTile),
-			normalNode: normalMap(texture(normalTexture, uvTile)),
-		});
+    const geometry = new PlaneGeometry(size, size)
+    const material = new MeshPhongNodeMaterial({
+      colorNode: texture(diffuseTexture, uvTile),
+      normalNode: normalMap(texture(normalTexture, uvTile)),
+    })
 
-		super(geometry, material);
+    super(geometry, material)
 
-		// 地面として配置
-		this.rotation.x = -Math.PI / 2;
-		this.position.y = 0;
-		this.castShadow = true;
-		this.receiveShadow = true;
-	}
+    // 地面として配置
+    this.rotation.x = -Math.PI / 2
+    this.position.y = 0
+    this.castShadow = true
+    this.receiveShadow = true
+  }
 }

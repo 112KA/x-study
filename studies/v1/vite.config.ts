@@ -1,38 +1,39 @@
-import { resolve } from "node:path";
-import { defineConfig } from "vite";
-import { glslify } from "vite-plugin-glslify";
+import { resolve } from 'node:path'
+import { defineConfig } from 'vite'
+import { glslify } from 'vite-plugin-glslify'
 
 export default defineConfig({
-	root: resolve(__dirname, "src"),
-	base: "/studies/",
-	build: {
-		outDir: resolve(__dirname, "../../112KA.github.io/studies"),
-		emptyOutDir: true,
-		rollupOptions: {
-			input: {
-				font_mesh: resolve("src/font_mesh", "index.html"),
-			},
-			output: {
-				manualChunks(id) {
-					if (id.includes("/x/")) {
-						return "x";
-					}
+  root: resolve(__dirname, 'src'),
+  base: '/studies/',
+  build: {
+    outDir: resolve(__dirname, '../../112KA.github.io/studies'),
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        font_mesh: resolve('src/font_mesh', 'index.html'),
+      },
+      output: {
+        manualChunks(id) {
+          if (id.includes('/x/')) {
+            return 'x'
+          }
 
-					if (id.includes("/x3/")) {
-						return "x3";
-					}
+          if (id.includes('/x3/')) {
+            return 'x3'
+          }
 
-					if (id.includes("node_modules")) return "vendor";
-				},
-			},
-		},
-	},
-	plugins: [glslify()],
-	assetsInclude: ["**/*.gltf", "**/*.glb", "**/*.frag"],
-	resolve: {
-		alias: {
-			x3: resolve(__dirname, "./x3_src"),
-			"x3-controls": resolve(__dirname, "./x3-controls_src"),
-		},
-	},
-});
+          if (id.includes('node_modules'))
+            return 'vendor'
+        },
+      },
+    },
+  },
+  plugins: [glslify()],
+  assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.frag'],
+  resolve: {
+    alias: {
+      'x3': resolve(__dirname, './x3_src'),
+      'x3-controls': resolve(__dirname, './x3-controls_src'),
+    },
+  },
+})

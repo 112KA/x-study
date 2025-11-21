@@ -17,46 +17,46 @@ import {
 import { Viewport } from './viewport'
 
 export class ApplicationBase implements RendererHostContext {
-	public plugin = new PluginManager(this);
+  public plugin = new PluginManager(this)
 
-	public viewport!: Viewport;
-	public rendererAdapter!: RendererAdapter;
+  public viewport!: Viewport
+  public rendererAdapter!: RendererAdapter
 
-	public scene = new Scene();
-	public camera: Camera = new PerspectiveCamera(75);
+  public scene = new Scene()
+  public camera: Camera = new PerspectiveCamera(75)
 
-	constructor(
-		public $wrapper: HTMLElement,
-		protected config: ApplicationConfig = {},
-	) {
-		if (this.config.renderer?.type === "webgpu" && !navigator.gpu) {
-			throw new Error(
-				"WebGPU is not supported on this device. Please use a different renderer.",
-			);
-		}
+  constructor(
+    public $wrapper: HTMLElement,
+    protected config: ApplicationConfig = {},
+  ) {
+    if (this.config.renderer?.type === 'webgpu' && !navigator.gpu) {
+      throw new Error(
+        'WebGPU is not supported on this device. Please use a different renderer.',
+      )
+    }
 
-		this.viewport = new Viewport(this.$wrapper);
+    this.viewport = new Viewport(this.$wrapper)
 
-		this.scene.add(this.camera);
-	}
+    this.scene.add(this.camera)
+  }
 
   public async initialize(): Promise<void> {
     await this.setupRenderer()
 
-		const renderer = this.rendererAdapter.renderer as WebGPURenderer;
-		if (renderer.isWebGPURenderer) {
-			// postprocessing設定後、asset load前に実行する
-			await renderer.init();
-		}
-		
-		this.onResize(this.viewport);
+    const renderer = this.rendererAdapter.renderer as WebGPURenderer
+    if (renderer.isWebGPURenderer) {
+      // postprocessing設定後、asset load前に実行する
+      await renderer.init()
+    }
 
-		await this.plugin.initializeAllBeforeScene();
-		this.initializeScene();
-		await this.plugin.initializeAllAfterScene();
+    this.onResize(this.viewport)
 
-		this.setupEventListeners();
-	}
+    await this.plugin.initializeAllBeforeScene()
+    this.initializeScene()
+    await this.plugin.initializeAllAfterScene()
+
+    this.setupEventListeners()
+  }
 
   protected async setupRenderer(): Promise<void> {
     // レンダラーの初期化
@@ -69,23 +69,23 @@ export class ApplicationBase implements RendererHostContext {
       renderer = await RendererFactory.createBestAvailable()
     }
 
-		this.rendererAdapter = new RendererAdapter(
-			renderer,
-			this,
-			this.update.bind(this),
-		);
-		this.rendererAdapter.setSize(this.viewport.width, this.viewport.height);
-		this.rendererAdapter.setPixelRatio(window.devicePixelRatio);
+    this.rendererAdapter = new RendererAdapter(
+      renderer,
+      this,
+      this.update.bind(this),
+    )
+    this.rendererAdapter.setSize(this.viewport.width, this.viewport.height)
+    this.rendererAdapter.setPixelRatio(window.devicePixelRatio)
 
-		// DOMに追加
-		this.$wrapper.appendChild(this.rendererAdapter.domElement);
-	}
+    // DOMに追加
+    this.$wrapper.appendChild(this.rendererAdapter.domElement)
+  }
 
   protected initializeScene(): void {}
 
-	protected setupEventListeners(): void {
-		this.viewport.addEventListener("resize", this.onResize);
-	}
+  protected setupEventListeners(): void {
+    this.viewport.addEventListener('resize', this.onResize)
+  }
 
   public start(): void {
     this.rendererAdapter.start()
@@ -95,8 +95,8 @@ export class ApplicationBase implements RendererHostContext {
     // プラグインの更新を先に実行
     this.plugin.updateAll(dt, timeMS)
 
-		await this.rendererAdapter.render();
-	}
+    await this.rendererAdapter.render()
+  }
 
   protected onResize = ({ width, height }: TViewportEventMap['resize']): void => {
     this.resize(width, height)
@@ -110,16 +110,16 @@ export class ApplicationBase implements RendererHostContext {
       camera.updateProjectionMatrix()
     }
 
-		// Update renderer size
-		this.rendererAdapter.setSize(width, height);
+    // Update renderer size
+    this.rendererAdapter.setSize(width, height)
 
-		// プラグインのリサイズ処理
-		this.plugin.resizeAll(width, height);
-	}
+    // プラグインのリサイズ処理
+    this.plugin.resizeAll(width, height)
+  }
 
-	// クリーンアップ
-	public dispose(): void {
-		this.rendererAdapter.dispose();
-		this.plugin.destroyAll();
-	}
+  // クリーンアップ
+  public dispose(): void {
+    this.rendererAdapter.dispose()
+    this.plugin.destroyAll()
+  }
 }

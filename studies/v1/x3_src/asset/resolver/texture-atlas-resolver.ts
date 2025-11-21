@@ -1,32 +1,33 @@
-import type { Texture } from "three";
-import type { Renderer } from "three/webgpu";
-import { JSONLoader } from "x3/loaders/json-loader.js";
-import { TextureAtlas, type TexturePackerData } from "x3/textures/texture-atlas.js";
-import type { AssetManager } from "../asset-manager.js";
-import type { ResourceItem } from "../types.js";
-import type { IResolver } from "./types.js";
+import type { Texture } from 'three'
+import type { Renderer } from 'three/webgpu'
+import type { TexturePackerData } from 'x3/textures/texture-atlas.js'
+import type { AssetManager } from '../asset-manager.js'
+import type { ResourceItem } from '../types.js'
+import type { IResolver } from './types.js'
+import { JSONLoader } from 'x3/loaders/json-loader.js'
+import { TextureAtlas } from 'x3/textures/texture-atlas.js'
 
 export class TextureAtlasResolver implements IResolver {
-	name = "TextureAtlasResolver";
-	constructor(
-		public manager: AssetManager,
-		_threeCDNPath = "",
-	) {
-		const { loadingManager } = manager;
-		loadingManager.addHandler(/\.json$/i, new JSONLoader(loadingManager));
-	}
+  name = 'TextureAtlasResolver'
+  constructor(
+    public manager: AssetManager,
+    _threeCDNPath = '',
+  ) {
+    const { loadingManager } = manager
+    loadingManager.addHandler(/\.json$/i, new JSONLoader(loadingManager))
+  }
 
-	check(_loaded: unknown): boolean {
-		return false; //no check
-	}
+  check(_loaded: unknown): boolean {
+    return false // no check
+  }
 
-	resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer): void {
-		const [json, texture] = loaded as [TexturePackerData, Texture];
+  resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer): void {
+    const [json, texture] = loaded as [TexturePackerData, Texture]
 
-		if (!json.meta?.app && /texturepacker/.test(json.meta?.app)) {
-			throw new Error("Invalid texture packer json");
-		}
+    if (!json.meta?.app && /texturepacker/.test(json.meta?.app)) {
+      throw new Error('Invalid texture packer json')
+    }
 
-		this.manager.atlases[resource.id] = new TextureAtlas(json, texture);
-	}
+    this.manager.atlases[resource.id] = new TextureAtlas(json, texture)
+  }
 }

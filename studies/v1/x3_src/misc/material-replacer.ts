@@ -1,39 +1,38 @@
+import type { Material, Mesh, MeshStandardMaterial, Object3D } from 'three'
 import {
-	type Material,
-	type Mesh,
-	MeshBasicMaterial,
-	type MeshStandardMaterial,
-	type Object3D,
-} from "three";
 
-export type ReplaceUnit = {
-	target: "material" | "mesh";
-	nameMatcher: RegExp | string[];
-	replacer: (originalMaterial: Material) => Material;
-};
+  MeshBasicMaterial,
+
+} from 'three'
+
+export interface ReplaceUnit {
+  target: 'material' | 'mesh'
+  nameMatcher: RegExp | string[]
+  replacer: (originalMaterial: Material) => Material
+}
 
 export class MaterialReplacer {
-	protected cache: Record<string, Material> = {};
-	protected replaceUnitList: ReplaceUnit[] = [];
+  protected cache: Record<string, Material> = {}
+  protected replaceUnitList: ReplaceUnit[] = []
 
-	constructor() {
-		this.addReplaceUnit(this.createDefaultReplaceUnit());
-	}
+  constructor() {
+    this.addReplaceUnit(this.createDefaultReplaceUnit())
+  }
 
   addReplaceUnit(replaceUnit: ReplaceUnit): void {
     this.replaceUnitList.push(replaceUnit)
   }
 
-	createDefaultReplaceUnit(): ReplaceUnit {
-		return {
-			target: "material",
-			nameMatcher: /.*/,
-			replacer: (originalMaterial: Material): Material => {
-				const { name, map, color } = originalMaterial as MeshStandardMaterial;
-				return new MeshBasicMaterial({ name, map, color });
-			},
-		};
-	}
+  createDefaultReplaceUnit(): ReplaceUnit {
+    return {
+      target: 'material',
+      nameMatcher: /.*/,
+      replacer: (originalMaterial: Material): Material => {
+        const { name, map, color } = originalMaterial as MeshStandardMaterial
+        return new MeshBasicMaterial({ name, map, color })
+      },
+    }
+  }
 
   replace(o: Object3D): void {
     // mesh毎の置換判定グループ
@@ -41,66 +40,71 @@ export class MaterialReplacer {
       .filter(unit => unit.target === 'mesh')
       .reverse() // 新しく追加されたものから順番にチェック
 
-		// material毎の置換判定グループ
-		const materialReplaceGroup = this.replaceUnitList
-			.filter((unit) => unit.target === "material")
-			.reverse(); // 新しく追加されたものから順番にチェック
+    // material毎の置換判定グループ
+    const materialReplaceGroup = this.replaceUnitList
+      .filter(unit => unit.target === 'material')
+      .reverse() // 新しく追加されたものから順番にチェック
 
-		o.traverse((child: Object3D): void => {
-			const mesh: Mesh = child as Mesh;
-			if (!mesh.isMesh) return;
+    o.traverse((child: Object3D): void => {
+      const mesh: Mesh = child as Mesh
+      if (!mesh.isMesh)
+        return
 
-			const targetReplaceUnit = meshReplaceGroup.find((unit) => {
-				if (unit.nameMatcher instanceof RegExp) {
-					return (unit.nameMatcher as RegExp).test(mesh.name);
-				} else if (Array.isArray(unit.nameMatcher)) {
-					return (unit.nameMatcher as string[]).includes(mesh.name);
-				}
-			});
+      const targetReplaceUnit = meshReplaceGroup.find((unit) => {
+        if (unit.nameMatcher instanceof RegExp) {
+          return (unit.nameMatcher as RegExp).test(mesh.name)
+        }
+        else if (Array.isArray(unit.nameMatcher)) {
+          return (unit.nameMatcher as string[]).includes(mesh.name)
+        }
+        return false
+      })
 
-			if (targetReplaceUnit) {
-				if (Array.isArray(mesh.material)) {
-					mesh.material = mesh.material.map((material) => {
-						const replacedMaterial = targetReplaceUnit.replacer(material);
-						return this.cacheAndReturn(replacedMaterial);
-					});
-				} else if(mesh.material.name !== "") {
-					const replacedMaterial = targetReplaceUnit.replacer(mesh.material);
-					mesh.material = this.cacheAndReturn(replacedMaterial);
-				}
-				else {
-					console.warn("replaceの元となるmaterial名が付与されていない", { meshName: mesh.name })
-					// NOTE: 何も名前がない場合は、モデル素材でmaterial未設定の可能性があるため、cacheせず常に新しいmaterialをつくる
-					mesh.material = targetReplaceUnit.replacer(mesh.material)
-				}
-				return;
-			}
+      if (targetReplaceUnit) {
+        if (Array.isArray(mesh.material)) {
+          mesh.material = mesh.material.map((material) => {
+            const replacedMaterial = targetReplaceUnit.replacer(material)
+            return this.cacheAndReturn(replacedMaterial)
+          })
+        }
+        else if (mesh.material.name !== '') {
+          const replacedMaterial = targetReplaceUnit.replacer(mesh.material)
+          mesh.material = this.cacheAndReturn(replacedMaterial)
+        }
+        else {
+          console.warn('replaceの元となるmaterial名が付与されていない', { meshName: mesh.name })
+          // NOTE: 何も名前がない場合は、モデル素材でmaterial未設定の可能性があるため、cacheせず常に新しいmaterialをつくる
+          mesh.material = targetReplaceUnit.replacer(mesh.material)
+        }
+        return
+      }
 
-			if (Array.isArray(mesh.material)) {
-				mesh.material = mesh.material.map(
-					(material) =>
-						this.cache[material.name] ??
-						this.createMaterial(material, materialReplaceGroup),
-				);
-			} else {
-				mesh.material =
-					this.cache[mesh.material.name] ??
-					this.createMaterial(mesh.material, materialReplaceGroup);
-			}
-		});
-	}
+      if (Array.isArray(mesh.material)) {
+        mesh.material = mesh.material.map(
+          material =>
+            this.cache[material.name]
+            ?? this.createMaterial(material, materialReplaceGroup),
+        )
+      }
+      else {
+        mesh.material
+          = this.cache[mesh.material.name]
+            ?? this.createMaterial(mesh.material, materialReplaceGroup)
+      }
+    })
+  }
 
-	protected cacheAndReturn(replacedMaterial : Material) : Material {
-		const cachedMaterial = this.cache[replacedMaterial.name];
-		if(cachedMaterial !== undefined) {
-			replacedMaterial.dispose();
-			return cachedMaterial;
-		}
-		else {
-			this.cache[replacedMaterial.name] = replacedMaterial;
-			return replacedMaterial;
-		}
-	}
+  protected cacheAndReturn(replacedMaterial: Material): Material {
+    const cachedMaterial = this.cache[replacedMaterial.name]
+    if (cachedMaterial !== undefined) {
+      replacedMaterial.dispose()
+      return cachedMaterial
+    }
+    else {
+      this.cache[replacedMaterial.name] = replacedMaterial
+      return replacedMaterial
+    }
+  }
 
   protected createMaterial(
     originalMaterial: Material,
@@ -113,17 +117,18 @@ export class MaterialReplacer {
       else if (Array.isArray(unit.nameMatcher)) {
         return (unit.nameMatcher as string[]).includes(originalMaterial.name)
       }
-      return undefined
+      return false
     })
 
-		if (targetReplaceUnit) {
-			const material = targetReplaceUnit.replacer(originalMaterial);
-			this.cache[originalMaterial.name] = material;
-			return material;
-		} else {
-			console.warn(
-				`No replacement found for material: ${originalMaterial.name}`,
-			);
-		}
-	}
+    if (targetReplaceUnit) {
+      const material = targetReplaceUnit.replacer(originalMaterial)
+      this.cache[originalMaterial.name] = material
+      return material
+    }
+    else {
+      console.warn(
+        `No replacement found for material: ${originalMaterial.name}`,
+      )
+    }
+  }
 }
