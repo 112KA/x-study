@@ -1,3 +1,4 @@
+import type { WebGLRenderer } from 'three'
 import type { GLTF, KTX2Loader } from 'three/examples/jsm/Addons.js'
 import type { Renderer } from 'three/webgpu'
 import type { AssetManager } from '../asset-manager.js'
@@ -32,7 +33,7 @@ export class GLTFResolver implements IResolver {
     return (loaded as GLTF).scene !== undefined
   }
 
-  resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer): void {
+  resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer | WebGLRenderer): void {
     this.manager.objects[resource.id] = loaded as GLTF
   }
 }

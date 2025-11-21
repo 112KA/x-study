@@ -1,4 +1,4 @@
-import type { Texture } from 'three'
+import type { Texture, WebGLRenderer } from 'three'
 import type { Renderer } from 'three/webgpu'
 import type { TexturePackerData } from 'x3/textures/texture-atlas.js'
 import type { AssetManager } from '../asset-manager.js'
@@ -21,7 +21,7 @@ export class TextureAtlasResolver implements IResolver {
     return false // no check
   }
 
-  resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer): void {
+  resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer | WebGLRenderer): void {
     const [json, texture] = loaded as [TexturePackerData, Texture]
 
     if (!json.meta?.app && /texturepacker/.test(json.meta?.app)) {
