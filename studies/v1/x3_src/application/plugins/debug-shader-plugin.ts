@@ -29,12 +29,12 @@ export class DebugShaderPlugin implements IPlugin {
 
 	destroy(): void {}
 
-	async info(targetObject: Object3D) {
-		const rawShader = await this.renderer.debug.getShaderAsync(
-			this.scene,
-			this.camera,
-			targetObject,
-		);
+  async info(targetObject: Object3D): Promise<void> {
+    const rawShader = await this.renderer.debug.getShaderAsync(
+      this.scene,
+      this.camera,
+      targetObject,
+    )
 
 		const style =
 			"background-color: #333; color: white; font-style: italic; border: 2px solid #777; font-size: 22px;";

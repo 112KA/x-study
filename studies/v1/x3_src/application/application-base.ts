@@ -1,19 +1,20 @@
+import type { Camera } from 'three'
+import type { WebGPURenderer } from 'three/webgpu'
+import type { RendererHostContext, SupportedRenderer } from './renderer/index.js'
+import type { ApplicationConfig } from './types'
+import type { TViewportEventMap } from './viewport'
 import {
-	type Camera,
-	type EventListener,
-	PerspectiveCamera,
-	Scene,
-} from "three";
-import type { WebGPURenderer } from "three/webgpu";
-import { PluginManager } from "./plugins";
+
+  PerspectiveCamera,
+  Scene,
+} from 'three'
+import { PluginManager } from './plugins'
 import {
-	RendererAdapter,
-	RendererFactory,
-	type RendererHostContext,
-	type SupportedRenderer,
-} from "./renderer/index.js";
-import type { ApplicationConfig } from "./types";
-import { type TViewportEventMap, Viewport } from "./viewport";
+  RendererAdapter,
+  RendererFactory,
+
+} from './renderer/index.js'
+import { Viewport } from './viewport'
 
 export class ApplicationBase implements RendererHostContext {
 	public plugin = new PluginManager(this);
@@ -39,8 +40,8 @@ export class ApplicationBase implements RendererHostContext {
 		this.scene.add(this.camera);
 	}
 
-	public async initialize() {
-		await this.setupRenderer();
+  public async initialize(): Promise<void> {
+    await this.setupRenderer()
 
 		const renderer = this.rendererAdapter.renderer as WebGPURenderer;
 		if (renderer.isWebGPURenderer) {
@@ -57,15 +58,16 @@ export class ApplicationBase implements RendererHostContext {
 		this.setupEventListeners();
 	}
 
-	protected async setupRenderer() {
-		// レンダラーの初期化
-		let renderer: SupportedRenderer;
+  protected async setupRenderer(): Promise<void> {
+    // レンダラーの初期化
+    let renderer: SupportedRenderer
 
-		if (this.config.renderer) {
-			renderer = await RendererFactory.create(this.config.renderer);
-		} else {
-			renderer = await RendererFactory.createBestAvailable();
-		}
+    if (this.config.renderer) {
+      renderer = await RendererFactory.create(this.config.renderer)
+    }
+    else {
+      renderer = await RendererFactory.createBestAvailable()
+    }
 
 		this.rendererAdapter = new RendererAdapter(
 			renderer,
@@ -79,35 +81,34 @@ export class ApplicationBase implements RendererHostContext {
 		this.$wrapper.appendChild(this.rendererAdapter.domElement);
 	}
 
-	protected initializeScene() {}
+  protected initializeScene(): void {}
 
 	protected setupEventListeners(): void {
 		this.viewport.addEventListener("resize", this.onResize);
 	}
 
-	public start() {
-		this.rendererAdapter.start();
-	}
+  public start(): void {
+    this.rendererAdapter.start()
+  }
 
-	protected async update(dt: number, timeMS: number) {
-		// プラグインの更新を先に実行
-		this.plugin.updateAll(dt, timeMS);
+  protected async update(dt: number, timeMS: number): Promise<void> {
+    // プラグインの更新を先に実行
+    this.plugin.updateAll(dt, timeMS)
 
 		await this.rendererAdapter.render();
 	}
 
-	protected onResize = ({ width, height }: TViewportEventMap["resize"]) => {
-		console.log("ApplicationBase onResize", { width, height });
-		this.resize(width, height);
-	};
+  protected onResize = ({ width, height }: TViewportEventMap['resize']): void => {
+    this.resize(width, height)
+  }
 
-	protected resize(width: number, height: number) {
-		// Update camera aspect ratio
-		const camera = this.camera as PerspectiveCamera;
-		if (camera.isPerspectiveCamera) {
-			camera.aspect = width / height;
-			camera.updateProjectionMatrix();
-		}
+  protected resize(width: number, height: number): void {
+    // Update camera aspect ratio
+    const camera = this.camera as PerspectiveCamera
+    if (camera.isPerspectiveCamera) {
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
+    }
 
 		// Update renderer size
 		this.rendererAdapter.setSize(width, height);

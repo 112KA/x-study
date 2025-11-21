@@ -26,17 +26,17 @@ export class Viewport extends EventDispatcher<TViewportEventMap> {
 		resizeObserver.observe($element);
 	}
 
-	private handleResize = (entries: ResizeObserverEntry[]) => {
-		for (const entry of entries) {
-			this.width = entry.contentRect.width;
-			this.height = entry.contentRect.height;
-			this.aspectRatio = this.width / this.height;
-			this.dispatchEvent({
-				type: "resize",
-				width: this.width,
-				height: this.height,
-				aspectRatio: this.aspectRatio,
-			});
-		}
-	};
+  private handleResize = (entries: ResizeObserverEntry[]): void => {
+    for (const entry of entries) {
+      this.width = entry.contentRect.width
+      this.height = entry.contentRect.height
+      this.aspectRatio = this.width / this.height
+      this.dispatchEvent({
+        type: 'resize',
+        width: this.width,
+        height: this.height,
+        aspectRatio: this.aspectRatio,
+      })
+    }
+  }
 }

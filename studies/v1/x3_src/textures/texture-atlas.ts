@@ -54,7 +54,7 @@ export class TextureAtlas {
 		}
 	}
 
-	get(key: string) {
-		return this.#textures[key];
-	}
+  get(key: string): Texture {
+    return this.#textures[key]
+  }
 }

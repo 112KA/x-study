@@ -20,9 +20,9 @@ export class MaterialReplacer {
 		this.addReplaceUnit(this.createDefaultReplaceUnit());
 	}
 
-	addReplaceUnit(replaceUnit: ReplaceUnit) {
-		this.replaceUnitList.push(replaceUnit);
-	}
+  addReplaceUnit(replaceUnit: ReplaceUnit): void {
+    this.replaceUnitList.push(replaceUnit)
+  }
 
 	createDefaultReplaceUnit(): ReplaceUnit {
 		return {
@@ -35,11 +35,11 @@ export class MaterialReplacer {
 		};
 	}
 
-	replace(o: Object3D) {
-		// mesh毎の置換判定グループ
-		const meshReplaceGroup = this.replaceUnitList
-			.filter((unit) => unit.target === "mesh")
-			.reverse(); // 新しく追加されたものから順番にチェック
+  replace(o: Object3D): void {
+    // mesh毎の置換判定グループ
+    const meshReplaceGroup = this.replaceUnitList
+      .filter(unit => unit.target === 'mesh')
+      .reverse() // 新しく追加されたものから順番にチェック
 
 		// material毎の置換判定グループ
 		const materialReplaceGroup = this.replaceUnitList
@@ -102,17 +102,19 @@ export class MaterialReplacer {
 		}
 	}
 
-	protected createMaterial(
-		originalMaterial: Material,
-		replaceGroup: ReplaceUnit[],
-	) {
-		const targetReplaceUnit = replaceGroup.find((unit) => {
-			if (unit.nameMatcher instanceof RegExp) {
-				return (unit.nameMatcher as RegExp).test(originalMaterial.name);
-			} else if (Array.isArray(unit.nameMatcher)) {
-				return (unit.nameMatcher as string[]).includes(originalMaterial.name);
-			}
-		});
+  protected createMaterial(
+    originalMaterial: Material,
+    replaceGroup: ReplaceUnit[],
+  ): Material | undefined {
+    const targetReplaceUnit = replaceGroup.find((unit) => {
+      if (unit.nameMatcher instanceof RegExp) {
+        return (unit.nameMatcher as RegExp).test(originalMaterial.name)
+      }
+      else if (Array.isArray(unit.nameMatcher)) {
+        return (unit.nameMatcher as string[]).includes(originalMaterial.name)
+      }
+      return undefined
+    })
 
 		if (targetReplaceUnit) {
 			const material = targetReplaceUnit.replacer(originalMaterial);

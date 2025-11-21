@@ -35,30 +35,32 @@ export class RendererAdapter extends EventDispatcher {
 		const renderer = this.renderer as WebGPURenderer;
 		const { scene, camera } = this.hostContext;
 
-		if (renderer.isWebGPURenderer) {
-			if (this.postProcessing !== null) {
-				await this.postProcessing.renderAsync();
-			} else {
-				await renderer.renderAsync(scene, camera);
-			}
-			renderer.resolveTimestampsAsync(TimestampQuery.RENDER);
-		} else {
-			this.renderer.render(scene, camera);
-		}
-	}
+    if (renderer.isWebGPURenderer) {
+      if (this.postProcessing !== null) {
+        await this.postProcessing.renderAsync()
+      }
+      else {
+        await renderer.renderAsync(scene, camera)
+      }
+      renderer.resolveTimestampsAsync(TimestampQuery.RENDER)
+    }
+    else {
+      this.renderer.render(scene, camera)
+    }
+  }
 
-	start() {
-		this.renderer.setAnimationLoop(this.handleTick);
-	}
+  start(): void {
+    this.renderer.setAnimationLoop(this.handleTick)
+  }
 
-	protected handleTick = (
-		time: DOMHighResTimeStamp,
-		_frame: XRFrame | undefined,
-	) => {
-		const dt = time - this.previousTime;
-		this.previousTime = time;
-		this.updateCallback(dt, time);
-	};
+  protected handleTick = (
+    time: DOMHighResTimeStamp,
+    _frame: XRFrame | undefined,
+  ): void => {
+    const dt = time - this.previousTime
+    this.previousTime = time
+    this.updateCallback(dt, time)
+  }
 
 	dispose(): void {
 		this.renderer.setAnimationLoop(null);
