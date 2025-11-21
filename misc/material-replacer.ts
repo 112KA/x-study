@@ -19,7 +19,7 @@ export class MaterialReplacer {
     this.addReplaceUnit(this.createDefaultReplaceUnit())
   }
 
-  addReplaceUnit(replaceUnit: ReplaceUnit) {
+  addReplaceUnit(replaceUnit: ReplaceUnit): void {
     this.replaceUnitList.push(replaceUnit)
   }
 
@@ -34,7 +34,7 @@ export class MaterialReplacer {
     }
   }
 
-  replace(o: Object3D) {
+  replace(o: Object3D): void {
     // mesh毎の置換判定グループ
     const meshReplaceGroup = this.replaceUnitList
       .filter(unit => unit.target === 'mesh')
@@ -104,7 +104,7 @@ export class MaterialReplacer {
   protected createMaterial(
     originalMaterial: Material,
     replaceGroup: ReplaceUnit[],
-  ) {
+  ): Material | undefined {
     const targetReplaceUnit = replaceGroup.find((unit) => {
       if (unit.nameMatcher instanceof RegExp) {
         return (unit.nameMatcher as RegExp).test(originalMaterial.name)

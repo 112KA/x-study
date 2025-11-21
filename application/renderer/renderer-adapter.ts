@@ -49,14 +49,14 @@ export class RendererAdapter extends EventDispatcher {
     }
   }
 
-  start() {
+  start(): void {
     this.renderer.setAnimationLoop(this.handleTick)
   }
 
   protected handleTick = (
     time: DOMHighResTimeStamp,
     _frame: XRFrame | undefined,
-  ) => {
+  ): void => {
     const dt = time - this.previousTime
     this.previousTime = time
     this.updateCallback(dt, time)

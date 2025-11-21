@@ -40,7 +40,7 @@ export class ApplicationBase implements RendererHostContext {
     this.scene.add(this.camera)
   }
 
-  public async initialize() {
+  public async initialize(): Promise<void> {
     await this.setupRenderer()
 
     const renderer = this.rendererAdapter.renderer as WebGPURenderer
@@ -56,7 +56,7 @@ export class ApplicationBase implements RendererHostContext {
     this.setupEventListeners()
   }
 
-  protected async setupRenderer() {
+  protected async setupRenderer(): Promise<void> {
     // レンダラーの初期化
     let renderer: SupportedRenderer
 
@@ -79,28 +79,28 @@ export class ApplicationBase implements RendererHostContext {
     this.$wrapper.appendChild(this.rendererAdapter.domElement)
   }
 
-  protected initializeScene() {}
+  protected initializeScene(): void {}
 
   protected setupEventListeners(): void {
     this.viewport.addEventListener('resize', this.onResize)
   }
 
-  public start() {
+  public start(): void {
     this.rendererAdapter.start()
   }
 
-  protected async update(dt: number, timeMS: number) {
+  protected async update(dt: number, timeMS: number): Promise<void> {
     // プラグインの更新を先に実行
     this.plugin.updateAll(dt, timeMS)
 
     await this.rendererAdapter.render()
   }
 
-  protected onResize = ({ width, height }: TViewportEventMap['resize']) => {
+  protected onResize = ({ width, height }: TViewportEventMap['resize']): void => {
     this.resize(width, height)
   }
 
-  protected resize(width: number, height: number) {
+  protected resize(width: number, height: number): void {
     // Update camera aspect ratio
     const camera = this.camera as PerspectiveCamera
     if (camera.isPerspectiveCamera) {

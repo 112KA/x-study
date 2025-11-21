@@ -30,7 +30,7 @@ export class DebugShaderPlugin implements IPlugin {
 
   destroy(): void {}
 
-  async info(targetObject: Object3D) {
+  async info(targetObject: Object3D): Promise<void> {
     const rawShader = await this.renderer.debug.getShaderAsync(
       this.scene,
       this.camera,

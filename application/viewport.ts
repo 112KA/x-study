@@ -26,7 +26,7 @@ export class Viewport extends EventDispatcher<TViewportEventMap> {
     resizeObserver.observe($element)
   }
 
-  private handleResize = (entries: ResizeObserverEntry[]) => {
+  private handleResize = (entries: ResizeObserverEntry[]): void => {
     for (const entry of entries) {
       this.width = entry.contentRect.width
       this.height = entry.contentRect.height
