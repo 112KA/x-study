@@ -20,8 +20,6 @@ export class DebugShaderPlugin implements IPlugin {
     }
     this.scene = scene
     this.camera = camera
-
-    // console.log('DebugShaderPlugin initialized.')
   }
 
   update(): void {}
@@ -40,11 +38,9 @@ export class DebugShaderPlugin implements IPlugin {
     const style
       = 'background-color: #333; color: white; font-style: italic; border: 2px solid #777; font-size: 22px;'
 
-    /* eslint-disable no-console */
-    console.log('%c  [ WGSL ] Vertex Shader      ', style)
-    console.log(rawShader.vertexShader)
-    console.log('%c  [ WGSL ] Fragment Shader    ', style)
-    console.log(rawShader.fragmentShader)
-    /* eslint-enable no-console */
+    console.warn('%c  [ WGSL ] Vertex Shader      ', style)
+    console.warn(rawShader.vertexShader)
+    console.warn('%c  [ WGSL ] Fragment Shader    ', style)
+    console.warn(rawShader.fragmentShader)
   }
 }

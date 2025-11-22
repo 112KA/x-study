@@ -57,7 +57,7 @@ export class MaterialReplacer {
         else if (Array.isArray(unit.nameMatcher)) {
           return (unit.nameMatcher as string[]).includes(mesh.name)
         }
-        return undefined
+        return false
       })
 
       if (targetReplaceUnit) {
@@ -67,9 +67,14 @@ export class MaterialReplacer {
             return this.cacheAndReturn(replacedMaterial)
           })
         }
-        else {
+        else if (mesh.material.name !== '') {
           const replacedMaterial = targetReplaceUnit.replacer(mesh.material)
           mesh.material = this.cacheAndReturn(replacedMaterial)
+        }
+        else {
+          console.warn('replaceの元となるmaterial名が付与されていない', { meshName: mesh.name })
+          // NOTE: 何も名前がない場合は、モデル素材でmaterial未設定の可能性があるため、cacheせず常に新しいmaterialをつくる
+          mesh.material = targetReplaceUnit.replacer(mesh.material)
         }
         return
       }
@@ -112,7 +117,7 @@ export class MaterialReplacer {
       else if (Array.isArray(unit.nameMatcher)) {
         return (unit.nameMatcher as string[]).includes(originalMaterial.name)
       }
-      return undefined
+      return false
     })
 
     if (targetReplaceUnit) {

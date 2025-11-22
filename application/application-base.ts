@@ -49,6 +49,8 @@ export class ApplicationBase implements RendererHostContext {
       await renderer.init()
     }
 
+    this.onResize(this.viewport)
+
     await this.plugin.initializeAllBeforeScene()
     this.initializeScene()
     await this.plugin.initializeAllAfterScene()

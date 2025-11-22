@@ -14,7 +14,6 @@ export class AssetPlugin implements IPlugin {
   constructor(private resources: ResourceItem[]) {}
 
   async initialize(app: ApplicationBase): Promise<void> {
-    // console.log('Initializing AssetPlugin...', { app })
     // AssetManagerの初期化や必要なアセットのロードを行う
     await this.assetManager.load(this.resources, app.rendererAdapter.renderer)
   }
