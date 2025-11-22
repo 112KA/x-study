@@ -12,13 +12,11 @@ import {
 } from 'three'
 import {
   LoadingManager,
-
 } from 'three/webgpu'
-import { assertIsDefined } from 'x'
+import { assertIsDefined } from '@112ka/x'
 import {
   FontResolver,
   GLTFResolver,
-
   TextureAtlasResolver,
   TextureResolver,
 } from './resolver/index.js'
