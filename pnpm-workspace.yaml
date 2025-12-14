@@ -2,3 +2,7 @@ packages:
   - "codepen/*"
   - "studies/*"
   - "tools/*"
+
+minimumReleaseAge: 2880
+engineStrict: true
+saveExact: true
