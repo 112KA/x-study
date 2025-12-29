@@ -17,9 +17,16 @@
 		}
 	},
 	"scripts": {
+		"prepare": "simple-git-hooks",
 		"dev": "pnpm v1 dev",
 		"v0": "pnpm --filter v0",
 		"v1": "pnpm --filter v1"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "pnpm lint-staged"
+	},
+	"lint-staged": {
+		"studies/v1/**/*.ts": "eslint"
 	},
 	"keywords": [],
 	"author": "Masayuki Iizuka <mas.iizuka@gmail.com>",
@@ -28,6 +35,8 @@
 		"@tsconfig/recommended": "^1.0.13",
 		"@types/node": "^25.0.3",
 		"eslint": "9.39.2",
+		"lint-staged": "16.2.7",
+		"simple-git-hooks": "2.13.1",
 		"tsx": "4.21.0",
 		"typescript": "^5.9.3"
 	},
