@@ -1,2 +1,2 @@
-export * from './noise'
 export * from './halftone'
+export * from './noise'

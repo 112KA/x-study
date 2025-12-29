@@ -4,6 +4,7 @@ import type { WebGPURenderer } from 'three/webgpu'
 import type { TextureAtlas } from 'x3/textures/texture-atlas.js'
 import type { IResolver } from './resolver/index.js'
 import type { ResourceItem } from './types.js'
+import { assertIsDefined } from '@112ka/x'
 import {
   EventDispatcher,
 
@@ -13,7 +14,6 @@ import {
 import {
   LoadingManager,
 } from 'three/webgpu'
-import { assertIsDefined } from '@112ka/x'
 import {
   FontResolver,
   GLTFResolver,
