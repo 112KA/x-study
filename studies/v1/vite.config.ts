@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 import { glslify } from 'vite-plugin-glslify'
 
@@ -28,8 +29,8 @@ export default defineConfig({
       },
     },
   },
-  plugins: [glslify()],
-  assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.frag'],
+  plugins: [react(), glslify()],
+  assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.vert', '**/*.frag'],
   resolve: {
     alias: {
       'x3': resolve(__dirname, './x3_src'),

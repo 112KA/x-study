@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/recommended/tsconfig.json",
+  "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
     "module": "ES2015",
     "moduleResolution": "bundler",
