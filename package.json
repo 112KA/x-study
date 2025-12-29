@@ -24,9 +24,9 @@
 	"keywords": [],
 	"author": "Masayuki Iizuka <mas.iizuka@gmail.com>",
 	"devDependencies": {
-		"@antfu/eslint-config": "6.7.1",
+		"@antfu/eslint-config": "6.7.3",
 		"@tsconfig/recommended": "^1.0.13",
-		"@types/node": "^25.0.2",
+		"@types/node": "^25.0.3",
 		"eslint": "9.39.2",
 		"tsx": "4.21.0",
 		"typescript": "^5.9.3"

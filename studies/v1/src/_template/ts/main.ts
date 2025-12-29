@@ -1,4 +1,4 @@
-import { assertIsDefined } from 'x'
+import { assertIsDefined } from '@112ka/x'
 import {
   AssetPlugin,
   OrbitControlsPlugin,
