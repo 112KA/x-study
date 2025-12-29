@@ -2,8 +2,10 @@
 
 ## Setup
 1. @gltf-transform/cli install
-> npm install --global @gltf-transform/cli
-2. KTX Software install & pathを通す
+> pnpm install --global @gltf-transform/cli
+2. tsx install
+> pnpm i tsx -w
+3. KTX Software install & pathを通す
 https://github.com/KhronosGroup/KTX-Software/releases/tag/v4.4.0
 
 
