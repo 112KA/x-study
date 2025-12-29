@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
+    "types": ["vite/client"],
     "module": "ES2015",
     "moduleResolution": "bundler",
     "paths": {
