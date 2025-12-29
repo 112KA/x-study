@@ -1,6 +1,6 @@
-import { FileLoader, Loader, LoaderUtils } from 'three'
-
 import { autotag } from '@112ka/x'
+
+import { FileLoader, Loader, LoaderUtils } from 'three'
 
 @autotag
 export class JSONLoader extends Loader {
