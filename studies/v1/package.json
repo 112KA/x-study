@@ -27,7 +27,7 @@
     "@types/three": "0.182.0",
     "@vitejs/plugin-react-swc": "4.2.2",
     "eslint-plugin-format": "1.1.0",
-    "vite": "7.3.0",
+    "vite": "catalog:",
     "vite-plugin-glslify": "2.3.0"
   }
 }

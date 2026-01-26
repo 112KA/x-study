@@ -34,4 +34,12 @@ export default antfu(
   {
     ignores: ['public/**'],
   },
+  {
+    files: ['**/package.json'],
+    rules: {
+      'pnpm/json-enforce-catalog': ['warn', {
+        autofix: false,
+      }],
+    },
+  },
 )

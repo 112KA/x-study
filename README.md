@@ -1,4 +1,4 @@
-# Studies
+# x-study
 
 ## Setup
 
@@ -6,11 +6,11 @@
 
 1. `.npmrc` の準備（重要）
 
-- トークンをリポジトリにコミットしないでください。プロジェクトにはテンプレートファイル `.npmrc.org` が含まれています。
-- ローカルで使う場合はコピーして必要な値を置き換えます:
+- トークンをリポジトリにコミットしない。プロジェクトにはテンプレートファイル `.npmrc.org` が含まれている。
+- ローカルで使う場合はコピーして必要な値を置き換える:
 ```bash
 cp .npmrc.org .npmrc
-# - ★エディタで .npmrc を開き、%%PERSONAL_ACCESS_TOKEN%% を自分の Personal Access Token に置き換えてください
+# - ★エディタで .npmrc を開き、%%PERSONAL_ACCESS_TOKEN%% を自分の Personal Access Token に置き換える
 ```
 
 2. 依存関係をインストール

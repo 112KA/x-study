@@ -1,13 +1,13 @@
 {
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
-    "types": ["vite/client"],
     "module": "ES2015",
     "moduleResolution": "bundler",
     "paths": {
       "x3/*": ["./x3_src/*"],
       "x3-controls/*": ["./x3-controls_src/*"]
     },
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": ["vite/client"]
   }
 }
