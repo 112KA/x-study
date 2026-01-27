@@ -18,6 +18,7 @@
 		"three.quarks": "0.16.0"
 	},
 	"devDependencies": {
-		"@types/three": "0.165.0"
+		"@types/three": "0.165.0",
+    	"vite": "catalog:"
 	}
 }
