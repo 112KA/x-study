@@ -4,11 +4,11 @@ packages:
   - tools/*
 
 catalog:
-  '@types/react': 19.2.9
+  '@types/react': 19.2.14
   '@types/react-dom': 19.2.3
-  react: 19.2.3
-  react-dom: 19.2.3
-  vite: 7.3.0
+  react: 19.2.4
+  react-dom: 19.2.4
+  vite: 7.3.1
 
 engineStrict: true
 

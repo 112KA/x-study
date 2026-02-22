@@ -17,7 +17,7 @@
 	},
 	"devDependencies": {
 		"@types/three": "0.148.1",
-		"vite": "7.1.4",
+    	"vite": "catalog:",
 		"vite-plugin-glslify": "2.2.0"
 	}
 }
