@@ -1,3 +1,9 @@
+engineStrict: true
+minimumReleaseAge: 2880
+saveExact: true
+shellEmulator: true
+trustPolicy: no-downgrade
+
 packages:
   - codepen/*
   - studies/*
@@ -10,8 +16,3 @@ catalog:
   react-dom: 19.2.4
   vite: 7.3.1
 
-engineStrict: true
-
-minimumReleaseAge: 2880
-
-saveExact: true
