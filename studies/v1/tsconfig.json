@@ -8,6 +8,8 @@
       "x3-controls/*": ["./x3-controls_src/*"]
     },
     "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "types": ["vite/client"]
   }
 }

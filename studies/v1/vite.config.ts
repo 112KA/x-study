@@ -29,7 +29,9 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react(), glslify()],
+  plugins: [react({
+    tsDecorators: true,
+  }), glslify()],
   assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.vert', '**/*.frag'],
   resolve: {
     alias: {
