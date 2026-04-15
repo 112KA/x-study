@@ -7,6 +7,8 @@ import type { IResolver } from './types.js'
 import { JSONLoader } from 'x3/loaders/json-loader.js'
 import { TextureAtlas } from 'x3/textures/texture-atlas.js'
 
+const JSON_HANDLER_REGEX = /\.json$/i
+const TEXTURE_ATLAS_APP_REGEX = /texturepacker/
 export class TextureAtlasResolver implements IResolver {
   name = 'TextureAtlasResolver'
   constructor(
@@ -14,7 +16,7 @@ export class TextureAtlasResolver implements IResolver {
     _threeCDNPath = '',
   ) {
     const { loadingManager } = manager
-    loadingManager.addHandler(/\.json$/i, new JSONLoader(loadingManager))
+    loadingManager.addHandler(JSON_HANDLER_REGEX, new JSONLoader(loadingManager))
   }
 
   check(_loaded: unknown): boolean {
@@ -24,7 +26,7 @@ export class TextureAtlasResolver implements IResolver {
   resolve(resource: ResourceItem, loaded: unknown, _renderer: Renderer | WebGLRenderer): void {
     const [json, texture] = loaded as [TexturePackerData, Texture]
 
-    if (!json.meta?.app && /texturepacker/.test(json.meta?.app)) {
+    if (!json.meta?.app && TEXTURE_ATLAS_APP_REGEX.test(json.meta?.app)) {
       throw new Error('Invalid texture packer json')
     }
 

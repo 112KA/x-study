@@ -1,16 +1,12 @@
-import type { Object3D, Texture, WebGLRenderer } from 'three'
+import type { Object3D, Texture } from 'three'
 import type { Font, GLTF, KTX2Loader } from 'three/examples/jsm/Addons.js'
 import type { WebGPURenderer } from 'three/webgpu'
 import type { TextureAtlas } from 'x3/textures/texture-atlas.js'
+import type { GLTFLoaderMode } from './resolver/gltf-resolver.js'
 import type { IResolver } from './resolver/index.js'
 import type { ResourceItem } from './types.js'
 import { assertIsDefined } from '@112ka/x'
-import {
-  EventDispatcher,
-
-  REVISION,
-
-} from 'three'
+import { EventDispatcher, REVISION, WebGLRenderer } from 'three'
 import {
   LoadingManager,
 } from 'three/webgpu'
@@ -30,6 +26,11 @@ export interface AssetManagerEventMap {
   error: {
     url: string
   }
+  cancelled: object
+}
+
+export interface AssetManagerOptions {
+  gltfLoaderMode?: GLTFLoaderMode
 }
 
 const THREE_CDN_PATH = `https://unpkg.com/three@0.${REVISION}.x`
@@ -39,20 +40,26 @@ const _LOG_PREFIX = '[AssetManager]'
 export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
   public loadingManager: LoadingManager = new LoadingManager()
 
-  #resolvers: Record<string, IResolver> = {
-    font: new FontResolver(this),
-    texture: new TextureResolver(this, THREE_CDN_PATH),
-    gltf: new GLTFResolver(this, THREE_CDN_PATH),
-    atlas: new TextureAtlasResolver(this),
-  }
+  #resolvers: Record<string, IResolver>
 
   textures: Record<string, Texture> = {}
   objects: Record<string, Object3D | GLTF> = {}
   atlases: Record<string, TextureAtlas> = {}
   fonts: Record<string, Font> = {}
 
-  constructor() {
+  private isCancelled = false
+
+  constructor(options: AssetManagerOptions = {}) {
     super()
+
+    this.#resolvers = {
+      font: new FontResolver(this),
+      texture: new TextureResolver(this, THREE_CDN_PATH),
+      gltf: new GLTFResolver(this, THREE_CDN_PATH, {
+        loaderMode: options.gltfLoaderMode,
+      }),
+      atlas: new TextureAtlasResolver(this),
+    }
 
     this.loadingManager.onError = this.#onError
   }
@@ -64,15 +71,14 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
   }
 
   public async load(
-    resources: ResourceItem[],
-    renderer: WebGPURenderer | WebGLRenderer,
+    resources: readonly ResourceItem[],
+    renderer: WebGPURenderer | WebGLRenderer | null = null,
   ): Promise<void> {
-    if (!renderer) {
-      throw new Error('You must provide a renderer to the load function.')
-    }
+    const activeRenderer = renderer ?? new WebGLRenderer()
+    const shouldDisposeRenderer = renderer === null
 
     const ktx2Loader = this.loadingManager.getHandler('.ktx2') as KTX2Loader
-    ktx2Loader.detectSupport(renderer)
+    ktx2Loader.detectSupport(activeRenderer)
 
     // console.groupCollapsed(`${_LOG_PREFIX} load`)
 
@@ -87,7 +93,7 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
           resolver.check(loaded),
         )
         assertIsDefined(resolver)
-        resolver.resolve(resource, loaded, renderer)
+        resolver.resolve(resource, loaded, activeRenderer)
       }
       else if (type === 'atlas') {
         const { jsonUrl, textureUrl } = resource
@@ -96,7 +102,11 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
           this.loadSingle(jsonUrl),
           this.loadSingle(textureUrl),
         ])
-        this.#resolvers.atlas.resolve(resource, loaded, renderer)
+        this.#resolvers.atlas.resolve(resource, loaded, activeRenderer)
+      }
+
+      if (this.isCancelled) {
+        break
       }
 
       // console.info(_LOG_PREFIX, 'Loaded', { targetUrl })
@@ -108,10 +118,24 @@ export class AssetManager extends EventDispatcher<AssetManagerEventMap> {
       })
     }
 
+    if (shouldDisposeRenderer) {
+      activeRenderer.dispose()
+    }
+
+    if (this.isCancelled) {
+      this.dispatchEvent({
+        type: 'cancelled',
+      })
+    }
+
     // console.info(_LOG_PREFIX, 'Load Completed', { assetManager: this })
     // console.groupEnd()
 
     this.dispatchEvent({ type: 'loaded' })
+  }
+
+  cancel(): void {
+    this.isCancelled = true
   }
 
   #onError = (url: string): void => {

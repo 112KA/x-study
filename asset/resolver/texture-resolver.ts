@@ -12,6 +12,9 @@ import {
 } from 'three'
 import { KTX2Loader } from 'three/examples/jsm/Addons.js'
 
+const IMAGE_HANDLER_REGEX = /\.(png|jpg|webp)$/i
+const KTX2_HANDLER_REGEX = /\.(ktx2)$/i
+
 export class TextureResolver implements IResolver {
   name = 'TextureResolver'
   constructor(
@@ -21,12 +24,12 @@ export class TextureResolver implements IResolver {
     const { loadingManager } = manager
 
     loadingManager.addHandler(
-      /\.(png|jpg|webp)$/i,
+      IMAGE_HANDLER_REGEX,
       new TextureLoader(loadingManager),
     )
 
     loadingManager.addHandler(
-      /\.(ktx2)$/i,
+      KTX2_HANDLER_REGEX,
       new KTX2Loader(loadingManager).setTranscoderPath(
         `${threeCDNPath}/examples/jsm/libs/basis/`,
       ),
