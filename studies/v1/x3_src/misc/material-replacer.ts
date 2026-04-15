@@ -11,6 +11,8 @@ export interface ReplaceUnit {
   replacer: (originalMaterial: Material) => Material
 }
 
+const DEFAULT_REGEXP = /.*/ // デフォルトは全て置換
+
 export class MaterialReplacer {
   protected cache: Record<string, Material> = {}
   protected replaceUnitList: ReplaceUnit[] = []
@@ -26,7 +28,7 @@ export class MaterialReplacer {
   createDefaultReplaceUnit(): ReplaceUnit {
     return {
       target: 'material',
-      nameMatcher: /.*/,
+      nameMatcher: DEFAULT_REGEXP,
       replacer: (originalMaterial: Material): Material => {
         const { name, map, color } = originalMaterial as MeshStandardMaterial
         return new MeshBasicMaterial({ name, map, color })

@@ -29,6 +29,8 @@ export interface TexturePackerData {
   frames: TexturePackerFrame[]
 }
 
+const IMAGE_HANDLER_REGEX = /\.(png|jpg|webp)$/i
+
 export class TextureAtlas {
   #textures: Record<string, Texture> = {}
   constructor(json: TexturePackerData, sourceTexture: Texture) {
@@ -36,7 +38,7 @@ export class TextureAtlas {
     const { w: width, h: height } = meta.size
     for (const frame of frames) {
       const t = sourceTexture.clone()
-      const key = frame.filename.replace(/\.(png|jpg)/, '')
+      const key = frame.filename.replace(IMAGE_HANDLER_REGEX, '')
       const data = frame.frame
 
       t.name = frame.filename

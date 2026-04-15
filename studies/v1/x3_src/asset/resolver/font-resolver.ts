@@ -6,11 +6,13 @@ import type { ResourceItem } from '../types.js'
 import type { IResolver } from './types.js'
 import { Font, TTFLoader } from 'three/examples/jsm/Addons.js'
 
+const TTF_HANDLER_REGEX = /\.(ttf)$/i
+
 export class FontResolver implements IResolver {
   name = 'FontResolver'
   constructor(public manager: AssetManager) {
     const { loadingManager } = manager
-    loadingManager.addHandler(/\.(ttf)$/i, new TTFLoader(loadingManager))
+    loadingManager.addHandler(TTF_HANDLER_REGEX, new TTFLoader(loadingManager))
   }
 
   check(loaded: unknown): boolean {
