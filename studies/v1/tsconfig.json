@@ -1,6 +1,8 @@
 {
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "module": "ES2015",
     "moduleResolution": "bundler",
     "paths": {
@@ -8,8 +10,6 @@
       "x3-controls/*": ["./x3-controls_src/*"]
     },
     "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "types": ["vite/client"]
   }
 }

@@ -26,12 +26,6 @@ export default antfu(
     },
   },
   {
-    files: ['**/*.md'],
-    rules: {
-      'no-irregular-whitespace': 'warn',
-    },
-  },
-  {
     ignores: ['public/**'],
   },
   {
