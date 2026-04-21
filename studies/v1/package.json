@@ -16,15 +16,15 @@
     "@react-three/fiber": "9.6.0",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "stats-gl": "3.8.0",
-    "three": "0.182.0",
+    "stats-gl": "4.1.0",
+    "three": "0.184.0",
     "tweakpane": "4.0.5"
   },
   "devDependencies": {
     "@tweakpane/core": "2.0.5",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@types/three": "0.182.0",
+    "@types/three": "0.184.0",
     "@vitejs/plugin-react-swc": "4.3.0",
     "eslint-plugin-format": "2.0.1",
     "vite": "catalog:",

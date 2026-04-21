@@ -1,7 +1,10 @@
 import type { PerspectiveCamera } from 'three'
 
 export class CameraControls {
-  constructor(public camera: PerspectiveCamera) {}
+  public readonly camera: PerspectiveCamera
+  constructor(camera: PerspectiveCamera) {
+    this.camera = camera
+  }
 
   update(_dt: number): void {
     // console.log('update', dt)

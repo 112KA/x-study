@@ -25,10 +25,15 @@ export class ApplicationBase implements RendererHostContext {
   public scene = new Scene()
   public camera: Camera = new PerspectiveCamera(75)
 
+  public readonly $wrapper: HTMLElement
+  public readonly config: ApplicationConfig = {}
+
   constructor(
-    public $wrapper: HTMLElement,
-    protected config: ApplicationConfig = {},
+    $wrapper: HTMLElement,
+    config: ApplicationConfig = {},
   ) {
+    this.$wrapper = $wrapper
+    this.config = config
     if (this.config.renderer?.type === 'webgpu' && !navigator.gpu) {
       throw new Error(
         'WebGPU is not supported on this device. Please use a different renderer.',

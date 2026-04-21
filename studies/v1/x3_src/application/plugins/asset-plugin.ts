@@ -11,7 +11,11 @@ export class AssetPlugin implements IPlugin {
 
   public assetManager: AssetManager = new AssetManager()
 
-  constructor(private resources: ResourceItem[]) {}
+  private readonly resources: ResourceItem[]
+
+  constructor(resources: ResourceItem[]) {
+    this.resources = resources
+  }
 
   async initialize(app: ApplicationBase): Promise<void> {
     // AssetManagerの初期化や必要なアセットのロードを行う

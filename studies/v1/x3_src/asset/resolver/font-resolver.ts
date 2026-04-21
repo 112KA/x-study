@@ -10,7 +10,9 @@ const TTF_HANDLER_REGEX = /\.(ttf)$/i
 
 export class FontResolver implements IResolver {
   name = 'FontResolver'
-  constructor(public manager: AssetManager) {
+  public readonly manager: AssetManager
+  constructor(manager: AssetManager) {
+    this.manager = manager
     const { loadingManager } = manager
     loadingManager.addHandler(TTF_HANDLER_REGEX, new TTFLoader(loadingManager))
   }

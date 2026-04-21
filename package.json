@@ -35,7 +35,7 @@
 		"@tsconfig/recommended": "^1.0.13",
 		"@tsconfig/vite-react": "7.0.2",
 		"@types/node": "^24.12.2",
-		"eslint": "10.2.0",
+		"eslint": "10.2.1",
 		"lint-staged": "16.4.0",
 		"simple-git-hooks": "2.13.1",
 		"tsx": "4.21.0",

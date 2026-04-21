@@ -2,7 +2,11 @@ import type { AmbientLight, DirectionalLight, Light, PointLight } from 'three'
 import type { FolderApi } from 'tweakpane'
 
 export class LightsFolder {
-  constructor(public title = 'Light') {}
+  public title: string
+
+  constructor(title = 'Light') {
+    this.title = title
+  }
 
   setup(parent: FolderApi, targetList: Light[], expanded = true) {
     const f = parent.addFolder({

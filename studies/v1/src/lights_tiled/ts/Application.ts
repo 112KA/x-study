@@ -4,7 +4,7 @@ import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import { ApplicationBase } from 'x3/application'
 import { GroundSphere } from './GroundSphere'
 import { LightGroup } from './LightGroup'
-import { TiledLightingPostProcessing } from './TiledLightingPostProcessing'
+import { TiledLightingRenderPipeline } from './TiledLightingRenderPipeline'
 
 export const LIGHT_COUNT = 1000
 
@@ -14,8 +14,8 @@ export class Application extends ApplicationBase {
   protected override async setupRenderer() {
     await super.setupRenderer()
 
-    const postProcessing = new TiledLightingPostProcessing(this, LIGHT_COUNT)
-    this.rendererAdapter.addPostProcessing(postProcessing)
+    const postProcessing = new TiledLightingRenderPipeline(this, LIGHT_COUNT)
+    this.rendererAdapter.addRenderPipeline(postProcessing)
 
     const gui = new GUI()
     gui

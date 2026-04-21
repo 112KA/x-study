@@ -1,18 +1,24 @@
 import type { WebGPURenderer } from 'three/webgpu'
-import type { AbstractPostProcessing } from './abstract-postporcessing'
+import type { AbstractRenderPipeline } from './abstract-renderpipeline'
 import type { RendererHostContext, SupportedRenderer } from './types'
 import { EventDispatcher, TimestampQuery } from 'three'
 
 export class RendererAdapter extends EventDispatcher {
   protected previousTime = 0
-  protected postProcessing: AbstractPostProcessing | null = null
+  protected postProcessing: AbstractRenderPipeline | null = null
+  public readonly renderer: SupportedRenderer
+  protected hostContext: RendererHostContext
+  protected updateCallback: (dt: number, time: DOMHighResTimeStamp) => void
 
   constructor(
-    public renderer: SupportedRenderer,
-    protected hostContext: RendererHostContext,
-    protected updateCallback: (dt: number, time: DOMHighResTimeStamp) => void,
+    renderer: SupportedRenderer,
+    hostContext: RendererHostContext,
+    updateCallback: (dt: number, time: DOMHighResTimeStamp) => void,
   ) {
     super()
+    this.renderer = renderer
+    this.hostContext = hostContext
+    this.updateCallback = updateCallback
   }
 
   setPixelRatio(ratio: number): void {
@@ -37,7 +43,7 @@ export class RendererAdapter extends EventDispatcher {
 
     if (renderer.isWebGPURenderer) {
       if (this.postProcessing !== null) {
-        await this.postProcessing.renderAsync()
+        await this.postProcessing.render()
       }
       else {
         renderer.render(scene, camera)
@@ -71,7 +77,7 @@ export class RendererAdapter extends EventDispatcher {
     return this.renderer.domElement
   }
 
-  addPostProcessing(postProcessing: AbstractPostProcessing): void {
+  addRenderPipeline(postProcessing: AbstractRenderPipeline): void {
     this.postProcessing = postProcessing
   }
 }

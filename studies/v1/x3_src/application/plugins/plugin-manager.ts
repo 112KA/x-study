@@ -6,9 +6,12 @@ import {
 } from './types'
 
 export class PluginManager implements IPluginManager {
+  private readonly app: ApplicationBase
   private plugins = new Map<string, IPlugin>()
 
-  constructor(private app: ApplicationBase) {}
+  constructor(app: ApplicationBase) {
+    this.app = app
+  }
 
   register(plugin: IPlugin): void {
     if (this.plugins.has(plugin.name)) {

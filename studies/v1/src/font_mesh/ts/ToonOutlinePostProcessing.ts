@@ -1,9 +1,9 @@
-import type { PostProcessingHostContext } from 'x3/application/renderer/types.js'
+import type { RenderPipelineHostContext } from 'x3/application/renderer/types.js'
 import { toonOutlinePass } from 'three/tsl'
-import { AbstractPostProcessing } from 'x3/application/renderer/abstract-postporcessing.js'
+import { AbstractRenderPipeline } from 'x3/application/renderer/abstract-renderpipeline.js'
 
-export class ToonOutlinePostProcessing extends AbstractPostProcessing {
-  constructor(hostContext: PostProcessingHostContext) {
+export class ToonOutlinePostProcessing extends AbstractRenderPipeline {
+  constructor(hostContext: RenderPipelineHostContext) {
     super(hostContext)
 
     this.outputNode = toonOutlinePass(

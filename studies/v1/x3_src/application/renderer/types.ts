@@ -26,7 +26,7 @@ export interface RendererHostContext {
   readonly camera: Camera
 }
 
-export interface PostProcessingHostContext {
+export interface RenderPipelineHostContext {
   readonly scene: Scene
   readonly camera: Camera
   readonly rendererAdapter: RendererAdapter

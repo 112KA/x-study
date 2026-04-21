@@ -2,7 +2,7 @@ import type TiledLightsNode from 'three/examples/jsm/tsl/lighting/TiledLightsNod
 import type OperatorNode from 'three/src/nodes/math/OperatorNode.js'
 import type { ShaderNodeObject } from 'three/tsl'
 import type { UniformNode, WebGPURenderer } from 'three/webgpu'
-import type { PostProcessingHostContext } from 'x3/application/renderer'
+import type { RenderPipelineHostContext } from 'x3/application/renderer'
 import { TiledLighting } from 'three/examples/jsm/lighting/TiledLighting.js'
 import { bloom } from 'three/examples/jsm/tsl/display/BloomNode.js'
 import { pass, uniform } from 'three/tsl'
@@ -10,15 +10,15 @@ import {
   NeutralToneMapping,
 
 } from 'three/webgpu'
-import { AbstractPostProcessing } from 'x3/application/renderer/abstract-postporcessing'
+import { AbstractRenderPipeline } from 'x3/application/renderer/abstract-renderpipeline'
 
-export class TiledLightingPostProcessing extends AbstractPostProcessing {
+export class TiledLightingRenderPipeline extends AbstractRenderPipeline {
   private compose!: ShaderNodeObject<OperatorNode>
   public tileInfluence!: ShaderNodeObject<UniformNode<number>>
   private lighting = new TiledLighting()
 
   constructor(
-    hostContext: PostProcessingHostContext,
+    hostContext: RenderPipelineHostContext,
     public count: number,
   ) {
     super(hostContext)
